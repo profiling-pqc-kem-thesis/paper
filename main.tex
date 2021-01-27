@@ -1,0 +1,119 @@
+\documentclass[a4paper,twoside]{bth}
+
+% BTH THESIS TEMPLATE
+%--------------------
+% Template version 3.4.1 -- Aug 31, 2020
+%--------------------
+% Please change the data below appropriately to fit your thesis.
+% The data will be used to generate text in various places on the
+% thesis front and inner pages.
+%--------------------
+
+% Global values
+\input{defines.tex}
+
+% Package config
+\input{includes/includes.tex}
+\input{includes.tex}
+
+% DOCUMENT BEGINS HERE
+\begin{document}
+
+\pagestyle{plain}
+\pagenumbering{roman}
+
+% THESIS FRONT PAGE
+% ----------------------------------------
+\input{includes/frontpage}
+% ----------------------------------------
+
+
+% THESIS INNER PAGE
+% ----------------------------------------
+\input{includes/innerpage.tex}
+% ----------------------------------------
+
+\setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% YOUR TEXTS START HERE
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ABSTRACT IN ENGLISH
+% -------------------
+\input{abstract-english}
+% -------------------
+
+
+% ABSTRACT IN SWEDISH
+% -------------------
+\input{abstract-swedish}
+% -------------------
+
+
+% ACKNOWLEDGEMENTS
+% -------------------
+\input{acknowledgements}
+% -------------------
+
+
+% TABLE OF CONTENTS
+% -------------------
+% You should uncomment the commands you need.
+\tableofcontents
+%\listoffigures             % in case you have them
+%\listoftables              % in case you have them
+%\listofalgorithms          % in case you have them
+
+\cleardoublepage
+% -------------------
+
+% START OF THESIS
+% -------------------
+\pagestyle{headings}
+\pagenumbering{arabic}
+
+% Preface
+\input{chapters/preface/main.tex}
+
+% Introduction
+\input{chapters/introduction/main.tex}
+
+% Method
+\input{chapters/method/main.tex}
+
+% Results and Analysis
+\input{chapters/results/main.tex}
+
+% Discussion
+\input{chapters/discussion/main.tex}
+
+% Conclusions
+\input{chapters/conclusions/main.tex}
+
+% All references are in a separate file: thesis-refs.bib
+\setlength{\bibsep}{4pt}
+\bibliography{thesis-refs}
+\bibliographystyle{IEEEtranS}
+
+% Appendix
+\input{chapters/appendix/main.tex}
+
+% DO NOT CHANGE BELOW
+% This part makes sure that the last page is even with BTH-logo.
+% -------------------
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{\fill}
+\clearpage{\thispagestyle{empty}}
+\changepage{3cm}{1cm}{-0.5cm}{-0.5cm}{}{-1.5cm}{}{}{}
+\vspace*{\fill}
+\center
+
+{\bthcsnotextlogo{3cm}}
+\\
+\noindent\makebox[\linewidth]{\rule{\textwidth}{1pt}} 
+Faculty of \faculty, Blekinge Institute of Technology, 371 79 Karlskrona, Sweden
+% -------------------
+
+\end{document}
