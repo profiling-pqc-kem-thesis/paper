@@ -1,31 +1,372 @@
 \chapter{Method}
-\label{chp:method}
-\section{On the content}
-Here you specify and motivate your research questions (and relate them to the main research question if you have defined one in the introduction). An important property of a research question is that it can be answered. If not, you have probably come up with a theme or a field, not a question. You can find many guidelines online (e.g., this one\footnote{\url{http://www.robertfeldt.net/advice/guide_to_creating_research_questions.pdf}}) on how to formulate good research questions.
+\label{chapter:method}
 
-Some tips:
-\begin{itemize}
-    \item Use interrogative words: how, why, which (factors/situations), in which ways, etc.
-    \item Some questions are closed and only invoke concrete/limited answers. Others will open up for discussions and different interpretations.
-    Asking ``What?'' is a more closed question than asking ``How?'' or ``In what way?'' Asking ``Why'' means you are investigating the causes of a phenomenon. Studying causality is methodologically demanding.
-    \item Feel free to pose partially open questions that allow discussions of the overall theme, e.g., ``In what way\dots''; ``How can we understand [a particular phenomenon]?''
-    \item Do not use research questions that are answered by just ``yes'' or ``no'', except when you have a specific hypothesis that you are going to test.
-    \item Avoid questions stating that you want ``to know'' something. It is very unlikely that you get to know something definitely after your degree project.
-\end{itemize}
+This chapter explains and motivates the chosen research questions and methods in greater depth.
 
-The method chapter should not iterate the contents of methodology handbooks. You also do not need to describe the differences between quantitative and qualitative methods, or list all different kinds of validity and reliability. Such general descriptions are only meaningful when you need them to motivate the approach you have taken.
+Section \ref{section:method:selected-method} discusses the selected research method. The application of the selected method is then discussed and explained in greater depth in section \ref{section:method:literature-study} as well as section\ref{section:method:experiment}.
 
-What you \emph{must} do is to show how your choice of design and research method is suited to answering your research question(s). A good approach to motivate your choice is to compare the properties, characteristics and features of different research methods, illustrating why a particular method is (not) well suited to answer a particular research question. You should try to identify reasonable (but not all) research methods, that have at least the potential to be considered as alternatives. In addition, you should demonstrate that you have given due consideration to the validity and reliability of your chosen method. By ``showing'' instead of ``telling'', you demonstrate that you have understood the practical meaning of these concepts. This way, the method section is not only able to tie the different parts of your thesis together, it also becomes interesting to read!
+The research questions are listed below for the reader's convenience.
 
 \begin{itemize}
-    \item Show the reader what you have done in your study, and explain why. How did you collect the data? Which options became available through your chosen approach (and which not)?
-    \item What were your working conditions? What considerations did you have to balance?
-    \item Tell the reader \emph{what you did to increase the validity} of
-    your research. E.g., what can you say about the reliability in data
-    collection? How do you know that you have actually investigated what you 
-    intended to investigate? What conclusions can be drawn on this basis? 
-    Which conclusions are certain and which are more tentative? Can your 
-    results be applied in other areas? Can you generalise? If so, why? If 
-    not, why not?
-    \item You should aim to describe weaknesses as well as strengths. An excellent thesis distinguishes itself by defending -- and at the same time criticising -- the choices made. Being self-critical increases trustworthiness.
+    \item Does performance of post-quantum cryptography algorithms differ between architectures and if so, how?
+    \item What specialized instructions and features applicable for post-quantum cryptography are available in z/15 and how are they used in context?
+    \item What techniques may be used to increase performance of post-quantum cryptography algorithms for different architectures?
 \end{itemize}
+
+\section{Selected Method}
+\label{section:method:selected-method}
+
+Argue for one or more methods that are applicable for our questions...
+
+\section{Literature Study}
+
+Now we have defined our chosen models and why we chose them - now it's time to explain them in context.
+
+\section{Experiment}
+\label{section:method:experiment}
+
+This section describes the experiment...
+
+\subsection{Goal}
+
+Our goal is to analyze \textbf{post-quantum asymmetric key encapsulation mechanisms} for the purpose of evaluating \textbf{the readiness of today's consumer, server and mainframe hardware} with the respect to their \textbf{performance} from the point of view of \textbf{businesses and professionals}, in the context of \textbf{replacing the key-exchange algorithms used today for TLS, SSH, VPNs and other applications.}
+
+The context is an analysis of a model of a crypto system using a "physical" implementation.
+
+Today key exchange algorithms such as X25519 (in some contexts known as Curve25519), ECDH(E), DH(E) are used to exchange session keys in TLS, SSH, VPNs such as OpenVPN, IPSec and Wireguard. The same key exchange algorithms are also used in messaging applications such as the Signal protocol. Some of these algorithms are recommended for use today by organizations such as NIST, MDN and IETF, namely X25519, ECDHE and DHE. Plain DH is deemed obsolete.
+
+\subsection{Subjects}
+
+The subjects of the experiment are the post-quantum algorithms as submitted to NIST's third round of submissions, as well as the algorithms recommended for use today, as discussed previously.
+
+The NIST submissions under test are presented in table \ref{table:method:experiment:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of McEliece, we also rely on previous work from EU, which identified that not all parameter sets recommended by the author are applicable. That is, EU identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded.
+
+In the case of the NIST submissions, in this context, the submitted implementations are not thought to be production-ready due to them not yet being standardized nor battle-tested. This, in addition to our interest in exploring optimization techniques that are applicable for post-quantum cryptography, results in us exploring various ways the implementations may be optimized.
+
+\todo{"As CRYSTALS-KYBER, NTRU, and SABER are all structured lattice schemes, NIST intends to select, at most, one of these finalists to be standardized."}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l|c|p{4cm}}
+        Name & Parameter Set & Comment \\
+        \hline
+        McEliece & 6960119 & \\
+        McEliece & 8192128 & \\
+        McEliece & 6960119f & Differs in the key-generation only \\
+        McEliece & 8192128f & Differs in the key-generation only\\
+        NTRU & hrss701 & \\
+        NTRU & hps2048677 & \\
+    \end{tabular}
+    \caption{Test Subjects}
+    \label{table:method:experiment:test-subjects}
+\end{table}
+
+The control subjects, the algorithms in use today, are presented in table \ref{table:method:experiment:control-subjects}. All of the selected subjects and parameter sets have been recommended by one or more of NIST, EU and the IETF. As these algorithms are intended to represent those currently in use, they are thought to be a solved problem. That is, in this context, implementation details are of no concern - an implementation on the native platform is assumed to be optimized and production-ready.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+        Name & Parameter Set \\
+        \hline
+        ECDHE & P-256, X25519 \\
+        DHE & RSA 2048 \\
+    \end{tabular}
+    \caption{Control Subjects}
+    \label{table:method:experiment:control-subjects}
+\end{table}
+
+\subsection{Variables}
+
+The independent variables identified are presented in table \ref{table:method:experiment:independent-variables} below.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c|p{4cm}|p{3cm}}
+        Group & Label & Choices & Comment \\
+        \hline
+        Compiler & Compilers & GCC, Clang, IBM XL, IBM AutoSIMD, Intel C++ Compiler (ICC) & There are more, but these are the most commonly used compilers? \\
+        Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (SUPERCOP, NIST publications) \\
+        Implementation & Libraries & SHA3 / SHAKE / KECCAK, AES, CPACF & \\
+        Implementation & Optimizations & AVX, AVX2, AVX512, SIMD (GPU), SIMD on Z, HSM & These the optimizations available in the selected implementations \\
+        Environment & OS & OS Type and version, Scheduling & \\
+        Environment & Hardware & CPU model, CPU Architecture, available cores, available RAM, RAM model and specification & \\
+    \end{tabular}
+    \caption{Independent Variables}
+    \label{table:method:experiment:independent-variables}
+\end{table}
+
+In table \ref{table:method:experiment:dependent-variables} below, the dependant variables are presented.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l|c|p{4cm}|p{3cm}}
+        Group & Label & Choices & Comment \\
+        \hline
+        Throughput & Encapsulation & CPU cycles, wall-clock time & \\
+        Throughput & Decapsulation & CPU cycles, wall-clock time & \\
+        Throughput & Key-pair generation & CPU cycles, wall-clock time & \\
+        Hardware Utilization & Encapsulation & Memory usage (heap and stack allocation) & \\
+        Hardware Utilization & Logical core utilization & Some environments we use for measurements may not expose physical cores and instead use vCPUs
+    \end{tabular}
+    \caption{Dependent Variables}
+    \label{table:method:experiment:dependent-variables}
+\end{table}
+
+\subsection{Instrumentation}
+
+\subsubsection{Toolset - Processor}
+The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.
+
+Other measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the performed instructions, cycles or time spent inside of the kernel.
+
+Another tool that monitor the entire lifetime of a process, Valgrind (Callgrind) emulates the running code in a simplified machine, meaning the measurements are not applicable in our case where the underlying platform is of great importance.
+
+Other libraries or APIs such as those used in SUPERCOP and PAPI were identified to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of SUPERCOP, some measurements were identified to rely on extrapolation and estimation of data.
+
+As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. Valgrind (Callgrind) was identified as usable for identifying hot paths in the code, but as perf provides the same capability with less overhead and better support, perf was used for that analysis as well.
+
+To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
+
+\subsubsection{Toolset - Memory}
+
+As previously mentioned, Valgrind is a tool that emulates the machine code of a binary in order to analyze its behaviour in its entirety. Although we found it was not applicable for us to use for processor profiling, it was identified as the tool of choice for memory analysis.
+
+\subsubsection{Measurements}
+
+Using the aforementioned toolsets, we will instrument the subjects and measure the following values.
+
+\begin{itemize}
+    \item Retired instruction count
+    \item Total cycle count
+    \item Page fault count
+    \item Cache miss count \footnote{x86 only - not available on s390}
+    \item Heap allocation in bytes
+    \item Stack usage in bytes
+    \item Wall clock time in nanosecond resolution
+\end{itemize}
+
+The measurements will be taken at different points in the algorithms' lifecycles as explained by below. The same measurements are repeated for the three phases - key-generation, encryption (key encapsulation) and decryption (key decapsulation). By first analysing the hot paths of the NIST submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for SHAKE and AES, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l|p{3cm}|p{3cm}}
+        Subject & Location(s) & Comment \\
+        \hline
+        All & Right before and right after the algorithm is invoked & Provides the bounds of the timeline of the execution \\
+        McEliece & Right before and right after the matrix multiplication is invoked & \\
+        McEliece, NTRU & Right before and right after random bytes are requested & \\
+        McEliece, NTRU & Right before and right after the SHAKE implementation is called & \\
+        McEliece & int32_sort & \\
+        McEliece & syndrome, transpose, vec256_sq, vec256_copy, ... &\\
+        NTRU & Poly math - ntru_poly_S3_inv, ntru_poly_rq_to_s3, ntru_poly_rq_mul, square, ...& \\
+        NTRU & crypto_sort_int32 & \\
+    \end{tabular}
+    \caption{Measurement Locations}
+    \label{table:method:instrumentation}
+\end{table}
+
+\subsection{Validity}
+
+\subsubsection{Conclusion validity}
+
+\subsubsection{Internal validity}
+\label{section:method:internal-validity}
+History - An unrelated event influences the outcomes.
+
+Other software is running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system. Run the experiment multiple times at different times.
+Just in time (JIT), compilation and garbage collection could have influenced the result, but because we (mostly) uses the programming languages C and assembly this will not be a problem. Because they do not use JIT compilation and provide full control of garbage collection.
+
+\todo{GPU kernel JIT compilation}
+
+\todo{Swap locks the system while writing/reading to from disk}
+\todo{Cache misses}
+
+\todo{Windows Update?}
+
+
+%Maturation - The outcomes of the study vary as a natural result of time.
+
+The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. DHE and ECDHE have been standardized and optimized for many years and have mature implementations, they are likely fully optimized by this point.
+
+
+Instrumentation - Different measures are used in the pre-test and post-test phases.
+We have written the measurement tools, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms??????
+
+
+%Testing - The pre-test influences the outcomes of the post-test.
+
+Hardware can throttle because of the temperature increase caused 
+by the benchmarks, to mitigate this benchmarks will not be run directly after each other, we will wait for the temperature of the system to normalize.
+We cannot necessarily use the same OS for the mainframes and x86 but that is not an issue. We do not necessarily aim to pit x86 against Z, rather represent a type of computer and evaluate their readiness.
+
+%Selection bias - Groups are not comparable at the beginning of the study.
+
+One my argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of NIST:s standardization process. NTRU, CRYSTALS-KYBER, and SABER are all lattice-based cryptos, and at most one of these will be standardized. NTRU was selected based on the comment NIST gave each of the participants. Classic McEliece was the only non-lattice-based finalist and has a long and good reputation. In addition to these four finalists, there are alternate candidates still in round 3, these were not even considered. This was done to get a manageable scope of the project. As you can read above do we lean heavily on NIST recommendations (to some extent EU paper as well????). For the implementations of DHE and ECDHE, we only use OpenSSL/OpenSSL-IBM.
+
+\todo{We have only selected a subset of potential optimizations?}
+
+
+%Attrition - Dropout from participants
+Not applicable?
+Perhaps all subjects and platforms will not be able to see all optimizations or compiler flags?
+
+
+
+\subsubsection{Construct validity}
+
+
+
+\subsubsection{Content validity}
+\todo{Rewrite properly}
+
+% Refers to the extent to which a measure represents all facets of a given construct.
+
+It is not of interest to measure anything else inside of the "black box" since usage of the algorithms will have to include all parts of the system. As such, measuring the time of the entire system should suffice.
+
+According to our definition of performance, we measure all the possible values (CPU time, memory usage).
+
+* When measuring memory, we cannot measure time as it would induce a higher memory load not related to the algorithm instead
+* If we don't want to test each possible combination (with CPACF, with compiler optimization) we need to perform micro benchmarks as well to be able to tell that CPACF makes a difference
+* If we measure micro benchmarks it may add a non-trivial overhead which adds up depending on the number of benchmarks. Evaluate the impact of these. The easiest way is to remove micro benchmarks and measure the entire "black box" and then see the diffrence and make sure it's not statistically significant.
+
+\subsubsection{External validity}
+
+% Sampling bias.
+As previously discussed under section \ref{section:method:internal-validity}, internal validity, one may argue that the selection of subjects is biased as we do not take the entire population of post-quantum and modern-day algorithms into account. Such a comparison would however be unfeasible. That is why the presented sample is based on the accumulative recommendations of several organizations. We therefore argue that our sample is representative of the algorithms that are and likely will be in use.
+
+% History.
+Another factor that may hurt the generalizability of the results is the potential of a series of unrelated events influencing the outcome. We have identified several actions to help mitigate this risk, as discussed further in section \ref{section:method:internal-validity}, internal validity.
+
+% Experimenter effect.
+The implementations used for benchmarks are not created by us. They have, however, been slightly altered in order to support various forms of optimization. This fact may result in the tested implementations performing differently than if the original implementers would have applied the optimizations. It is therefore plausible that the measurements of the samples will not be general to other implementations using the same techniques.
+
+% Aptitude treatment.
+As there are several optimization techniques such as vectorization and compiler flags applied simultaneously, there is a potential for techniques to cancel each other out or in otherways impact the performance negatively. We will mitigate this risk by evaluating each form of optimization in isolation, before combining all techniques into a truly optimized implementation. These evaluations are listed in table \ref{table:method:instrumentation}.
+
+% Situation effect.
+Factors such as various settings, time of day and location may limit the generalizability of the presented findings. We have identified several mitigative actions as defined under \ref{section:method:internal-validity}, internal validity.
+
+% Counter threats.
+To counter threats across the experiment we aim to improve replication of the results by enabling third parties to carry out the experiment on their own. This is done by providing detailed methodology, the used tools and any accumulated data. The data, tools and the tested implementations used are available as open source\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
+
+\subsection{Execution}
+
+\subsubsection{Hardware Configurations}
+
+The following hardware configurations will be assessed.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l|c|c}
+        Label & CPU & RAM\\
+        \hline
+        Modern Workstation & Intel i9-9900k & 32GB 3600MHz DDR4\\
+        Modern Laptop & Intel i7-8565u & 16 GB 2600MHz DDR4\\
+        Old Mid-Range Laptop & Intel i5-3230m & 8GB 1600MHz DDR3\\
+        Old Low-Range Laptop & Intel i3-3120m & 8GB 1600MHz DDR3
+    \end{tabular}
+    \caption{Consumer Hardware - x86}
+    \label{table:method:consumer-hardware}
+\end{table}
+\todo{The above table requires more up-to-date information.}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l|c|c}
+        Label & CPU & RAM\\
+        \hline
+        Cloud Provider 1 - Shared CPU\footnotemark & 1 vCPU & 1GB RAM \\
+        Cloud Provider 1 - Dedicated CPU\footnotemark & 1 CPU & 1GB RAM \\
+        Cloud Provider 2 - Shared CPU\footnotemark & 1 vCPU & 1GB RAM \\
+        Cloud Provider 2 - Dedicated CPU\footnotemark & 1 CPU & 1GB RAM \\
+    \end{tabular}
+    \caption{Server Hardware - x86}
+    \label{table:method:server-hardware}
+\end{table}
+\addtocounter{footnote}{-4}
+\addtocounter{footnote}{1}
+\footnotetext{A DigitalOcean "small droplet"}
+\addtocounter{footnote}{1}
+\footnotetext{A DigitalOcean "small droplet"}
+\addtocounter{footnote}{1}
+\footnotetext{A Google Cloud Platform "small droplet"}
+\addtocounter{footnote}{1}
+\footnotetext{A Google Cloud Platform "small droplet"}
+\todo{The above table requires more up-to-date information.}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l|c|c|c}
+        Label & Model & CPU & RAM\\
+        \hline
+        Mainframe & IBM z15 & z15 (s390x) & 4GB\\
+    \end{tabular}
+    \caption{Mainframe Hardware}
+    \label{table:method:mainframe-hardware}
+\end{table}
+\todo{The above table requires more up-to-date information.}
+
+\subsubsection{Compiler Configurations}
+
+The following compiler configurations will be assessed.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{l|c|c|p{4cm}}
+        Label & Name & Version & Flags \\
+        \hline
+        GCC Minimal & GCC & 8 & Minimal required\\
+        Clang Minimal & Clang & 8 & Minimal required\\
+        IBM XL Minimal & IBM XL & 8 & Minimal required\\
+        GCC Optimized & GCC & 8 & Highest value for -O, -mtune=native, -march=native\\
+        Clang Optimized & Clang & 8 & Highest value for -O, -mtune=native, -march=native\\
+        IBM XL Optimized & IBM XL & 8 & Highest value for -O, -mtune=native, -march=native\\
+    \end{tabular}
+    \caption{Caption}
+    \label{table:method:compilers}
+\end{table}
+
+In order to see the exact flags used to compile each sample, please refer to the source code for the experiment\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
+
+\subsubsection{Implementation Configurations}
+
+The following implementation details will be changed.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l|p{6cm}}
+        Label & Description\\
+        \hline
+        Reference Implementation & The reference implementation as published in the NIST submissions, or the available OpenSSL implementation. \\
+        Optimized Implementation(s) & Use the authors' provided optimizations.\\
+        Optimized SHAKE implementation & Use a KECCAK implementation optimized for the native platform (plain, AVX2, AVX512).\\
+        Optimized AES implementation & Exchange the included AES implementation with OpenSSL which is optimized for the native platform (plain, AES, AES-NI).\\
+        Fully optimized implementation & Optimized implementation, optimized SHAKE implementation, optimized AES implementation.\\
+    \end{tabular}
+    \caption{Mainframe Hardware}
+    \label{table:method:mainframe-hardware}
+\end{table}
+\todo{The above table requires more up-to-date information.}
+
+\subsubsection{Configuration Summary}
+
+The following section summarizes the configurations that are to be tested.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{l|p{4cm}|p{3cm}}
+        Hardware & Compiler Configurations & Implementation Configurations\\
+        \hline
+        Modern Workstation & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX2, AES)\\
+        Modern Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX2, AES) \\
+        Old Mid-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX, AES)\\
+        Old Low-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX)\\
+        Cloud Provider 1 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
+        Cloud Provider 1 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
+        Cloud Provider 2 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
+        Cloud Provider 2 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
+        Mainframe & GCC Minimal, GCC Optimized, IBM XL, IBM XL Optimized & All (CPACF)\\
+    \end{tabular}
+    \caption{Configuration Summary}
+    \label{table:method:configuration-summary}
+\end{table}
