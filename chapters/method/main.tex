@@ -29,12 +29,13 @@ Now we have defined our chosen models and why we chose them - now it's time to e
 This section describes and discusses the experiment design and rationale.
 
 \subsection{Goal}
+\label{section:method:experiment-goal}
 
 Our goal is to analyze \textbf{post-quantum asymmetric key encapsulation mechanisms} for the purpose of evaluating \textbf{the readiness of today's consumer, server and mainframe hardware} with the respect to their \textbf{performance} from the point of view of \textbf{businesses and professionals}, in the context of \textbf{replacing the key-exchange algorithms used today for TLS, SSH, VPNs and other applications.}
 
-The context is an analysis of a model of a crypto system using a "physical" implementation.
+% The context is an analysis of a model of a crypto system using a "physical" implementation.
 
-Today key exchange algorithms such as X25519 (in some contexts known as Curve25519), ECDH(E), DH(E) are used to exchange session keys in TLS, SSH, VPNs such as OpenVPN, IPSec and Wireguard. The same key exchange algorithms are also used in messaging applications such as the Signal protocol. Some of these algorithms are recommended for use today by organizations such as NIST, MDN and IETF, namely X25519, ECDHE and DHE. Plain DH is deemed obsolete.
+Today key exchange algorithms such as X25519 (in some contexts known as Curve25519), ECDH(E), DH(E) are used to exchange session keys in TLS, SSH, VPNs such as OpenVPN, IPSec and Wireguard. The same key exchange algorithms are also used in messaging applications such as the Signal protocol. Some of these algorithms are recommended for use today by organizations such as NIST, MDN and IETF, namely X25519, ECDHE and DHE. These recommended algorithms will constitute the subjects for this study.
 
 \subsection{Subjects}
 
@@ -78,7 +79,7 @@ The control subjects, the algorithms in use today, are presented in table \ref{t
 
 \subsection{Variables}
 
-The independent variables identified are presented in table \ref{table:method:experiment:independent-variables} below.
+The identified independent variables are presented in table \ref{table:method:experiment:independent-variables} below.
 
 \begin{table}[H]
     \centering
@@ -96,7 +97,7 @@ The independent variables identified are presented in table \ref{table:method:ex
     \label{table:method:experiment:independent-variables}
 \end{table}
 
-In table \ref{table:method:experiment:dependent-variables} below, the dependant variables are presented.
+In table \ref{table:method:experiment:dependent-variables} below, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}.
 
 \begin{table}[H]
     \centering
@@ -115,6 +116,8 @@ In table \ref{table:method:experiment:dependent-variables} below, the dependant 
 
 \subsection{Instrumentation}
 
+This section describes the tools and instrumentation used in the experiment.
+
 \subsubsection{Toolset - Processor}
 The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.
 
@@ -124,7 +127,7 @@ Another tool that monitor the entire lifetime of a process, Valgrind (Callgrind)
 
 Other libraries or APIs such as those used in SUPERCOP and PAPI were identified to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of SUPERCOP, some measurements were identified to rely on extrapolation and estimation of data.
 
-As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. Valgrind (Callgrind) was identified as usable for identifying hot paths in the code, but as perf provides the same capability with less overhead and better support, perf was used for that analysis as well.
+As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. Valgrind (Callgrind) was identified as usable for identifying hot paths in the code, but as perf provides the same capability with less overhead and better support, perf will be used for that analysis as well.
 
 To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
 
@@ -134,7 +137,7 @@ As previously mentioned, Valgrind is a tool that emulates the machine code of a 
 
 \subsubsection{Measurements}
 
-Using the aforementioned toolsets, we will instrument the subjects and measure the following values.
+Using the aforementioned toolset, we will instrument the subjects and measure the following values.
 
 \begin{itemize}
     \item Retired instruction count
@@ -146,7 +149,7 @@ Using the aforementioned toolsets, we will instrument the subjects and measure t
     \item Wall clock time in nanosecond resolution
 \end{itemize}
 
-The measurements will be taken at different points in the algorithms' lifecycles as explained by below. The same measurements are repeated for the three phases - key-generation, encryption (key encapsulation) and decryption (key decapsulation). By first analysing the hot paths of the NIST submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for SHAKE and AES, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+The measurements will be taken at different points in the algorithms' lifecycles as explained int table \ref{table:method:instrumentation} below. The same measurements are repeated for the three phases - key-generation, encryption (key encapsulation) and decryption (key decapsulation). By first analysing the hot paths of the NIST submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for SHAKE and AES, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
 
 \begin{table}[H]
     \centering
@@ -166,16 +169,19 @@ The measurements will be taken at different points in the algorithms' lifecycles
     \label{table:method:instrumentation}
 \end{table}
 
+For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
+
 \subsection{Validity}
 
 \subsubsection{Conclusion validity}
 
 \subsubsection{Internal validity}
 \label{section:method:internal-validity}
-History - An unrelated event influences the outcomes.
+% History - An unrelated event influences the outcomes.
 
-Other software is running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system. Run the experiment multiple times at different times.
-Just in time (JIT), compilation and garbage collection could have influenced the result, but because we (mostly) uses the programming languages C and assembly this will not be a problem. Because they do not use JIT compilation and provide full control of garbage collection.
+Other software running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system and run the experiment multiple times at different times.
+
+Another factor, Just in time (JIT) compilation and garbage collection could influence the results. As we use the programming languages C and Assembly this will not be a problem as they do not use JIT compilation and provide full control of memory. Other programs running on the system which use JIT compilation or garbage collection falls under the previous category.
 
 \todo{GPU kernel JIT compilation}
 
@@ -186,22 +192,17 @@ Just in time (JIT), compilation and garbage collection could have influenced the
 
 
 %Maturation - The outcomes of the study vary as a natural result of time.
-
 The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. DHE and ECDHE have been standardized and optimized for many years and have mature implementations, they are likely fully optimized by this point.
-
 
 Instrumentation - Different measures are used in the pre-test and post-test phases.
 We have written the measurement tools, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms??????
 
-
 %Testing - The pre-test influences the outcomes of the post-test.
-
 Hardware can throttle because of the temperature increase caused 
 by the benchmarks, to mitigate this benchmarks will not be run directly after each other, we will wait for the temperature of the system to normalize.
 We cannot necessarily use the same OS for the mainframes and x86 but that is not an issue. We do not necessarily aim to pit x86 against Z, rather represent a type of computer and evaluate their readiness.
 
 %Selection bias - Groups are not comparable at the beginning of the study.
-
 One my argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of NIST:s standardization process. NTRU, CRYSTALS-KYBER, and SABER are all lattice-based cryptos, and at most one of these will be standardized. NTRU was selected based on the comment NIST gave each of the participants. Classic McEliece was the only non-lattice-based finalist and has a long and good reputation. In addition to these four finalists, there are alternate candidates still in round 3, these were not even considered. This was done to get a manageable scope of the project. As you can read above do we lean heavily on NIST recommendations (to some extent EU paper as well????). For the implementations of DHE and ECDHE, we only use OpenSSL/OpenSSL-IBM.
 
 \todo{We have only selected a subset of potential optimizations?}
@@ -211,11 +212,7 @@ One my argue that the choice of the two post-quantum algorithms is biased, but w
 Not applicable?
 Perhaps all subjects and platforms will not be able to see all optimizations or compiler flags?
 
-
-
 \subsubsection{Construct validity}
-
-
 
 \subsubsection{Content validity}
 \todo{Rewrite properly}
@@ -252,9 +249,11 @@ To counter threats across the experiment we aim to improve replication of the re
 
 \subsection{Execution}
 
+This section describes how the experiment will be executed, including the configurations used for testing.
+
 \subsubsection{Hardware Configurations}
 
-The following hardware configurations will be assessed.
+Several hardware configurations will be tested. These configurations have been divided into three categories, namely Consumer Hardware, Server Hardware and Mainframe Hardware.
 
 \begin{table}[H]
     \centering
@@ -309,7 +308,7 @@ The following hardware configurations will be assessed.
 
 \subsubsection{Compiler Configurations}
 
-The following compiler configurations will be assessed.
+The following compiler configurations will be assessed where applicable.
 
 \begin{table}[]
     \centering
@@ -319,9 +318,9 @@ The following compiler configurations will be assessed.
         GCC Minimal & GCC & 8 & Minimal required\\
         Clang Minimal & Clang & 8 & Minimal required\\
         IBM XL Minimal & IBM XL & 8 & Minimal required\\
-        GCC Optimized & GCC & 8 & Highest value for -O, -mtune=native, -march=native\\
-        Clang Optimized & Clang & 8 & Highest value for -O, -mtune=native, -march=native\\
-        IBM XL Optimized & IBM XL & 8 & Highest value for -O, -mtune=native, -march=native\\
+        GCC Optimized & GCC & 8 & -march=native\\
+        Clang Optimized & Clang & 8 & -march=native\\
+        IBM XL Optimized & IBM XL & 8 & -march=native\\
     \end{tabular}
     \caption{Caption}
     \label{table:method:compilers}
@@ -331,7 +330,7 @@ In order to see the exact flags used to compile each sample, please refer to the
 
 \subsubsection{Implementation Configurations}
 
-The following implementation details will be changed.
+The following implementation details will be changed in order to evaluate potential performance differences.
 
 \begin{table}[H]
     \centering
