@@ -18,10 +18,34 @@ The research questions are listed below for the reader's convenience.
 
 Argue for one or more methods that are applicable for our questions...
 
+In order to present what applicable performance optimizations are available on the Z platform, we will perform a literature study. In part, this study aims to study IBM's official documentation, but also research conducted by third-parties. That way we hope to get a balanced view of the capabilities of the platform.
+
+By mainly referring to peer-reviewed papers on the subject, we aim to provide facts built on a solid foundation of open research. We will search for papers using Summon, arXiv, and IEEE to find such papers. In cases where third-party validation of data is not of importance, we will rely on public information provided by IBM, NIST, etc.
+
+When conducting a performance test an experiment is the best way to support or disprove a hypothesis. We can isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. A survey would therefore not be relevant, because we are not interested in user experience, just the raw performance of the algorithms on different platforms. Neither is a case study relevant because it does not test any hypotheses, and is mostly used in social sciences\cite{wohlin2012experimentation}.
+
 \section{Literature Study}
 \label{section:method:literature-study}
 
 Now we have defined our chosen models and why we chose them - now it's time to explain them in context.
+
+\todo{
+Vill svara på What specialized instructions and features applicable for post-quantum cryp-tography are available in z/15 and how are they used in context?
+
+1. Sätt scope för "vad är post-quantum cryptagraphy?"
+2. Analysera litteratur för vad som är relevant att förbättra med dessa algoritmer (Applicable for post-quantum cryptography? - Studera implementationer i NIST-submissions? Studera rapporten / matten i NIST-submissions?, Lattice-based, (goppa) code-based, i sin tur SHA3 - sponge, bättre uniform random (AES)?) - Sätter scope för applicable for post-quantum
+3. Specialized instructions in z/15?
+4. Specialized features in z/15?
+5. How are they used in context?
+
+"Identifiera att en algoritm är lattice-based, identifiera att lattice bygger på matriser, visa att matriser går att vektorisera enkelt med studier, identifiera att vektorisering är viktigt - z/15 har hårdvara för z/15"
+
+I discussion argumentera saker som borde finnas i framtiden.
+
+}
+
+
+\subsection{Source Criticism}
 
 \section{Experiment}
 \label{section:method:experiment}
@@ -81,6 +105,8 @@ The control subjects, the algorithms in use today, are presented in table \ref{t
 
 The identified independent variables are presented in table \ref{table:method:experiment:independent-variables} below.
 
+\todo{Mention lack of SSE, HMC, FPGA etc.? Argue that it is out of scope.}
+
 \begin{table}[H]
     \centering
     \begin{tabular}{c|c|p{4cm}|p{3cm}}
@@ -97,16 +123,16 @@ The identified independent variables are presented in table \ref{table:method:ex
     \label{table:method:experiment:independent-variables}
 \end{table}
 
-In table \ref{table:method:experiment:dependent-variables} below, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}.
+In table \ref{table:method:experiment:dependent-variables} below, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as (EC)DH is not a KEM, but a KEX, its "encapsulation" and "decapsulation" is the same stage. As such, only one measurement is necessary and will henceforth be referred to as the encapsulation phase.
 
 \begin{table}[H]
     \centering
     \begin{tabular}{l|c|p{4cm}|p{3cm}}
         Group & Label & Choices & Comment \\
         \hline
-        Throughput & Encapsulation & CPU cycles, wall-clock time & \\
-        Throughput & Decapsulation & CPU cycles, wall-clock time & \\
-        Throughput & Key-pair generation & CPU cycles, wall-clock time & \\
+        Throughput & Encapsulation & CPU cycles, instruction count, wall-clock time & \\
+        Throughput & Decapsulation & CPU cycles, instruction count, wall-clock time & \\
+        Throughput & Key-pair generation & CPU cycles, instruction count, wall-clock time & \\
         Hardware Utilization & Encapsulation & Memory usage (heap and stack allocation) & \\
         Hardware Utilization & Logical core utilization & Some environments we use for measurements may not expose physical cores and instead use vCPUs
     \end{tabular}
@@ -178,9 +204,9 @@ For the exact instrumentation used in each subject, please refer to the source c
 \subsubsection{Internal validity}
 \label{section:method:internal-validity}
 % History - An unrelated event influences the outcomes.
-
 Other software running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system and run the experiment multiple times at different times.
 
+% Maturation - The outcomes of the study vary as a natural result of time.
 Another factor, Just in time (JIT) compilation and garbage collection could influence the results. As we use the programming languages C and Assembly this will not be a problem as they do not use JIT compilation and provide full control of memory. Other programs running on the system which use JIT compilation or garbage collection falls under the previous category.
 
 \todo{GPU kernel JIT compilation}
@@ -190,23 +216,24 @@ Another factor, Just in time (JIT) compilation and garbage collection could infl
 
 \todo{Windows Update?}
 
-
-%Maturation - The outcomes of the study vary as a natural result of time.
 The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. DHE and ECDHE have been standardized and optimized for many years and have mature implementations, they are likely fully optimized by this point.
 
-Instrumentation - Different measures are used in the pre-test and post-test phases.
-We have written the measurement tools, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms??????
+% Instrumentation - Different measures are used in the pre-test and post-test phases.
+We have written the measurement tools, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms\todo{??????}.
 
 %Testing - The pre-test influences the outcomes of the post-test.
-Hardware can throttle because of the temperature increase caused 
-by the benchmarks, to mitigate this benchmarks will not be run directly after each other, we will wait for the temperature of the system to normalize.
-We cannot necessarily use the same OS for the mainframes and x86 but that is not an issue. We do not necessarily aim to pit x86 against Z, rather represent a type of computer and evaluate their readiness.
+Hardware can throttle because of the temperature increase caused by the benchmarks. This could result in worse performance than intended when running consecutive tests. To mitigate this, benchmarks will not be run directly after each other. We will instead wait for the temperature of the system to normalize to the same level it was before the test was started.
+
+We cannot necessarily use the same OS for the mainframes and x86, which could cause varying results. This is however not an issue. We do not aim to pit x86 against Z, rather represent a type of computer and evaluate their readiness.
 
 %Selection bias - Groups are not comparable at the beginning of the study.
-One my argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of NIST:s standardization process. NTRU, CRYSTALS-KYBER, and SABER are all lattice-based cryptos, and at most one of these will be standardized. NTRU was selected based on the comment NIST gave each of the participants. Classic McEliece was the only non-lattice-based finalist and has a long and good reputation. In addition to these four finalists, there are alternate candidates still in round 3, these were not even considered. This was done to get a manageable scope of the project. As you can read above do we lean heavily on NIST recommendations (to some extent EU paper as well????). For the implementations of DHE and ECDHE, we only use OpenSSL/OpenSSL-IBM.
+One may argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of NIST's standardization process. NTRU, CRYSTALS-KYBER, and SABER are all lattice-based cryptos, and at most one of these will be standardized. NTRU was selected based on the comment NIST gave each of the participants\todo{insert the comment?}. Classic McEliece was the only non-lattice-based finalist. It also has a long and good reputation according to NIST. In addition to these four finalists, there are alternate candidates still in round 3. These were not even considered. The choice was made to bring down the scope to a manageable level for this work.
+
+As has been mentioned previously, we lean heavily on NIST recommendations as they in many cases provide the authoritative recommendation of algorithms used by protocol implementers (\todo{to some extent EU paper as well????}). As we have not identified any other standardization process like that of NIST, we have concluded that relying on their expertise in this context is correct.
+
+For the implementations of DHE and ECDHE, we only use the underlying algorithms provided by OpenSSL and OpenSSL with the IBM engine. This was done as OpenSSL was identified as the main library for these algorithms on the tested platforms. Using other libraries such as BoringSSL might have resulted in different measurements. The implementations available in OpenSSL have been rigorously tested and analyzed by the industry over the decades it has seen use. We are therefore confident that, although the exact measurements may differ between libraries, OpenSSL provides a solid foundation for our use case as a representation of today's algorithms.
 
 \todo{We have only selected a subset of potential optimizations?}
-
 
 %Attrition - Dropout from participants
 Not applicable?
@@ -214,18 +241,39 @@ Perhaps all subjects and platforms will not be able to see all optimizations or 
 
 \subsubsection{Construct validity}
 
+% Extent to which the experiment setting actually reflects the construct under study. Treatment reflects the construct of the cause well. Output reflects the construct of the effect well
+
+% Construct validity evaluates whether a measurement tool really represents the thing we are interested in measuring. It’s central to establishing the overall validity of a method.
+
+As previously mentioned, we are interested in measuring the following values:
+
+\begin{itemize}
+    \item Encapsulation throughput in number of required CPU cycles, instruction count and wall clock time
+    \item Decapsulation throughput in number of required CPU cycles, instruction count and wall clock time
+    \item Keypair throughput in number of required CPU cycles, instruction count and wall clock time
+    \item Hardware utilization in terms of memory (heap and stack allocation)
+    \item Hardware utilization in terms of processing (logical core utilization)
+\end{itemize}
+
+For our measurements, we rely on the standard Linux kernel-based API named perf (perf\_event\_open). The API was introduced in Linux 2.6.31 which was released in 2009. The API has grown, and as is tradition with the Linux development, each iteration of the API has been reviewed extensively by multiple people throughout the years. We are confident that the API provides as accurate data as the kernel is able to collect.
+
+To make the API usable, we provide a lightweight instrumentation tool which is used to measure the values as listed above. By using the C preprocessor, usage of the tool is readable and configurable and written to not introduce any overhead over the raw Linux API when performing measurements. We therefore argue that the tool does not provide any additional risks over the base API.
+
+By reading the official documentation of the API, we have ensured that the values we measure correspond to those we are interested in. That is, when we use the API to measure CPU cycles, for example, we have asserted that our code indeed refers to the correct measurements as described in the documentation.
+
 \subsubsection{Content validity}
-\todo{Rewrite properly}
 
 % Refers to the extent to which a measure represents all facets of a given construct.
+%"refers to the degree to which an assessment instrument is relevant to, and representative of, the targeted construct it is designed to measure."
 
-It is not of interest to measure anything else inside of the "black box" since usage of the algorithms will have to include all parts of the system. As such, measuring the time of the entire system should suffice.
+To answer our first research question, \textit{Does performance of post-quantum cryptography algorithms differ between architectures and if so, how?},  we do not need to measure anything other than at the start and end of the algorithm invocation. This, since the algorithm's usage will include all of the system's parts. As such, measuring the time, CPU cycles and total instructions of the entire system should suffice.
 
-According to our definition of performance, we measure all the possible values (CPU time, memory usage).
+For our other research questions we examine optimizations of different parts of the algorithm. We need to see how the parts in the system as a whole are performing. For this, we will use micro-benchmarks. Micro-benchmarks may add a non-trivial overhead that depends on the number of benchmarks. We will evaluate the impact of these. We will perform the experiment once with and once without the micro-benchmarks to see the difference and make sure it is not statistically significant. If there is a significant amount of overhead, each micro-benchmark will be run in complete isolation.
 
-* When measuring memory, we cannot measure time as it would induce a higher memory load not related to the algorithm instead
-* If we don't want to test each possible combination (with CPACF, with compiler optimization) we need to perform micro benchmarks as well to be able to tell that CPACF makes a difference
-* If we measure micro benchmarks it may add a non-trivial overhead which adds up depending on the number of benchmarks. Evaluate the impact of these. The easiest way is to remove micro benchmarks and measure the entire "black box" and then see the diffrence and make sure it's not statistically significant.
+When measuring memory usage, we cannot measure any other performance metric as it could induce a higher memory load unrelated to the algorithm under test. Instead, we perform the measurement of the memory usage of the key-pair generation, encryption, and decryption separate from the CPU measurements.
+
+\subsubsection{Criterion validity}
+In the publications for the NIST submissions, the authors have written their own performance analysis using the SUPERCOP benchmark tool. The presented measurements are for the total number of cycles used by the algorithms for generating keys, encapsulation and decapsulation. As these figures have not been validated by a third party, we will not use them to validate ours. We will however present comparisons in order to identify potential issue in their measurements or ours.
 
 \subsubsection{External validity}
 
@@ -253,7 +301,7 @@ This section describes how the experiment will be executed, including the config
 
 \subsubsection{Hardware Configurations}
 
-Several hardware configurations will be tested. These configurations have been divided into three categories, namely Consumer Hardware, Server Hardware and Mainframe Hardware.
+To fulfil the goal of the experiment, several hardware configurations will be tested. These configurations have been divided into three categories, namely Consumer Hardware, Server Hardware and Mainframe Hardware.
 
 \begin{table}[H]
     \centering
