@@ -427,13 +427,13 @@
 %   Symbols for AmsTex and bth
 %
 \newcommand{\bthcslogo}[1]{%
-   \includegraphics[width=#1]{bth}%
+   \includegraphics[width=#1]{includes/bth.pdf}%
 }
 \newcommand{\bthcsnotextlogo}[1]{%
-   \includegraphics[width=#1]{bthnotext}%
+   \includegraphics[width=#1]{includes/bth.pdf}%
 }
 \newcommand{\bthlogo}[1]{%
-   \includegraphics[width=#1]{bth}%
+   \includegraphics[width=#1]{includes/bth.pdf}%
 }
 
 \endinput

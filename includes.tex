@@ -1,5 +1,19 @@
-
 % Any other setup not related directly to the template
 
 % Enable hyper referencing
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{linktocpage, linktoc=all}
+
+% Improvements for tables
+\usepackage{ragged2e}
+\usepackage{booktabs, makecell, tabularx}
+
+% Less whitespace for itemize - not needed when raggedbottom is in use
+%\setlist[itemize]{noitemsep,topsep=0pt}
+
+% Don't stretch pages vertically
+\raggedbottom
+
+% Allow for glossaries
+\usepackage[toc,acronym]{glossaries}
+\input{glossaries}

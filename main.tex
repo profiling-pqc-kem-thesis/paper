@@ -10,11 +10,11 @@
 %--------------------
 
 % Global values
-\input{defines.tex}
+\input{defines}
 
 % Package config
-\input{includes/includes.tex}
-\input{includes.tex}
+\input{includes/includes}
+\input{includes}
 
 % DOCUMENT BEGINS HERE
 \begin{document}
@@ -30,7 +30,7 @@
 
 % THESIS INNER PAGE
 % ----------------------------------------
-\input{includes/innerpage.tex}
+\input{includes/innerpage}
 % ----------------------------------------
 
 \setcounter{page}{1}
@@ -59,13 +59,8 @@
 
 % TABLE OF CONTENTS
 % -------------------
-% You should uncomment the commands you need.
+% Insert the Table of Contents
 \tableofcontents
-%\listoffigures             % in case you have them
-%\listoftables              % in case you have them
-%\listofalgorithms          % in case you have them
-
-\cleardoublepage
 % -------------------
 
 % START OF THESIS
@@ -74,30 +69,44 @@
 \pagenumbering{arabic}
 
 % Preface
-% \input{chapters/preface/main.tex}
+% \input{chapters/preface/main}
 
 % Introduction
-% \input{chapters/introduction/main.tex}
+% \input{chapters/introduction/main}
 
 % Method
-\input{chapters/method/main.tex}
+\input{chapters/method/main}
 
 % Results and Analysis
-% \input{chapters/results/main.tex}
+% \input{chapters/results/main}
 
 % Discussion
-% \input{chapters/discussion/main.tex}
+% \input{chapters/discussion/main}
 
 % Conclusions
-% \input{chapters/conclusions/main.tex}
+% \input{chapters/conclusions/main}
 
 % All references are in a separate file: thesis-refs.bib
 \setlength{\bibsep}{4pt}
 \bibliography{thesis-refs}
 \bibliographystyle{IEEEtranS}
 
+% Add a list of abbreviations (included in the ToC)
+\printglossary[type=\acronymtype]
+
+% Add a list of glossary (included in the ToC)
+\printglossary
+
+% Add a list of figures (included in the ToC)
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+
+% Add a list of tables (included in the ToC)
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
 % Appendix
-%\input{chapters/appendix/main.tex}
+%\input{chapters/appendix/main}
 
 % DO NOT CHANGE BELOW
 % This part makes sure that the last page is even with BTH-logo.

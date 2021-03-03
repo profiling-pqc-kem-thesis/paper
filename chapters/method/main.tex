@@ -8,44 +8,44 @@ Section \ref{section:method:selected-method} discusses the selected research met
 The research questions are listed below for the reader's convenience.
 
 \begin{itemize}
-    \item Does performance of post-quantum cryptography algorithms differ between architectures and if so, how?
-    \item What specialized instructions and features applicable for post-quantum cryptography are available in z/15 and how are they used in context?
-    \item What techniques may be used to increase performance of post-quantum cryptography algorithms for different architectures?
+    \item Does performance of \gls{post-quantum} cryptography algorithms differ between architectures and if so, how?
+    \item What specialized instructions and features applicable for \gls{post-quantum} cryptography are available in \gls{z15} and how are they used in context?
+    \item What techniques may be used to increase performance of \gls{post-quantum} cryptography algorithms for different architectures?
 \end{itemize}
 
 \section{Selected Method}
 \label{section:method:selected-method}
 
-Argue for one or more methods that are applicable for our questions...
+%Argue for one or more methods that are applicable for our questions...
 
-In order to present what applicable performance optimizations are available on the Z platform, we will perform a literature study. In part, this study aims to study IBM's official documentation, but also research conducted by third-parties. That way we hope to get a balanced view of the capabilities of the platform.
-
-By mainly referring to peer-reviewed papers on the subject, we aim to provide facts built on a solid foundation of open research. We will search for papers using Summon, arXiv, and IEEE to find such papers. In cases where third-party validation of data is not of importance, we will rely on public information provided by IBM, NIST, etc.
-
-When conducting a performance test an experiment is the best way to support or disprove a hypothesis. We can isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. A survey would therefore not be relevant, because we are not interested in user experience, just the raw performance of the algorithms on different platforms. Neither is a case study relevant because it does not test any hypotheses, and is mostly used in social sciences\cite{wohlin2012experimentation}.
+When conducting a performance test, an experiment is the best way to answer our research questions. We can isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we are not interested in user experience, just the algorithms' raw performance on various platforms. Neither is a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
 
-Now we have defined our chosen models and why we chose them - now it's time to explain them in context.
+A literature study will be conducted to answer our research question, "What specialized instructions and features applicable for post-quantum cryptography are available in \gls{z15}, and how are they used in context?". We will limit the scope to post-quantum \glspl{kem}, specifically the four finalists in \gls{nist}'s standardization process, round 3.
 
-\todo{
+By studying the algorithms' underlying mathematics, the authors' own optimizations on \gls{x86}, and relevant literature on cryptography optimization, we aim to identify what parts of the algorithms are possible and suitable to optimize.
+
+When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third-parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
+
+To identify relevant research papers, we will search for peer-reviewed papers in reputable journals, such as IEEE and Springer. By searching for keywords related to our research topic, we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
+
+The selected papers, as well as the the papers submitted to \gls{nist}, will be included in a start set. The start set will then be used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
+
+\todo[inline]{
 Vill svara på What specialized instructions and features applicable for post-quantum cryp-tography are available in z/15 and how are they used in context?
 
-1. Sätt scope för "vad är post-quantum cryptagraphy?"
+1. Sätt scope för "vad är post-quantum cryptography?" NIST-finalister?
 2. Analysera litteratur för vad som är relevant att förbättra med dessa algoritmer (Applicable for post-quantum cryptography? - Studera implementationer i NIST-submissions? Studera rapporten / matten i NIST-submissions?, Lattice-based, (goppa) code-based, i sin tur SHA3 - sponge, bättre uniform random (AES)?) - Sätter scope för applicable for post-quantum
 3. Specialized instructions in z/15?
 4. Specialized features in z/15?
-5. How are they used in context?
+5. How are they used in context? - Hur definierar vi det här? Bara teoretiskt "de används för matrismultiplikation", eller faktiska implementationer?
 
 "Identifiera att en algoritm är lattice-based, identifiera att lattice bygger på matriser, visa att matriser går att vektorisera enkelt med studier, identifiera att vektorisering är viktigt - z/15 har hårdvara för z/15"
 
 I discussion argumentera saker som borde finnas i framtiden.
-
 }
-
-
-\subsection{Source Criticism}
 
 \section{Experiment}
 \label{section:method:experiment}
@@ -55,51 +55,55 @@ This section describes and discusses the experiment design and rationale.
 \subsection{Goal}
 \label{section:method:experiment-goal}
 
-Our goal is to analyze \textbf{post-quantum asymmetric key encapsulation mechanisms} for the purpose of evaluating \textbf{the readiness of today's consumer, server and mainframe hardware} with the respect to their \textbf{performance} from the point of view of \textbf{businesses and professionals}, in the context of \textbf{replacing the key-exchange algorithms used today for TLS, SSH, VPNs and other applications.}
+
+
+Our goal with the experiment is to analyze \textbf{\gls{post-quantum} \glspl{kem}} for the purpose of evaluating \textbf{the readiness of today's consumer, server and mainframe hardware} with the respect to their \textbf{performance} from the point of view of \textbf{businesses and professionals}, in the context of \textbf{replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.}
 
 % The context is an analysis of a model of a crypto system using a "physical" implementation.
 
-Today key exchange algorithms such as X25519 (in some contexts known as Curve25519), ECDH(E), DH(E) are used to exchange session keys in TLS, SSH, VPNs such as OpenVPN, IPSec and Wireguard. The same key exchange algorithms are also used in messaging applications such as the Signal protocol. Some of these algorithms are recommended for use today by organizations such as NIST, MDN and IETF, namely X25519, ECDHE and DHE. These recommended algorithms will constitute the subjects for this study.
-
 \subsection{Subjects}
 
-The subjects of the experiment are the post-quantum algorithms as submitted to NIST's third round of submissions, as well as the algorithms recommended for use today, as discussed previously.
+The subjects of the experiment are two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. They were chosen ...\todo{"As CRYSTALS-KYBER, NTRU, and SABER are all structured lattice schemes, NIST intends to select, at most, one of these finalists to be standardized."}
 
-The NIST submissions under test are presented in table \ref{table:method:experiment:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of McEliece, we also rely on previous work from EU, which identified that not all parameter sets recommended by the author are applicable. That is, EU identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded.
-
-In the case of the NIST submissions, in this context, the submitted implementations are not thought to be production-ready due to them not yet being standardized nor battle-tested. This, in addition to our interest in exploring optimization techniques that are applicable for post-quantum cryptography, results in us exploring various ways the implementations may be optimized.
-
-\todo{"As CRYSTALS-KYBER, NTRU, and SABER are all structured lattice schemes, NIST intends to select, at most, one of these finalists to be standardized."}
+The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also rely on previous work from a EU-founded project \gls{pgcrypto}, which identified that not all parameter sets recommended by the author are appropriate. That is, \gls{pgcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded\cite{eu2015}.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{l|c|p{4cm}}
-        Name & Parameter Set & Comment \\
-        \hline
-        McEliece & 6960119 & \\
-        McEliece & 8192128 & \\
-        McEliece & 6960119f & Differs in the key-generation only \\
-        McEliece & 8192128f & Differs in the key-generation only\\
-        NTRU & hrss701 & \\
-        NTRU & hps2048677 & \\
-    \end{tabular}
+    \begin{tabularx}{\linewidth}{l c X}
+        \toprule
+        \thead{Name} & \thead{Parameter Set} & \thead{Comment} \\
+        \midrule
+        \gls{mceliece} & 6960119 & \\
+        \gls{mceliece} & 8192128 & \\
+        \gls{mceliece} & 6960119f & Differs in the key-generation only\\
+        \gls{mceliece} & 8192128f & Differs in the key-generation only\\
+        \gls{ntru} & hrss701 & \\
+        \gls{ntru} & hps2048677 & \\
+        \bottomrule
+    \end{tabularx}
     \caption{Test Subjects}
     \label{table:method:experiment:test-subjects}
 \end{table}
 
-The control subjects, the algorithms in use today, are presented in table \ref{table:method:experiment:control-subjects}. All of the selected subjects and parameter sets have been recommended by one or more of NIST, EU and the IETF. As these algorithms are intended to represent those currently in use, they are thought to be a solved problem. That is, in this context, implementation details are of no concern - an implementation on the native platform is assumed to be optimized and production-ready.
+Today key exchange algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\footnote{\href{https://tools.ietf.org/html/rfc8446}{https://tools.ietf.org/html/rfc8446}}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\footnote{\href{https://tools.ietf.org/html/rfc2409}{https://tools.ietf.org/html/rfc2409}} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms are recommended for use today by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\footnote{\href{https://tools.ietf.org/html/rfc7748}{https://tools.ietf.org/html/rfc7748}}, \gls{ecdhe}\cite{mckay2019} and \gls{dhe}\cite{mckay2019}. These recommended algorithms will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:control-subjects}.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{c|c}
-        Name & Parameter Set \\
-        \hline
-        ECDHE & P-256, X25519 \\
-        DHE & RSA 2048 \\
-    \end{tabular}
+    \begin{tabularx}{\linewidth}{l X}
+        \toprule
+        \thead{Name} & \thead{Parameter Set} \\
+        \midrule
+        \gls{ecdhe} & \gls{p-256}, \gls{x25519} \\
+        \gls{dhe} & \gls{rsa} with 2048 bit keys \\
+        \bottomrule
+    \end{tabularx}
     \caption{Control Subjects}
     \label{table:method:experiment:control-subjects}
 \end{table}
+
+In the case of the \gls{nist} submissions, in this context, the submitted implementations are not thought to be production-ready due to them not yet being standardized nor battle-tested. This, in addition to our interest in exploring optimization techniques that are applicable for post-quantum cryptography, results in us exploring various ways the implementations may be optimized.
+
+As the control subjects are intended to represent the algorithms already in use, they are thought to be a solved problem. That is, in this context, implementation details are of no concern - an implementation on the native platform is assumed to be optimized and production-ready.
 
 \subsection{Variables}
 
@@ -109,33 +113,37 @@ The identified independent variables are presented in table \ref{table:method:ex
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{c|c|p{4cm}|p{3cm}}
-        Group & Label & Choices & Comment \\
-        \hline
+    \begin{tabularx}{\linewidth}{l>{\RaggedRight}l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
+        \toprule
+        \thead{Group} & \thead{Label} & \thead{Choices} & \thead{Comment} \\
+        \midrule
         Compiler & Compilers & GCC, Clang, IBM XL, IBM AutoSIMD, Intel C++ Compiler (ICC) & There are more, but these are the most commonly used compilers? \\
-        Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (SUPERCOP, NIST publications) \\
-        Implementation & Libraries & SHA3 / SHAKE / KECCAK, AES, CPACF & \\
-        Implementation & Optimizations & AVX, AVX2, AVX512, SIMD (GPU), SIMD on Z, HSM & These the optimizations available in the selected implementations \\
+        Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications) \\
+        Implementation & Libraries & \gls{sha3} / \gls{shake} / \gls{keccak}, \gls{aes-instruction-set}, \gls{cpacf} & \\
+        Implementation & Optimizations & \gls{avx}, \gls{avx2}, \gls{avx512}, \gls{simd} (GPU), \gls{simd} on \gls{ibmz}, \gls{hsm} & These the optimizations available in the selected implementations \\
         Environment & OS & OS Type and version, Scheduling & \\
         Environment & Hardware & CPU model, CPU Architecture, available cores, available RAM, RAM model and specification & \\
-    \end{tabular}
+        \bottomrule
+    \end{tabularx}
     \caption{Independent Variables}
     \label{table:method:experiment:independent-variables}
 \end{table}
 
-In table \ref{table:method:experiment:dependent-variables} below, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as (EC)DH is not a KEM, but a KEX, its "encapsulation" and "decapsulation" is the same stage. As such, only one measurement is necessary and will henceforth be referred to as the encapsulation phase.
+In table \ref{table:method:experiment:dependent-variables} below, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but a \glspl{kex}, its "encapsulation" and "decapsulation" is the same stage. As such, only one measurement is necessary and will henceforth be referred to as the encapsulation phase.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{l|c|p{4cm}|p{3cm}}
-        Group & Label & Choices & Comment \\
-        \hline
-        Throughput & Encapsulation & CPU cycles, instruction count, wall-clock time & \\
-        Throughput & Decapsulation & CPU cycles, instruction count, wall-clock time & \\
-        Throughput & Key-pair generation & CPU cycles, instruction count, wall-clock time & \\
-        Hardware Utilization & Encapsulation & Memory usage (heap and stack allocation) & \\
-        Hardware Utilization & Logical core utilization & Some environments we use for measurements may not expose physical cores and instead use vCPUs
-    \end{tabular}
+    \begin{tabularx}{\linewidth}{l c X}
+        \toprule
+        \thead{Group} & \thead{Label} & \thead{Choices}\\
+        \midrule
+        Throughput & Encapsulation & CPU cycles, instruction count, wall-clock time\\
+        Throughput & Decapsulation & CPU cycles, instruction count, wall-clock time\\
+        Throughput & Key-pair generation & CPU cycles, instruction count, wall-clock time\\
+        Hardware Utilization & Encapsulation & Memory usage (heap and stack allocation)\\
+        Hardware Utilization & Logical core utilization & Some environments we use for measurements may not expose physical cores and instead use vCPUs\\
+        \bottomrule
+    \end{tabularx}
     \caption{Dependent Variables}
     \label{table:method:experiment:dependent-variables}
 \end{table}
@@ -145,13 +153,13 @@ In table \ref{table:method:experiment:dependent-variables} below, the dependant 
 This section describes the tools and instrumentation used in the experiment.
 
 \subsubsection{Toolset - Processor}
-The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.
+The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
 
-Other measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the performed instructions, cycles or time spent inside of the kernel.
+Other measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the performed instructions, cycles or time spent inside of the kernel.\todo{Cite this properly?}
 
-Another tool that monitor the entire lifetime of a process, Valgrind (Callgrind) emulates the running code in a simplified machine, meaning the measurements are not applicable in our case where the underlying platform is of great importance.
+Another tool that monitor the entire lifetime of a process, Valgrind (Callgrind) emulates the running code in a simplified machine, meaning the measurements are not applicable in our case where the underlying platform is of great importance.\todo{Cite this properly?}
 
-Other libraries or APIs such as those used in SUPERCOP and PAPI were identified to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of SUPERCOP, some measurements were identified to rely on extrapolation and estimation of data.
+Other libraries or APIs such as those used in \gls{supercop} and PAPI were identified to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of \gls{supercop}, some measurements were identified to rely on extrapolation and estimation of data.\todo{Cite this properly?}
 
 As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. Valgrind (Callgrind) was identified as usable for identifying hot paths in the code, but as perf provides the same capability with less overhead and better support, perf will be used for that analysis as well.
 
@@ -175,22 +183,24 @@ Using the aforementioned toolset, we will instrument the subjects and measure th
     \item Wall clock time in nanosecond resolution
 \end{itemize}
 
-The measurements will be taken at different points in the algorithms' lifecycles as explained int table \ref{table:method:instrumentation} below. The same measurements are repeated for the three phases - key-generation, encryption (key encapsulation) and decryption (key decapsulation). By first analysing the hot paths of the NIST submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for SHAKE and AES, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+The measurements will be taken at different points in the algorithms' lifecycles as explained int table \ref{table:method:instrumentation} below. The same measurements are repeated for the three phases - key-generation, encryption (key encapsulation) and decryption (key decapsulation). By first analysing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{l|p{3cm}|p{3cm}}
-        Subject & Location(s) & Comment \\
-        \hline
+    \begin{tabularx}{\linewidth}{l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
+        \toprule
+        \thead{Subject} & \thead{Location} & \thead{Comment}\\
+        \midrule
         All & Right before and right after the algorithm is invoked & Provides the bounds of the timeline of the execution \\
-        McEliece & Right before and right after the matrix multiplication is invoked & \\
-        McEliece, NTRU & Right before and right after random bytes are requested & \\
-        McEliece, NTRU & Right before and right after the SHAKE implementation is called & \\
-        McEliece & int32_sort & \\
-        McEliece & syndrome, transpose, vec256_sq, vec256_copy, ... &\\
-        NTRU & Poly math - ntru_poly_S3_inv, ntru_poly_rq_to_s3, ntru_poly_rq_mul, square, ...& \\
-        NTRU & crypto_sort_int32 & \\
-    \end{tabular}
+        \gls{mceliece} & Right before and right after the matrix multiplication is invoked & \\
+        \gls{mceliece}, \gls{ntru} & Right before and right after random bytes are requested & \\
+        \gls{mceliece}, \gls{ntru} & Right before and right after the SHAKE implementation is called & \\
+        \gls{mceliece} & int32\_sort & \\
+        \gls{mceliece} & syndrome, transpose, vec256\_sq, vec256\_copy, ... &\\
+        \gls{ntru} & Poly math - ntru\_poly\_S3\_inv, ntru\_poly\_rq\_to\_s3, ntru\_poly\_rq\_mul, square, ...& \\
+        \gls{ntru} & crypto\_sort\_int32 & \\
+        \bottomrule
+    \end{tabularx}
     \caption{Measurement Locations}
     \label{table:method:instrumentation}
 \end{table}
@@ -207,16 +217,16 @@ For the exact instrumentation used in each subject, please refer to the source c
 Other software running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system and run the experiment multiple times at different times.
 
 % Maturation - The outcomes of the study vary as a natural result of time.
-Another factor, Just in time (JIT) compilation and garbage collection could influence the results. As we use the programming languages C and Assembly this will not be a problem as they do not use JIT compilation and provide full control of memory. Other programs running on the system which use JIT compilation or garbage collection falls under the previous category.
+Another factor, \gls{jit} compilation and garbage collection could influence the results. As we use the programming languages C and Assembly this will not be a problem as they do not use \gls{jit} compilation and provide full control of memory. Other programs running on the system which use JIT compilation or garbage collection falls under the previous category.
 
-\todo{GPU kernel JIT compilation}
+\todo{GPU kernel \gls{jit} compilation}
 
 \todo{Swap locks the system while writing/reading to from disk}
 \todo{Cache misses}
 
 \todo{Windows Update?}
 
-The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. DHE and ECDHE have been standardized and optimized for many years and have mature implementations, they are likely fully optimized by this point.
+The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. \gls{dhe} and \gls{ecdhe} have been standardized and optimized for many years and have mature implementations, they are likely fully optimized by this point.
 
 % Instrumentation - Different measures are used in the pre-test and post-test phases.
 We have written the measurement tools, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms\todo{??????}.
@@ -227,11 +237,11 @@ Hardware can throttle because of the temperature increase caused by the benchmar
 We cannot necessarily use the same OS for the mainframes and x86, which could cause varying results. This is however not an issue. We do not aim to pit x86 against Z, rather represent a type of computer and evaluate their readiness.
 
 %Selection bias - Groups are not comparable at the beginning of the study.
-One may argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of NIST's standardization process. NTRU, CRYSTALS-KYBER, and SABER are all lattice-based cryptos, and at most one of these will be standardized. NTRU was selected based on the comment NIST gave each of the participants\todo{insert the comment?}. Classic McEliece was the only non-lattice-based finalist. It also has a long and good reputation according to NIST. In addition to these four finalists, there are alternate candidates still in round 3. These were not even considered. The choice was made to bring down the scope to a manageable level for this work.
+One may argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of \gls{nist}'s standardization process. \gls{ntru}, \gls{crystals-kyber}, and \gls{saber} are all lattice-based algorithms, and at most one of these will be standardized. \gls{ntru} was selected based on the comment \gls{nist} gave each of the participants\todo{insert the comment?}. \gls{mceliece} was the only non-lattice-based finalist. It also has a long and good reputation according to \gls{nist}. In addition to these four finalists, there are alternate candidates still in round 3. These were not even considered. The choice was made to bring down the scope to a manageable level for this work.
 
-As has been mentioned previously, we lean heavily on NIST recommendations as they in many cases provide the authoritative recommendation of algorithms used by protocol implementers (\todo{to some extent EU paper as well????}). As we have not identified any other standardization process like that of NIST, we have concluded that relying on their expertise in this context is correct.
+As has been mentioned previously, we lean heavily on \gls{nist} recommendations as they in many cases provide the authoritative recommendation of algorithms used by protocol implementers (\todo{to some extent EU paper as well????}). As we have not identified any other standardization process like that of \gls{nist}, we have concluded that relying on their expertise in this context is correct.
 
-For the implementations of DHE and ECDHE, we only use the underlying algorithms provided by OpenSSL and OpenSSL with the IBM engine. This was done as OpenSSL was identified as the main library for these algorithms on the tested platforms. Using other libraries such as BoringSSL might have resulted in different measurements. The implementations available in OpenSSL have been rigorously tested and analyzed by the industry over the decades it has seen use. We are therefore confident that, although the exact measurements may differ between libraries, OpenSSL provides a solid foundation for our use case as a representation of today's algorithms.
+For the implementations of \gls{dhe} and \gls{ecdhe}, we only use the underlying algorithms provided by \gls{openssl} and \gls{openssl} with the IBM engine. This was done as \gls{openssl} was identified as the main library for these algorithms on the tested platforms. Using other libraries such as BoringSSL might have resulted in different measurements. The implementations available in \gls{openssl} have been rigorously tested and analyzed by the industry over the decades it has seen use. We are therefore confident that, although the exact measurements may differ between libraries, \gls{openssl} provides a solid foundation for our use case as a representation of today's algorithms.
 
 \todo{We have only selected a subset of potential optimizations?}
 
@@ -255,9 +265,9 @@ As previously mentioned, we are interested in measuring the following values:
     \item Hardware utilization in terms of processing (logical core utilization)
 \end{itemize}
 
-For our measurements, we rely on the standard Linux kernel-based API named perf (perf\_event\_open). The API was introduced in Linux 2.6.31 which was released in 2009. The API has grown, and as is tradition with the Linux development, each iteration of the API has been reviewed extensively by multiple people throughout the years. We are confident that the API provides as accurate data as the kernel is able to collect.
+For our measurements, we rely on the standard Linux kernel-based API named perf (perf\_event\_open). The API was introduced in Linux 2.6.31 which was released in 2009\footnote{\href{https://www.linux.com/news/linux-2631-released/}{https://www.linux.com/news/linux-2631-released/}}. The API has grown, and as is tradition with the Linux development, each iteration of the API has been reviewed extensively by multiple people throughout the years. We are confident that the API provides as accurate data as the kernel is able to collect.
 
-To make the API usable, we provide a lightweight instrumentation tool which is used to measure the values as listed above. By using the C preprocessor, usage of the tool is readable and configurable and written to not introduce any overhead over the raw Linux API when performing measurements. We therefore argue that the tool does not provide any additional risks over the base API.
+To make the API usable, we provide a lightweight instrumentation tool which is used to measure the values as listed above. By using the C pre-processor, usage of the tool is readable and configurable and written to not introduce any overhead over the raw Linux API when performing measurements. We therefore argue that the tool does not provide any additional risks over the base API.
 
 By reading the official documentation of the API, we have ensured that the values we measure correspond to those we are interested in. That is, when we use the API to measure CPU cycles, for example, we have asserted that our code indeed refers to the correct measurements as described in the documentation.
 
@@ -273,7 +283,7 @@ For our other research questions we examine optimizations of different parts of 
 When measuring memory usage, we cannot measure any other performance metric as it could induce a higher memory load unrelated to the algorithm under test. Instead, we perform the measurement of the memory usage of the key-pair generation, encryption, and decryption separate from the CPU measurements.
 
 \subsubsection{Criterion validity}
-In the publications for the NIST submissions, the authors have written their own performance analysis using the SUPERCOP benchmark tool. The presented measurements are for the total number of cycles used by the algorithms for generating keys, encapsulation and decapsulation. As these figures have not been validated by a third party, we will not use them to validate ours. We will however present comparisons in order to identify potential issue in their measurements or ours.
+In the publications for the \gls{nist} submissions, the authors have written their own performance analysis using the \gls{supercop} benchmark tool. The presented measurements are for the total number of cycles used by the algorithms for generating keys, encapsulation and decapsulation. As these figures have not been validated by a third party, we will not use them to validate ours. We will however present comparisons in order to identify potential issue in their measurements or ours.
 
 \subsubsection{External validity}
 
@@ -287,7 +297,7 @@ Another factor that may hurt the generalizability of the results is the potentia
 The implementations used for benchmarks are not created by us. They have, however, been slightly altered in order to support various forms of optimization. This fact may result in the tested implementations performing differently than if the original implementers would have applied the optimizations. It is therefore plausible that the measurements of the samples will not be general to other implementations using the same techniques.
 
 % Aptitude treatment.
-As there are several optimization techniques such as vectorization and compiler flags applied simultaneously, there is a potential for techniques to cancel each other out or in otherways impact the performance negatively. We will mitigate this risk by evaluating each form of optimization in isolation, before combining all techniques into a truly optimized implementation. These evaluations are listed in table \ref{table:method:instrumentation}.
+As there are several optimization techniques such as vectorization and compiler flags applied simultaneously, there is a potential for techniques to cancel each other out or in other ways impact the performance negatively. We will mitigate this risk by evaluating each form of optimization in isolation, before combining all techniques into a truly optimized implementation. These evaluations are listed in table \ref{table:method:instrumentation}.
 
 % Situation effect.
 Factors such as various settings, time of day and location may limit the generalizability of the presented findings. We have identified several mitigative actions as defined under \ref{section:method:internal-validity}, internal validity.
@@ -305,14 +315,16 @@ To fulfil the goal of the experiment, several hardware configurations will be te
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{l|c|c}
-        Label & CPU & RAM\\
-        \hline
+    \begin{tabularx}{\linewidth}{X c c}
+        \toprule
+        \thead{Label} & \thead{CPU} & \thead{RAM}\\
+        \midrule
         Modern Workstation & Intel i9-9900k & 32GB 3600MHz DDR4\\
         Modern Laptop & Intel i7-8565u & 16 GB 2600MHz DDR4\\
         Old Mid-Range Laptop & Intel i5-3230m & 8GB 1600MHz DDR3\\
-        Old Low-Range Laptop & Intel i3-3120m & 8GB 1600MHz DDR3
-    \end{tabular}
+        Old Low-Range Laptop & Intel i3-3120m & 8GB 1600MHz DDR3\\
+        \bottomrule
+    \end{tabularx}
     \caption{Consumer Hardware - x86}
     \label{table:method:consumer-hardware}
 \end{table}
@@ -320,14 +332,16 @@ To fulfil the goal of the experiment, several hardware configurations will be te
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{l|c|c}
-        Label & CPU & RAM\\
-        \hline
+    \begin{tabularx}{\linewidth}{X c c}
+        \toprule
+        \thead{Label} & \thead{CPU} & \thead{RAM}\\
+        \midrule
         Cloud Provider 1 - Shared CPU\footnotemark & 1 vCPU & 1GB RAM \\
         Cloud Provider 1 - Dedicated CPU\footnotemark & 1 CPU & 1GB RAM \\
         Cloud Provider 2 - Shared CPU\footnotemark & 1 vCPU & 1GB RAM \\
         Cloud Provider 2 - Dedicated CPU\footnotemark & 1 CPU & 1GB RAM \\
-    \end{tabular}
+        \bottomrule
+    \end{tabularx}
     \caption{Server Hardware - x86}
     \label{table:method:server-hardware}
 \end{table}
@@ -344,11 +358,13 @@ To fulfil the goal of the experiment, several hardware configurations will be te
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{l|c|c|c}
-        Label & Model & CPU & RAM\\
-        \hline
-        Mainframe & IBM z15 & z15 (s390x) & 4GB\\
-    \end{tabular}
+    \begin{tabularx}{\linewidth}{X c c c}
+        \toprule
+        \thead{Label} & \thead{Model} & \thead{CPU} & \thead{RAM}\\
+        \midrule
+        Mainframe & IBM \gls{z15} & \gls{z15} (\gls{s390x}) & 4GB\\
+        \bottomrule
+    \end{tabularx}
     \caption{Mainframe Hardware}
     \label{table:method:mainframe-hardware}
 \end{table}
@@ -358,18 +374,20 @@ To fulfil the goal of the experiment, several hardware configurations will be te
 
 The following compiler configurations will be assessed where applicable.
 
-\begin{table}[]
+\begin{table}[H]
     \centering
-    \begin{tabular}{l|c|c|p{4cm}}
-        Label & Name & Version & Flags \\
-        \hline
+    \begin{tabularx}{\linewidth}{l c c X}
+        \toprule
+        \thead{Label} & \thead{Name} & \thead{Version} & \thead{Flags}\\
+        \midrule
         GCC Minimal & GCC & 8 & Minimal required\\
         Clang Minimal & Clang & 8 & Minimal required\\
         IBM XL Minimal & IBM XL & 8 & Minimal required\\
         GCC Optimized & GCC & 8 & -march=native\\
         Clang Optimized & Clang & 8 & -march=native\\
         IBM XL Optimized & IBM XL & 8 & -march=native\\
-    \end{tabular}
+        \bottomrule
+    \end{tabularx}
     \caption{Caption}
     \label{table:method:compilers}
 \end{table}
@@ -382,17 +400,19 @@ The following implementation details will be changed in order to evaluate potent
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{l|p{6cm}}
-        Label & Description\\
-        \hline
-        Reference Implementation & The reference implementation as published in the NIST submissions, or the available OpenSSL implementation. \\
+    \begin{tabularx}{\linewidth}{l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
+        \toprule
+        \thead{Label} & \thead{Description}\\
+        \midrule
+        Reference Implementation & The reference implementation as published in the \gls{nist} submissions, or the available \gls{openssl} implementation. \\
         Optimized Implementation(s) & Use the authors' provided optimizations.\\
-        Optimized SHAKE implementation & Use a KECCAK implementation optimized for the native platform (plain, AVX2, AVX512).\\
-        Optimized AES implementation & Exchange the included AES implementation with OpenSSL which is optimized for the native platform (plain, AES, AES-NI).\\
-        Fully optimized implementation & Optimized implementation, optimized SHAKE implementation, optimized AES implementation.\\
-    \end{tabular}
+        Optimized \gls{shake} implementation & Use a \gls{keccak} implementation optimized for the native platform (plain, \gls{avx2}, \gls{avx512}).\\
+        Optimized \gls{aes} implementation & Exchange the included \gls{aes} implementation with \gls{openssl} which is optimized for the native platform (plain, \gls{aes}, \gls{aes-ni}).\\
+        Fully optimized implementation & Optimized implementation, optimized \gls{shake} implementation, optimized \gls{aes} implementation.\\
+        \bottomrule
+    \end{tabularx}
     \caption{Mainframe Hardware}
-    \label{table:method:mainframe-hardware}
+    \label{table:method:implementation-configurations}
 \end{table}
 \todo{The above table requires more up-to-date information.}
 
@@ -400,21 +420,23 @@ The following implementation details will be changed in order to evaluate potent
 
 The following section summarizes the configurations that are to be tested.
 
-\begin{table}[]
+\begin{table}[H]
     \centering
-    \begin{tabular}{l|p{4cm}|p{3cm}}
-        Hardware & Compiler Configurations & Implementation Configurations\\
-        \hline
-        Modern Workstation & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX2, AES)\\
-        Modern Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX2, AES) \\
-        Old Mid-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX, AES)\\
-        Old Low-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX)\\
-        Cloud Provider 1 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
-        Cloud Provider 1 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
-        Cloud Provider 2 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
-        Cloud Provider 2 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (AVX512, AESNI)\\
-        Mainframe & GCC Minimal, GCC Optimized, IBM XL, IBM XL Optimized & All (CPACF)\\
-    \end{tabular}
+    \begin{tabularx}{\linewidth}{l X X}
+        \toprule
+        \thead{Hardware} & \thead{Compiler Configurations} & \thead{Implementation Configurations}\\
+        \midrule
+        Modern Workstation & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx2}, \gls{aes-instruction-set})\\
+        Modern Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx2}, \gls{aes-instruction-set}) \\
+        Old Mid-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx}, \gls{aes-instruction-set})\\
+        Old Low-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx})\\
+        Cloud Provider 1 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
+        Cloud Provider 1 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
+        Cloud Provider 2 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
+        Cloud Provider 2 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
+        Mainframe & GCC Minimal, GCC Optimized, IBM XL, IBM XL Optimized & All (\gls{cpacf})\\
+        \bottomrule
+    \end{tabularx}
     \caption{Configuration Summary}
     \label{table:method:configuration-summary}
 \end{table}

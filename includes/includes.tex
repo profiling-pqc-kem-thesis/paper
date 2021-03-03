@@ -1,21 +1,24 @@
 % PACKAGES AND COMMANDS START
 %----------------------------
 % please do not delete or change anything before the END of this section
+
+% These includes causes some sort of clash with tabularx, makecell, booktabs etc.
 \usepackage{amsmath}
-\usepackage{mathenv}
+% Causes a clash with tabularx, booktabs and / or makecell
+%\usepackage{mathenv}
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{textcomp}
 \usepackage{longtable}
 \usepackage{multirow}
 \usepackage{nameref}
-\usepackage{booktabs}
 \usepackage{pifont}
 \usepackage{changepage}
 \usepackage{listings}
 \usepackage{url}
 \usepackage{xspace}
-\usepackage{xtab}
+% Causes a clash with glossaries
+%\usepackage{xtab}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{float}
