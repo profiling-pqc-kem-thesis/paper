@@ -17,7 +17,7 @@ The research questions are listed below for the reader's convenience.
 \label{section:method:selected-method}
 
 %Argue for one or more methods that are applicable for our questions...
-We are using two methods to answer our three research questions - a literature study, and an experiment.
+We are using two methods to answer our three research questions - a literature study and an experiment.
 
 A literature study will be conducted to answer our research question, "What specialized instructions and features applicable for post-quantum cryptography are available in \gls{z15}, and how are they used in context?". We have chosen a study based in literature as the scope of the question, as well as our limited access to mainframe hardware makes it difficult for us to perform a practical study in the performance potentials of using various hardware features.\todo{revisit}
 
@@ -70,6 +70,8 @@ The \gls{nist} submissions under test are presented in table \ref{table:method:e
 
 \begin{table}[H]
     \centering
+    \caption{Test Subjects}
+    \label{table:method:experiment:test-subjects}
     \begin{tabularx}{\linewidth}{l c X}
         \toprule
         \thead{Name} & \thead{Parameter Set} & \thead{Comment} \\
@@ -82,14 +84,15 @@ The \gls{nist} submissions under test are presented in table \ref{table:method:e
         \gls{ntru} & hps2048677 & \\
         \bottomrule
     \end{tabularx}
-    \caption{Test Subjects}
-    \label{table:method:experiment:test-subjects}
+
 \end{table}
 
 Today key exchange algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\footnote{\href{https://tools.ietf.org/html/rfc8446}{https://tools.ietf.org/html/rfc8446}}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\footnote{\href{https://tools.ietf.org/html/rfc2409}{https://tools.ietf.org/html/rfc2409}} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use today by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\footnote{\href{https://tools.ietf.org/html/rfc7748}{https://tools.ietf.org/html/rfc7748}}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}. These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:control-subjects}.
 
 \begin{table}[H]
     \centering
+    \caption{Control Subjects}
+    \label{table:method:experiment:control-subjects}
     \begin{tabularx}{\linewidth}{l X}
         \toprule
         \thead{Name} & \thead{Parameter Set} \\
@@ -98,8 +101,6 @@ Today key exchange algorithms such as \gls{x25519} (in some contexts known as \g
         \gls{dhe} & \gls{rsa} with 2048 bit keys \\
         \bottomrule
     \end{tabularx}
-    \caption{Control Subjects}
-    \label{table:method:experiment:control-subjects}
 \end{table}
 
 In the case of the \gls{nist} submissions, in this context, the submitted implementations are not thought to be production-ready due to them not yet being standardized nor battle-tested. This, in addition to our interest in exploring optimization techniques that are applicable for post-quantum cryptography, results in us exploring various ways the implementations may be optimized.
@@ -114,6 +115,8 @@ The identified independent variables are presented in table \ref{table:method:ex
 
 \begin{table}[H]
     \centering
+    \caption{Independent Variables}
+    \label{table:method:experiment:independent-variables}
     \begin{tabularx}{\linewidth}{l>{\RaggedRight}l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
         \toprule
         \thead{Group} & \thead{Label} & \thead{Potential Values} & \thead{Comment} \\
@@ -126,24 +129,22 @@ The identified independent variables are presented in table \ref{table:method:ex
         Environment & Hardware & CPU model, CPU Architecture, available cores, available RAM, RAM model and specification & \\
         \bottomrule
     \end{tabularx}
-    \caption{Independent Variables}
-    \label{table:method:experiment:independent-variables}
 \end{table}
 
 In table \ref{table:method:experiment:dependent-variables} below, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, its "encapsulation" and "decapsulation" is the same stage. As such, only one measurement is necessary and will henceforth be referred to as the encapsulation phase.
 
 \begin{table}[H]
     \centering
+    \caption{Dependent Variables}
+    \label{table:method:experiment:dependent-variables}
     \begin{tabularx}{\linewidth}{l X X}
         \toprule
         \thead{Group} & \thead{Stages} & \thead{Comments}\\
         \midrule
-        Throughput & Encapsulation, Decapsulation, Key-pair generation & CPU cycles, instruction count, wall-clock time\\
-        Hardware Utilization & Encapsulation, Decapsulation, Key-pair generation & Memory usage (heap and stack allocation), logical core utilization\footnotemark\\
+        Throughput & \thead{Encapsulation,\\Decapsulation,\\Key-pair generation} & CPU cycles, instruction count, wall-clock time\\
+        Hardware Utilization & \thead{Encapsulation,\\Decapsulation,\\Key-pair generation} & Memory usage (heap and stack allocation), logical core utilization\footnotemark\\
         \bottomrule
     \end{tabularx}
-    \caption{Dependent Variables}
-    \label{table:method:experiment:dependent-variables}
 \end{table}
 \addtocounter{footnote}{-1}
 \addtocounter{footnote}{1}
@@ -154,8 +155,11 @@ In table \ref{table:method:experiment:dependent-variables} below, the dependant 
 This section describes the tools and instrumentation used in the experiment.
 
 \subsubsection{Toolset - Processor}
-The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
+\textbf{Selected tools:}\\
+The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}\\ 
 
+\noindent
+\textbf{Rejected tools:}\\
 Other measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the performed instructions, cycles or time spent inside of the kernel.\todo{Cite this properly?}
 
 Another tool that monitor the entire lifetime of a process, Valgrind (Callgrind) emulates the running code in a simplified machine, meaning the measurements are not applicable in our case where the underlying platform is of great importance.\todo{Cite this properly?}
@@ -167,8 +171,11 @@ As such the Linux perf API was identified as the only applicable tool for profil
 To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
 
 \subsubsection{Toolset - Memory}
+\textbf{Selected tools:}\\
+As previously mentioned, Valgrind is a tool that emulates the machine code of a binary in order to analyze its behaviour in its entirety. Although we found it was not applicable for us to use for processor profiling, it was identified as the tool of choice for memory analysis.\\ 
 
-As previously mentioned, Valgrind is a tool that emulates the machine code of a binary in order to analyze its behaviour in its entirety. Although we found it was not applicable for us to use for processor profiling, it was identified as the tool of choice for memory analysis.
+\noindent
+\textbf{Rejected tools:}\\
 
 \subsubsection{Measurements}
 
@@ -188,6 +195,8 @@ The measurements will be taken at different points in the algorithms' lifecycles
 
 \begin{table}[H]
     \centering
+    \caption{Measurement Locations}
+    \label{table:method:instrumentation}
     \begin{tabularx}{\linewidth}{l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
         \toprule
         \thead{Subject} & \thead{Location} & \thead{Comment}\\
@@ -202,8 +211,6 @@ The measurements will be taken at different points in the algorithms' lifecycles
         \gls{ntru} & crypto\_sort\_int32 & \\
         \bottomrule
     \end{tabularx}
-    \caption{Measurement Locations}
-    \label{table:method:instrumentation}
 \end{table}
 \todo{Update with accurate information}
 
@@ -318,6 +325,8 @@ To fulfil the goal of the experiment, several hardware configurations will be te
 
 \begin{table}[H]
     \centering
+    \caption{Consumer Hardware - x86}
+    \label{table:method:consumer-hardware}
     \begin{tabularx}{\linewidth}{X c c}
         \toprule
         \thead{Label} & \thead{CPU} & \thead{RAM}\\
@@ -328,13 +337,13 @@ To fulfil the goal of the experiment, several hardware configurations will be te
         Old Low-Range Laptop & Intel i3-3120m & 8GB 1600MHz DDR3\\
         \bottomrule
     \end{tabularx}
-    \caption{Consumer Hardware - x86}
-    \label{table:method:consumer-hardware}
 \end{table}
 \todo{The above table requires more up-to-date information.}
 
 \begin{table}[H]
     \centering
+    \caption{Server Hardware - x86}
+    \label{table:method:server-hardware}
     \begin{tabularx}{\linewidth}{X c c}
         \toprule
         \thead{Label} & \thead{CPU} & \thead{RAM}\\
@@ -345,8 +354,6 @@ To fulfil the goal of the experiment, several hardware configurations will be te
         Cloud Provider 2 - Dedicated CPU\footnotemark & 1 CPU & 1GB RAM \\
         \bottomrule
     \end{tabularx}
-    \caption{Server Hardware - x86}
-    \label{table:method:server-hardware}
 \end{table}
 \addtocounter{footnote}{-4}
 \addtocounter{footnote}{1}
@@ -361,6 +368,8 @@ To fulfil the goal of the experiment, several hardware configurations will be te
 
 \begin{table}[H]
     \centering
+    \caption{Mainframe Hardware}
+    \label{table:method:mainframe-hardware}
     \begin{tabularx}{\linewidth}{X c c c}
         \toprule
         \thead{Label} & \thead{Model} & \thead{CPU} & \thead{RAM}\\
@@ -368,8 +377,6 @@ To fulfil the goal of the experiment, several hardware configurations will be te
         Mainframe & IBM \gls{z15} & \gls{z15} (\gls{s390x}) & 4GB\\
         \bottomrule
     \end{tabularx}
-    \caption{Mainframe Hardware}
-    \label{table:method:mainframe-hardware}
 \end{table}
 \todo{The above table requires more up-to-date information.}
 
@@ -379,6 +386,8 @@ The following compiler configurations will be assessed where applicable.
 
 \begin{table}[H]
     \centering
+    \caption{Compiler Configurations}
+    \label{table:method:compilers}
     \begin{tabularx}{\linewidth}{l c c X}
         \toprule
         \thead{Label} & \thead{Name} & \thead{Version} & \thead{Flags}\\
@@ -391,8 +400,6 @@ The following compiler configurations will be assessed where applicable.
         IBM XL Optimized & IBM XL & 8 & -march=native\\
         \bottomrule
     \end{tabularx}
-    \caption{Caption}
-    \label{table:method:compilers}
 \end{table}
 
 In order to see the exact flags used to compile each sample, please refer to the source code for the experiment\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
@@ -403,6 +410,8 @@ The following implementation details will be changed in order to evaluate potent
 
 \begin{table}[H]
     \centering
+    \caption{Mainframe Hardware}
+    \label{table:method:implementation-configurations}
     \begin{tabularx}{\linewidth}{l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
         \toprule
         \thead{Label} & \thead{Description}\\
@@ -414,8 +423,6 @@ The following implementation details will be changed in order to evaluate potent
         Fully optimized implementation & Optimized implementation, optimized \gls{shake} implementation, optimized \gls{aes} implementation.\\
         \bottomrule
     \end{tabularx}
-    \caption{Mainframe Hardware}
-    \label{table:method:implementation-configurations}
 \end{table}
 \todo{The above table requires more up-to-date information.}
 
@@ -425,6 +432,8 @@ The following section summarizes the configurations that are to be tested.
 
 \begin{table}[H]
     \centering
+    \caption{Configuration Summary}
+    \label{table:method:configuration-summary}
     \begin{tabularx}{\linewidth}{l X X}
         \toprule
         \thead{Hardware} & \thead{Compiler Configurations} & \thead{Implementation Configurations}\\
@@ -440,6 +449,4 @@ The following section summarizes the configurations that are to be tested.
         Mainframe & GCC Minimal, GCC Optimized, IBM XL, IBM XL Optimized & All (\gls{cpacf})\\
         \bottomrule
     \end{tabularx}
-    \caption{Configuration Summary}
-    \label{table:method:configuration-summary}
 \end{table}
