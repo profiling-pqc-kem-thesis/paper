@@ -1,7 +1,7 @@
 \chapter{Method}
 \label{chapter:method}
 
-This chapter explains and motivates the chosen research questions and methods in greater depth.
+This chapter explains and motivates the chosen methods in greater depth.
 
 Section \ref{section:method:selected-method} discusses the selected research method. The application of the selected method is then discussed and explained in greater depth in section \ref{section:method:literature-study} as well as section \ref{section:method:experiment}.
 
@@ -19,14 +19,14 @@ The research questions are listed below for the reader's convenience.
 %Argue for one or more methods that are applicable for our questions...
 We are using two methods to answer our three research questions - a literature study and an experiment.
 
-A literature study will be conducted to answer our research question, "What specialized instructions and features applicable for post-quantum cryptography are available in \gls{z15}, and how are they used in context?". We have chosen a study based in literature as the scope of the question, as well as our limited access to mainframe hardware makes it difficult for us to perform a practical study in the performance potentials of using various hardware features.\todo{revisit}
+A literature study will be conducted to answer \researchquestion{1}. We have chosen a study based in literature as the scope of the question, as well as our limited access to mainframe hardware makes it difficult for us to perform a practical study in the performance potentials of using various hardware features.\todo{revisit}
 
-To provide information to help us answer our research questions "What specialized instructions and features applicable for \gls{post-quantum} cryptography are available in \gls{z15} and how are they used in context?" as well as "What techniques may be used to increase performance of \gls{post-quantum} cryptography algorithms for different architectures?", we will conduct a performance test. In this case, an experiment is the most appropriate method. We can isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we are not interested in user experience, just the algorithms' raw performance on various platforms. Neither is a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}.
+To provide information to help us answer \researchquestion{2} as well as \researchquestion{3}, we will conduct a performance test. In this case, an experiment is the most appropriate method. We can isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we are not interested in user experience, just the algorithms' raw performance on various platforms. Neither is a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
 
-As previously mentioned, we aim to answer our research question "What specialized instructions and features applicable for post-quantum cryptography are available in \gls{z15}, and how are they used in context?" by conducting a literature study. We will limit the scope to post-quantum \glspl{kem}, specifically the four finalists in \gls{nist}'s standardization process, round 3.
+As previously mentioned, we aim to answer \researchquestion{2} by conducting a literature study. We will limit the scope to post-quantum \glspl{kem}, specifically the four finalists in \gls{nist}'s standardization process, round 3.
 
 By studying the algorithms' underlying mathematics, the authors' own optimizations on \gls{x86}, and relevant literature on cryptography optimization, we aim to identify what parts of the algorithms are possible and suitable to optimize.
 
@@ -87,7 +87,7 @@ The \gls{nist} submissions under test are presented in table \ref{table:method:e
 
 \end{table}
 
-Today key exchange algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\footnote{\href{https://tools.ietf.org/html/rfc8446}{https://tools.ietf.org/html/rfc8446}}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\footnote{\href{https://tools.ietf.org/html/rfc2409}{https://tools.ietf.org/html/rfc2409}} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use today by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\footnote{\href{https://tools.ietf.org/html/rfc7748}{https://tools.ietf.org/html/rfc7748}}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}. These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:control-subjects}.
+These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:control-subjects}.
 
 \begin{table}[H]
     \centering
@@ -137,12 +137,12 @@ In table \ref{table:method:experiment:dependent-variables} below, the dependant 
     \centering
     \caption{Dependent Variables}
     \label{table:method:experiment:dependent-variables}
-    \begin{tabularx}{\linewidth}{l X X}
+    \begin{tabularx}{\linewidth}{l c X}
         \toprule
         \thead{Group} & \thead{Stages} & \thead{Comments}\\
         \midrule
-        Throughput & \thead{Encapsulation,\\Decapsulation,\\Key-pair generation} & CPU cycles, instruction count, wall-clock time\\
-        Hardware Utilization & \thead{Encapsulation,\\Decapsulation,\\Key-pair generation} & Memory usage (heap and stack allocation), logical core utilization\footnotemark\\
+        Throughput & \makecell{Encapsulation,\\Decapsulation,\\Key-pair generation} & CPU cycles, instruction count, wall-clock time\\
+        Hardware Utilization & \makecell{Encapsulation,\\Decapsulation,\\Key-pair generation} & Memory usage (heap and stack allocation), logical core utilization\footnotemark\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -158,6 +158,10 @@ This section describes the tools and instrumentation used in the experiment.
 \textbf{Selected tools:}\\
 The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}\\ 
 
+As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm.
+
+To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
+
 \noindent
 \textbf{Rejected tools:}\\
 Other measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the performed instructions, cycles or time spent inside of the kernel.\todo{Cite this properly?}
@@ -166,9 +170,9 @@ Another tool that monitor the entire lifetime of a process, Valgrind (Callgrind)
 
 Other libraries or APIs such as those used in \gls{supercop} and PAPI were identified to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of \gls{supercop}, some measurements were identified to rely on extrapolation and estimation of data.\todo{Cite this properly?}
 
-As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. Valgrind (Callgrind) was identified as usable for identifying hot paths in the code, but as perf provides the same capability with less overhead and better support, perf will be used for that analysis as well.
+Valgrind (Callgrind) was identified as usable for identifying hot paths in the code, but as perf provides the same capability with less overhead and better support, perf will be used for that analysis as well.
 
-To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
+
 
 \subsubsection{Toolset - Memory}
 \textbf{Selected tools:}\\
@@ -178,6 +182,8 @@ As previously mentioned, Valgrind is a tool that emulates the machine code of a 
 \textbf{Rejected tools:}\\
 
 \subsubsection{Measurements}
+
+\todo[inline]{Describe what each measurement is and what we aim to get out of them. Describe what system, user and wall-clock time is}
 
 Using the aforementioned toolset, we will instrument the subjects and measure the following values.
 
@@ -215,105 +221,6 @@ The measurements will be taken at different points in the algorithms' lifecycles
 \todo{Update with accurate information}
 
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
-
-\subsection{Validity}
-
-\subsubsection{Conclusion validity}
-
-\todo[inline]{Add Conclusion validity}
-
-\subsubsection{Internal validity}
-\label{section:method:internal-validity}
-% History - An unrelated event influences the outcomes.
-Other software running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system and run the experiment multiple times at different times.
-
-% Maturation - The outcomes of the study vary as a natural result of time.
-Another factor, \gls{jit} compilation and garbage collection could influence the results. As we use the programming languages C and Assembly this will not be a problem as they do not use \gls{jit} compilation and provide full control of memory. Other programs running on the system which use JIT compilation or garbage collection falls under the previous category.
-
-\todo{GPU kernel \gls{jit} compilation}
-
-\todo{Swap locks the system while writing/reading to from disk}
-\todo{Cache misses}
-
-\todo{Windows Update?}
-
-The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. \gls{dhe} and \gls{ecdhe} have been standardized and optimized for many years and have mature implementations, they are likely fully optimized by this point.
-
-% Instrumentation - Different measures are used in the pre-test and post-test phases.
-We have written the measurement tools, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms\todo{??????}.
-
-%Testing - The pre-test influences the outcomes of the post-test.
-Hardware can throttle because of the temperature increase caused by the benchmarks. This could result in worse performance than intended when running consecutive tests. To mitigate this, benchmarks will not be run directly after each other. We will instead wait for the temperature of the system to normalize to the same level it was before the test was started.
-
-We cannot necessarily use the same OS for the mainframes and x86, which could cause varying results. This is however not an issue. We do not aim to pit x86 against Z, rather represent a type of computer and evaluate their readiness.
-
-%Selection bias - Groups are not comparable at the beginning of the study.
-One may argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of \gls{nist}'s standardization process. \gls{ntru}, \gls{crystals-kyber}, and \gls{saber} are all lattice-based algorithms, and at most one of these will be standardized. \gls{ntru} was selected based on the comment \gls{nist} gave each of the participants\todo{insert the comment?}. \gls{mceliece} was the only non-lattice-based finalist. It also has a long and good reputation\cite{nist2020}. In addition to these four finalists, there are alternate candidates still in round 3. These were not considered. The choice was made to bring down the scope to a manageable level for this work.
-
-As has been mentioned previously, we lean heavily on \gls{nist} recommendations as they in many cases provide the authoritative recommendation of algorithms used by protocol implementers (\todo{to some extent EU paper as well????}). As we have not identified any other standardization process like that of \gls{nist}, we have concluded that relying on their expertise in this context is correct.
-
-For the implementations of \gls{dhe} and \gls{ecdhe}, we only use the underlying algorithms provided by \gls{openssl} and \gls{openssl} with the IBM engine. This was done as \gls{openssl} was identified as the main library for these algorithms on the tested platforms. Using other libraries such as BoringSSL might have resulted in different measurements. The implementations available in \gls{openssl} have been rigorously tested and analyzed by the industry over the decades it has seen use. We are therefore confident that, although the exact measurements may differ between libraries, \gls{openssl} provides a solid foundation for our use case as a representation of today's algorithms.
-
-\todo{We have only selected a subset of potential optimizations?}
-
-%Attrition - Dropout from participants
-\todo{Not applicable? Perhaps all subjects and platforms will not be able to see all optimizations or compiler flags?}
-
-\subsubsection{Construct validity}
-
-% Extent to which the experiment setting actually reflects the construct under study. Treatment reflects the construct of the cause well. Output reflects the construct of the effect well
-
-% Construct validity evaluates whether a measurement tool really represents the thing we are interested in measuring. It’s central to establishing the overall validity of a method.
-
-As previously mentioned, we are interested in measuring the following values:
-
-\begin{itemize}
-    \item Encapsulation throughput in number of required CPU cycles, instruction count and wall clock time
-    \item Decapsulation throughput in number of required CPU cycles, instruction count and wall clock time
-    \item Keypair throughput in number of required CPU cycles, instruction count and wall clock time
-    \item Hardware utilization in terms of memory (heap and stack allocation)
-    \item Hardware utilization in terms of processing (logical core utilization)
-\end{itemize}
-
-For our measurements, we rely on the standard Linux kernel-based API named perf (perf\_event\_open). The API was introduced in Linux 2.6.31 which was released in 2009\footnote{\href{https://www.linux.com/news/linux-2631-released/}{https://www.linux.com/news/linux-2631-released/}}. The API has grown, and as is tradition with the Linux development, each iteration of the API has been reviewed extensively by multiple people throughout the years. We are confident that the API provides as accurate data as the kernel is able to collect.
-
-To make the API usable, we provide a lightweight instrumentation tool which is used to measure the values as listed above. By using the C pre-processor, usage of the tool is readable and configurable and written to not introduce any overhead over the raw Linux API when performing measurements. We therefore argue that the tool does not introduce any additional risks over the base API.
-
-By reading the official documentation of the API, we have ensured that the values we measure correspond to those we are interested in. That is, when we use the API to measure CPU cycles, for example, we have asserted that our code indeed refers to the correct measurements as described in the documentation.
-
-\subsubsection{Content validity}
-
-% Refers to the extent to which a measure represents all facets of a given construct.
-%"refers to the degree to which an assessment instrument is relevant to, and representative of, the targeted construct it is designed to measure."
-
-To answer our first research question, \textit{Does performance of post-quantum cryptography algorithms differ between architectures and if so, how?},  we do not need to measure anything other than at the start and end of the algorithm invocation. This, since the algorithm's usage will include all of the system's parts. As such, measuring the time, CPU cycles and total instructions of the entire system should suffice.
-
-For our other research questions we examine optimizations of different parts of the algorithm. We need to see how the parts in the system as a whole are performing. For this, we will use micro-benchmarks. Micro-benchmarks may add a non-trivial overhead that depends on the number of benchmarks. We will evaluate the impact of these. We will perform the experiment once with and once without the micro-benchmarks to see the difference and make sure it is not statistically significant. If there is a significant amount of overhead, each micro-benchmark will be run in complete isolation.
-
-When measuring memory usage, we cannot measure any other performance metric as it could induce a higher memory load unrelated to the algorithm under test. Instead, we perform the measurement of the memory usage of the key-pair generation, encryption, and decryption separate from the CPU measurements.
-
-\subsubsection{Criterion validity}
-In the publications for the \gls{nist} submissions, the authors have written their own performance analysis using the \gls{supercop} benchmark tool. The presented measurements are for the total number of cycles used by the algorithms for generating keys, encapsulation and decapsulation. As these figures have not been validated by a third party, we will not use them to validate ours. We will however present comparisons in order to identify potential issue in their measurements or ours.
-
-\subsubsection{External validity}
-
-% Sampling bias.
-As previously discussed under section \ref{section:method:internal-validity}, internal validity, one may argue that the selection of subjects is biased as we do not take the entire population of post-quantum and modern-day algorithms into account. Such a comparison would however be unfeasible. That is why the presented sample is based on the accumulative recommendations of several organizations. We therefore argue that our sample is representative of the algorithms that are and likely will be in use.
-
-% History.
-Another factor that may hurt the generalizability of the results is the potential of a series of unrelated events influencing the outcome. We have identified several actions to help mitigate this risk, as discussed further in section \ref{section:method:internal-validity}, internal validity.
-
-% Experimenter effect.
-The implementations used for benchmarks are not created by us. They have, however, been slightly altered in order to support various forms of optimization. This fact may result in the tested implementations performing differently than if the original implementers would have applied the optimizations. It is therefore plausible that the measurements of the samples will not be general to other implementations using the same techniques.
-
-% Aptitude treatment.
-As there are several optimization techniques such as vectorization and compiler flags applied simultaneously, there is a potential for techniques to cancel each other out or in other ways impact the performance negatively. We will mitigate this risk by evaluating each form of optimization in isolation, before combining all techniques into a truly optimized implementation. These evaluations are listed in table \ref{table:method:instrumentation}.
-
-% Situation effect.
-Factors such as various settings, time of day and location may limit the generalizability of the presented findings. We have identified several mitigative actions as defined under \ref{section:method:internal-validity}, internal validity.
-
-% Counter threats.
-To counter threats across the experiment we aim to improve replication of the results by enabling third parties to carry out the experiment on their own. This is done by providing detailed methodology, the used tools and any accumulated data. The data, tools and the tested implementations used are available as open source\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
 
 \subsection{Execution}
 

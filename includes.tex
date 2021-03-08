@@ -14,6 +14,13 @@
 % Don't stretch pages vertically
 \raggedbottom
 
+% Add ability to create cells within tables
+\usepackage{makecell}
+
 % Allow for glossaries
 \usepackage[toc,acronym]{glossaries}
 \input{glossaries}
+
+% Add more whitespace to table captions
+\usepackage{subfig}
+\captionsetup{belowskip=12pt,aboveskip=4pt}

@@ -1,0 +1,71 @@
+\chapter{Background}
+\label{chapter:background}
+
+\section{Public Key Cryptography}
+
+% Describe what public key cryptography is - fundamentals
+
+\section{Post-Quantum}
+
+% Describe what post-quantum means - the issues, define pre-quantum
+
+\subsection{Shor's Algorithm}
+
+\subsection{Grover's Algorithm}
+
+\section{Pre-Quantum Cryptography}
+% Establish today's use of cryptography, RSA and ECC
+
+\subsection{Key Exchange}
+
+Today key exchange algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\footnote{\href{https://tools.ietf.org/html/rfc8446}{https://tools.ietf.org/html/rfc8446}}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\footnote{\href{https://tools.ietf.org/html/rfc2409}{https://tools.ietf.org/html/rfc2409}} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use today by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\footnote{\href{https://tools.ietf.org/html/rfc7748}{https://tools.ietf.org/html/rfc7748}}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+
+A key exchange algorithm is ...
+
+\section{Post-Quantum Cryptography}
+
+Post-quantum cryptography relies on an entirely different set of underlying mathematical problems...
+
+\subsection{Key Encapsulation Mechanism}
+
+A key encapsulation mechanism algorithm is ...
+
+\section{The NIST Post-Quantum Standardization Process}
+
+\section{Lattice-Based Key Encapsulation Mechanisms}
+
+\subsection{NTRU}
+
+\subsection{CRYSTALS-KYBER}
+
+\subsection{SABER}
+
+\section{Code-Based Key Encapsulation Mechanisms}
+
+\subsection{Classic McEliece}
+
+\section{Performance Optimization}
+
+"Theoretical" topics on performance optimization
+
+\subsection{SIMD}
+
+Vectorization ...
+
+\section{CPU Architectures}
+
+Alla datorer är inte likadana. Olika instruktionsset, o.s.v. Det finns massvis med olika.
+
+\section{Consumer and Server Hardware}
+
+x86, ARM, RISC-V
+
+\subsection{AVX}
+
+\section{Mainframe Hardware}
+
+IBM Z, POWER
+
+\subsection{CPACF}
+
+\subsection{HSM}
