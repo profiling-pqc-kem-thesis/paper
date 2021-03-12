@@ -26,7 +26,7 @@ To provide information to help us answer \researchquestion{2} as well as \resear
 \section{Literature Study}
 \label{section:method:literature-study}
 
-As previously mentioned, we aim to answer \researchquestion{2} by conducting a literature study. We will limit the scope to post-quantum \glspl{kem}, specifically the four finalists in \gls{nist}'s standardization process, round 3.
+As previously mentioned, we aim to answer \researchquestion{2} by conducting a literature study. We will limit the scope to the four finalists in \gls{nist}'s standardization process, round 3.
 
 By studying the algorithms' underlying mathematics, the authors' own optimizations on \gls{x86}, and relevant literature on cryptography optimization, we aim to identify what parts of the algorithms are possible and suitable to optimize.
 
@@ -55,7 +55,7 @@ I discussion argumentera saker som borde finnas i framtiden.
 \section{Experiment}
 \label{section:method:experiment}
 
-This section describes and discusses the experiment design and rationale. The experiment has two phases, in phases one we profile a run of the key exchange, and in phase 
+This section describes and discusses the experiment design and rationale. The experiment has two phases. In phase one, we profile a run of the key exchange, and in phase two, we test how the performance scalability for millions of key exchanges over multiple cores.
 
 \todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
 
@@ -70,7 +70,7 @@ Our goal with the experiment is to analyze \textbf{\gls{post-quantum} \glspl{kem
 
 The test subjects of the experiment are two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{crystals-kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and has a long and excellent reputation\cite{nist2020}.
 \todo[inline]{Finns fler NIST submissions? Varför är dessa bortvalda?\\ har jag inte readn svart på det ovan?????}
-The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also rely on previous work from the EU-funded project \gls{pgcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pgcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded\cite{eu2015}.
+The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also rely on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded\cite{eu2015}.
 
 \begin{table}[H]
     \centering
@@ -157,6 +157,8 @@ In table \ref{table:method:experiment:dependent-variables}, the dependant variab
 \subsection{Instrumentation}
 
 This section describes the tools and instrumentation used in the experiment.
+
+\todo[inline]{Förtydliga att hot-paths enbart utförs på referens-implementationen på en plattform. Förtydliga att minneskontroll enbart utförs på de enkla beräkningar och att ingen minneskontroll när vi kör i bulk. Minneskontroll görs inte vid multicore-benchmark p.g.a. att vi allokerar minne o.s.v.}
 
 \subsubsection{Toolset - Processor}
 \todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}

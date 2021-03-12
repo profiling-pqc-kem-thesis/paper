@@ -25,7 +25,47 @@ keywords = {snowball search, replication, systematic literature review, snowball
 location = {London, England, United Kingdom},
 series = {EASE '14}
 }
- 
+
+ % Original paper of Shor's algorithm
+@article{shor1997,
+  author    = {Peter W. Shor},
+  title     = {Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer},
+  pages     = {1484-1509},
+  journal   = {SIAM Journal on Computing},
+  volume    = {26},
+  number    = {5},
+  year      = {1997},
+  url       = {https://doi.org/10.1137/S0097539795293172}
+}
+
+@misc{gidney2019,
+      title={How to factor 2048 bit RSA integers in 8 hours using 20 million noisy qubits}, 
+      author={Craig Gidney and Martin Ekerå},
+      year={2019},
+      eprint={1905.09749},
+      archivePrefix={arXiv},
+}
+
+% Google number of qubits
+ @article{google2019:quantum-computer,
+     title={Quantum supremacy using a programmable superconducting processor},
+     volume={574},
+     DOI={10.1038/s41586-019-1666-5},
+     journal={Nature},
+     author={Arute, Frank and Arya, Kunal and Babbush, Ryan and Bacon, Dave and Bardin, Joseph C. and Barends, Rami and Biswas, Rupak and Boixo, Sergio and Brandao, Fernando G. and Buell, David A. and et al.},
+     year={2019},
+     pages={505–510}
+ } 
+
+ % IBM number of qubits
+ @misc{ibm2020:quantum-computer,
+     title={IBM's Roadmap For Scaling Quantum Technology},
+     url={https://www.ibm.com/blogs/research/2020/09/ibm-quantum-roadmap/},
+     journal={IBM Research Blog},
+     year={2020},
+     month={Nov}
+ } 
+
  % Contains information about the Signal protocol
  @inproceedings{gordon2017,
   author={K. {Cohn-Gordon} and C. {Cremers} and B. {Dowling} and L. {Garratt} and D. {Stebila}},
@@ -98,3 +138,46 @@ institution = {EU}
   institution = {The International Association for Cryptologic Research}
 }
 
+% Introduction to key establishment etc.
+% BTH URL: https://link-springer-com.miman.bib.bth.se/content/pdf/10.1007%2F978-3-662-58146-9.pdf
+@inbook{boyd2020:key-establishment,
+  title={Protocols for Authentication and Key Establishment},
+  url={http://dx.doi.org/10.1007/978-3-662-58146-9}, DOI={10.1007/978-3-662-58146-9},
+  journal={Information Security and Cryptography},
+  publisher={Springer Berlin Heidelberg},
+  author={Boyd, Colin and Mathuria, Anish and Stebila, Douglas}, year={2020},
+  pages = {28-29}
+}
+@inbook{boyd2020:key-encapsulation,
+  title={Protocols for Authentication and Key Establishment},
+  url={http://dx.doi.org/10.1007/978-3-662-58146-9}, DOI={10.1007/978-3-662-58146-9},
+  journal={Information Security and Cryptography},
+  publisher={Springer Berlin Heidelberg},
+  author={Boyd, Colin and Mathuria, Anish and Stebila, Douglas}, year={2020},
+  pages = {8}
+}
+@inbook{boyd2020:key-agreement,
+  title={Protocols for Authentication and Key Establishment},
+  url={http://dx.doi.org/10.1007/978-3-662-58146-9}, DOI={10.1007/978-3-662-58146-9},
+  journal={Information Security and Cryptography},
+  publisher={Springer Berlin Heidelberg},
+  author={Boyd, Colin and Mathuria, Anish and Stebila, Douglas}, year={2020},
+  pages = {127,165}
+}
+@inbook{boyd2020:key-transport,
+  title={Protocols for Authentication and Key Establishment},
+  url={http://dx.doi.org/10.1007/978-3-662-58146-9}, DOI={10.1007/978-3-662-58146-9},
+  journal={Information Security and Cryptography},
+  publisher={Springer Berlin Heidelberg},
+  author={Boyd, Colin and Mathuria, Anish and Stebila, Douglas}, year={2020},
+  pages = {104}
+}
+
+% NIST standardization process, security, evaluation critera
+@online{nist2017,
+  author = {NIST},
+  title = {Post-Quantum Cryptography | CSRC},
+  year = 2017,
+  url = {https://csrc.nist.gov/projects/post-quantum-cryptography/post-quantum-cryptography-standardization/evaluation-criteria/security-(evaluation-criteria)},
+  urldate = {2021-03-12}
+}

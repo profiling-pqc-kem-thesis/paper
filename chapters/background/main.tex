@@ -7,16 +7,33 @@ Cryptographic functions are sorted into two categories - \textit{symmetric} func
 
 In the case of symmetric functions, the same key is known to both parties. The key is used for both encryption and decryption. Symmetric functions can also be used to provide authenticity - if only the two parties know of the secret key, one of them may request the other to prove possession of the key\cite{bernstein2017}.
 
-In the case of public-key cryptography, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}.
+In the case of public-key cryptography, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}. \todo{Mention quantum supremacy?}
 
 \section{Key Establishment}
 
-\subsection{Key Exchange}
-...
+A key establishment protocol, sometimes referred to as a \gls{kex}, is a process in which two or more parties exchange a shared session key known only to them. The protocol should be able to be performed on an untrusted communication channel\cite{boyd2020:key-establishment}.
+
+There are typically two classes of key establishment, key transport and key agreement.
+
+A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties\cite{boyd2020:key-transport}.
+
+In a key agreement protocol, the parties jointly influence the outcome of the shared key by deriving the key from information supplied by the involved parties. This should be performed in such a way that no single party can predetermine the resulting shared key on their own\cite{boyd2020:key-agreement}.
 
 \subsection{Key Encapsulation Mechanism}
 
-A key encapsulation mechanism algorithm is ...
+A \gls{kem} is form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs\cite{boyd2020:key-encapsulation}.
+
+\todo{Should this be more descriptive? boyd2020:key-encapsulation has information on a definition of the protocol}
+
+\subsection{Forward Secrecy}
+
+\subsection{Applications}
+
+In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography\cite{bernstein2017}.
+
+In Wireguard...
+
+In SSH...
 
 \section{Post-Quantum}
 
@@ -27,9 +44,11 @@ Since \todo{when?}, research has been made to utilize quantum mechanics for comp
 Parallel to the development of the theoretical quantum computer, algorithms were developed to make use of the mechanics. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical to implement or use on a traditional system, but feasible to use on a quantum computer.
 
 The threat these algorithms and performance increases impose has led to a new epoch in computing and cryptography - post-quantum.
+\todo[inline]{Cite prop-erly?}
 
 \subsection{Shor's Algorithm}
 
+Pre-Quantum public-key cryptography suites are based on one of the following problems being hard to solve; integer factorization and elliptic-curve discrete logarithm. Shor's algorithm can solve these problems, rendering the cryptosystems useless\cite{shor1997}. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. But today's quantum computers are not powerful enough to execute Shor's algorithm on the large numbers used in modern cryptography\cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million noisy qubits to break 2048 bits RSA. Today's most powerful quantum computer is Google's 53-qubits system\cite{google2019:quantum-computer} IBM's 65-qubits system\cite{ibm2020:quantum-computer}. IBM has a 1000-qubits system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
 
 \subsection{Grover's Algorithm}
 
@@ -104,17 +123,45 @@ The digital signature finalists were the following.
     \item Rainbow
 \end{itemize}
 
+\subsection{IND-CCA2}
+
+\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack. Resistence to such an attack is referred to as \gls{ind-cca2} security\cite{nist2017}.
+
+\subsection{Security Categories}
+
+\gls{nist} anticipated that submissions to the standardization effort would face uncertainties in terms of estimating the security strength of post-quantum algorithms. They state that the uncertainties are largely caused by two issues. The first issue is the possibility that new attacks will be discovered and the second that there is a limited ability to predict how a quantum computer will behave in terms of cost, speed and memory\cite{nist2017}.
+
+\gls{nist} therefore defined security categories that are not based on the traditional measure of bit security. The following categories were defined. The order denotes the strength of the attack\cite{nist2017}.
+
+\begin{itemize}
+    \item 1. Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 128-bit key (e.g. AES128)
+    \item 2. Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for collision search on a 256-bit hash function (e.g. SHA256/ SHA3-256)
+    \item 3. Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 192-bit key (e.g. AES192)
+    \item 4. Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for collision search on a 384-bit hash function (e.g. SHA384/ SHA3-384)
+    \item 5. Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. AES 256)
+\end{itemize}
+
+\subsection{OWCPA}
+
 \section{Lattice-Based Key Encapsulation Mechanisms}
 
 \subsection{NTRU}
 
+\todo{include security category}
+
 \subsection{CRYSTALS-KYBER}
 
+\todo{include security category}
+
 \subsection{SABER}
+
+\todo{include security category}
 
 \section{Code-Based Key Encapsulation Mechanisms}
 
 \subsection{Classic McEliece}
+
+\todo{include security category}
 
 \section{Performance Optimization}
 
@@ -130,7 +177,7 @@ Alla datorer är inte likadana. Olika instruktionsset, o.s.v. Det finns massvis 
 
 \section{Consumer and Server Hardware}
 
-x86, ARM, RISC-V
+x86, ARM, RISC-V. RISC vs CISC. 
 
 \subsection{AVX}
 
@@ -138,7 +185,7 @@ AVX2 = AVX-256
 
 \section{Mainframe Hardware}
 
-IBM Z, POWER
+IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.
 
 \subsection{CPACF}
 

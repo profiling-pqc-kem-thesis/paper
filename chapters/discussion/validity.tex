@@ -1,5 +1,7 @@
 \section{Threats to Validity}
 
+\todo[inline]{ diskutera hur benchmarks inte säkerställer att rätt svar ges från algoritmerna. Detta utelämnas p.g.a. prestanda / träffsäkerhet i mätningar. Vi löser det genom att ha tester som är samma kod som benchmarken, fast med validering}
+
 \subsection{Conclusion validity}
 
 \todo[inline]{Add Conclusion validity}
@@ -49,6 +51,7 @@ For the implementations of \gls{dhe} and \gls{ecdhe}, we only use the underlying
 
 As previously mentioned, we are interested in measuring the following values:
 
+\todo[inline]{These do not correspond to the ones we actually measure? Update. Also; clarify that we're measuring two different things - single iteration and multi-core.}
 \begin{itemize}
     \item Encapsulation throughput in number of required CPU cycles, instruction count and wall clock time
     \item Decapsulation throughput in number of required CPU cycles, instruction count and wall clock time
