@@ -1,36 +1,108 @@
 \chapter{Background}
 \label{chapter:background}
 
-\section{Public Key Cryptography}
 
-% Describe what public key cryptography is - fundamentals
+\section{Symmetric and Public-Key Cryptography}
+Cryptographic functions are sorted into two categories - \textit{symmetric} functions and \textit{public-key} functions. Both categories refer to how the keys to the data are used\cite{bernstein2017}.
 
-\section{Post-Quantum}
+In the case of symmetric functions, the same key is known to both parties. The key is used for both encryption and decryption. Symmetric functions can also be used to provide authenticity - if only the two parties know of the secret key, one of them may request the other to prove possession of the key\cite{bernstein2017}.
 
-% Describe what post-quantum means - the issues, define pre-quantum
+In the case of public-key cryptography, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}.
 
-\subsection{Shor's Algorithm}
-
-\subsection{Grover's Algorithm}
-
-\section{Pre-Quantum Cryptography}
-% Establish today's use of cryptography, RSA and ECC
+\section{Key Establishment}
 
 \subsection{Key Exchange}
-
-Today key exchange algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\footnote{\href{https://tools.ietf.org/html/rfc8446}{https://tools.ietf.org/html/rfc8446}}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\footnote{\href{https://tools.ietf.org/html/rfc2409}{https://tools.ietf.org/html/rfc2409}} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use today by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\footnote{\href{https://tools.ietf.org/html/rfc7748}{https://tools.ietf.org/html/rfc7748}}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
-
-A key exchange algorithm is ...
-
-\section{Post-Quantum Cryptography}
-
-Post-quantum cryptography relies on an entirely different set of underlying mathematical problems...
+...
 
 \subsection{Key Encapsulation Mechanism}
 
 A key encapsulation mechanism algorithm is ...
 
+\section{Post-Quantum}
+
+Cryptography usually does not come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical. As the performance of conventional computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using conventional algorithms. As Moore's law has come to a halt, the threat of traditional computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
+
+Since \todo{when?}, research has been made to utilize quantum mechanics for computation, introducing the quantum computer. By utilizing quantum bits or qubits instead of the bits used in traditional computers, quantum computers are able to represent several states per qubit. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a traditional computer. Recent progress in the field has shown that, as progress have halted in the area of traditional computers, progress made on quantum computers has been increasing exponentially.
+
+Parallel to the development of the theoretical quantum computer, algorithms were developed to make use of the mechanics. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical to implement or use on a traditional system, but feasible to use on a quantum computer.
+
+The threat these algorithms and performance increases impose has led to a new epoch in computing and cryptography - post-quantum.
+
+\subsection{Shor's Algorithm}
+
+
+\subsection{Grover's Algorithm}
+
+\subsection{Bit Security}
+
+Bit security corresponds to the best security a key of $n$ bits can provide under the best known attack. Values for some widely deployed cryptographic systems are presented in table \ref{table:background:post-quantum:bit-security}.
+
+\begin{table}[H]
+    \centering
+    \caption{Security levels for widely deployed cryptographic systems and the bit security\cite{bernstein2017}. Pre-quantum and post-quantum refers to the bit security of the algorithm for the corresponding epoch.}
+    \label{table:background:post-quantum:bit-security}
+    \begin{tabularx}{\linewidth}{X c c c c}
+        \toprule
+        \thead{Name} & \thead{Function} & \thead{Pre-Quantum} & \thead{Post-Quantum} & \thead{Attack} \\
+        \midrule
+        \multicolumn{5}{c}{\thead[l]{Symmetric Cryptography}} \\
+        %\midrule
+        AES-128 & block cipher & 128 & 64 & Grover\\
+        AES-256 & block cipher & 256 & 128 & Grover\\
+        Salsa20 & stream cipher & 256 & 128 & Grover\\
+        GMAC & MAC & 128 & 128 & -\\
+        Poly1305 & MAC & 128 & 128 & -\\
+        SHA-256 & hash & 256 & 128 & Grover\\
+        SHA-3 & hash & 256 & 128 & Grover\\
+        \multicolumn{5}{c}{\thead[l]{Public-key Cryptography}} \\
+        %\midrule
+        RSA-3072 & encryption & 128 & broken & Shor \\
+        RSA-3072 & signature & 128 & broken & Shor \\
+        DH-3072 & key exchange & 128 & broken & Shor \\
+        DSA-3072 & signature & 128 & broken & Shor \\
+        256-bit ECDH & key exchange & 128 & broken & Shor \\
+        256-bit ECDSA & signature & 128 & broken & Shor \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\section{Pre-Quantum Cryptography}
+\label{section:background:pre-quantum}
+% Establish today's use of cryptography, RSA and ECC
+
+In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} were used for key exchange. Algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\footnote{\href{https://tools.ietf.org/html/rfc8446}{https://tools.ietf.org/html/rfc8446}}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\footnote{\href{https://tools.ietf.org/html/rfc2409}{https://tools.ietf.org/html/rfc2409}} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
+
+Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\footnote{\href{https://tools.ietf.org/html/rfc7748}{https://tools.ietf.org/html/rfc7748}}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+
+\section{Post-Quantum Cryptography}
+
+Post-quantum cryptography relies on an entirely different set of underlying mathematical problems...
+
 \section{The NIST Post-Quantum Standardization Process}
+\gls{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\footnote{\href{https://www.nist.gov/about-nist}{https://www.nist.gov/about-nist}}.
+
+The organization is split into various divisions. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and post-quantum cryptography\footnote{\href{https://www.nist.gov/itl/csd/cryptographic-technology}{https://www.nist.gov/itl/csd/cryptographic-technology}}.
+
+The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for post-quantum cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions \footnote{\href{https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/Call-for-Proposals}{https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/Call-for-Proposals}}.
+
+At the time of writing, the contest has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\footnote{\href{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}}.
+
+The public-key encryption and key-establishment algorithms finalists were the following.
+
+\begin{itemize}
+    \item Classic McEliece
+    \item CRYSTALS-KYBER
+    \item NTRU
+    \item SABER
+\end{itemize}
+
+The digital signature finalists were the following.
+
+\begin{itemize}
+    \item CRYSTALS-DILITHIUM
+    \item FALCON
+    \item Rainbow
+\end{itemize}
 
 \section{Lattice-Based Key Encapsulation Mechanisms}
 
@@ -61,6 +133,8 @@ Alla datorer är inte likadana. Olika instruktionsset, o.s.v. Det finns massvis 
 x86, ARM, RISC-V
 
 \subsection{AVX}
+
+AVX2 = AVX-256
 
 \section{Mainframe Hardware}
 

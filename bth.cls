@@ -307,37 +307,37 @@
 \newcommand{\acknowledgments}{%
    \chapter*{Acknowledgments}%
    \addcontentsline{toc}{chapter}{Acknowledgments}%
-   \markboth{Acknowledgments}{Acknowledgments}%
+   %\markboth{Acknowledgments}{Acknowledgments}%
 }
 
 \newcommand{\listOfDefinitions}{%
    \chapter*{Glossary}%
    \addcontentsline{toc}{chapter}{Glossary}%
-   \markboth{Glossary}{Glossary}%
+   %\markboth{Glossary}{Glossary}%
 }
    
 \newcommand{\zusammenfassung}{%
    \chapter*{Zusammenfassung}%
    \addcontentsline{toc}{chapter}{Zusammenfassung}%
-   \markboth{Zusammenfassung}{Zusammenfassung}%
+   %\markboth{Zusammenfassung}{Zusammenfassung}%
 }
    
 \newcommand{\sammanfattning}{%
    \chapter*{Sammanfattning}%
    \addcontentsline{toc}{chapter}{Sammanfattning}%
-   \markboth{Sammanfattning}{Sammanfattning}%
+   %\markboth{Sammanfattning}{Sammanfattning}%
 }
 
 \newcommand{\abstract}{%
    \chapter*{Abstract}%
    \addcontentsline{toc}{chapter}{Abstract}%
-   \markboth{Abstract}{Abstract}%
+   %\markboth{Abstract}{Abstract}%
 }
 
 \newcommand{\curriculum}{%
    \chapter*{Curriculum Vitae and Publications}%
    \addcontentsline{toc}{chapter}{Curriculum Vitae and Publications}%
-  \markboth{Curriculum Vitae}{Curriculum Vitae and Publications}%
+   %\markboth{Curriculum Vitae}{Curriculum Vitae and Publications}%
 }
 
 \newenvironment{noindentdescription}%

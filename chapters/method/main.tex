@@ -33,8 +33,10 @@ By studying the algorithms' underlying mathematics, the authors' own optimizatio
 When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third-parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
 
 To identify relevant research papers, we will search for peer-reviewed papers in reputable journals, such as IEEE and Springer. By searching for keywords related to our research topic, we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
+\todo[inline]{Här bör ni istället beskrive sökmetoden, vilka databaser, t ex scopus och web of science, och vilka nyckelord ni kommer att använda.}
 
 The selected papers, as well as the the papers submitted to \gls{nist}, will be included in a start set. The start set will then be used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
+\todo[inline]{Kommer ni att ha specificerade inclusion/exclusion criteria?}
 
 \todo[inline]{
 Vill svara på What specialized instructions and features applicable for post-quantum cryp-tography are available in z/15 and how are they used in context?
@@ -53,7 +55,9 @@ I discussion argumentera saker som borde finnas i framtiden.
 \section{Experiment}
 \label{section:method:experiment}
 
-This section describes and discusses the experiment design and rationale.
+This section describes and discusses the experiment design and rationale. The experiment has two phases, in phases one profile one run of the key exchange 
+
+\todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
 
 \subsection{Goal}
 \label{section:method:experiment-goal}
@@ -65,7 +69,7 @@ Our goal with the experiment is to analyze \textbf{\gls{post-quantum} \glspl{kem
 \subsection{Subjects}
 
 The test subjects of the experiment are two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{crystals-kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and has a long and excellent reputation\cite{nist2020}.
-
+\todo[inline]{Finns fler NIST submissions? Varför är dessa bortvalda?\\ har jag inte readn svart på det ovan?????}
 The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also rely on previous work from the EU-funded project \gls{pgcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pgcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded\cite{eu2015}.
 
 \begin{table}[H]
@@ -87,7 +91,7 @@ The \gls{nist} submissions under test are presented in table \ref{table:method:e
 
 \end{table}
 
-These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:control-subjects}.
+As previously mentioned in section \ref{section:background:pre-quantum}, there are several recommended classical \glspl{kex}. These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:control-subjects}.
 
 \begin{table}[H]
     \centering
@@ -109,7 +113,7 @@ As the control subjects are intended to represent the algorithms already in use,
 
 \subsection{Variables}
 
-The identified independent variables are presented in table \ref{table:method:experiment:independent-variables} below.
+The identified independent variables are presented in table \ref{table:method:experiment:independent-variables}.
 
 \todo{Mention lack of SSE, HMC, FPGA etc.? Argue that it is out of scope.}
 
@@ -121,8 +125,8 @@ The identified independent variables are presented in table \ref{table:method:ex
         \toprule
         \thead{Group} & \thead{Label} & \thead{Potential Values} & \thead{Comment} \\
         \midrule
-        Compiler & Compilers & GCC, Clang, IBM XL, IBM AutoSIMD, Intel C++ Compiler (ICC) & There are more, but these are the most commonly used compilers \\
-        Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications) \\
+        Compiler & Compilers & GCC, Clang, IBM XL, Intel C++ Compiler (ICC) & There are more, but these are the most commonly used compilers\todo{Cite properly?} \\
+        Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications)\todo{Research correct flags} \\
         Implementation & Libraries & \gls{sha3} / \gls{shake} / \gls{keccak}, \gls{aes-instruction-set}, \gls{cpacf} & \\
         Implementation & Optimizations & \gls{avx}, \gls{avx2}, \gls{avx512}, \gls{simd} (GPU), \gls{simd} on \gls{ibmz}, \gls{hsm} & These are the optimizations available in the selected implementations \\
         Environment & OS & OS Type and version, Scheduling & \\
@@ -131,7 +135,7 @@ The identified independent variables are presented in table \ref{table:method:ex
     \end{tabularx}
 \end{table}
 
-In table \ref{table:method:experiment:dependent-variables} below, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, its "encapsulation" and "decapsulation" is the same stage. As such, only one measurement is necessary and will henceforth be referred to as the encapsulation phase.
+In table \ref{table:method:experiment:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, its "encapsulation" and "decapsulation" is the same stage. As such, only one measurement is necessary and will henceforth be referred to as the encapsulation phase.
 
 \begin{table}[H]
     \centering
@@ -141,7 +145,7 @@ In table \ref{table:method:experiment:dependent-variables} below, the dependant 
         \toprule
         \thead{Group} & \thead{Stages} & \thead{Comments}\\
         \midrule
-        Throughput & \makecell{Encapsulation,\\Decapsulation,\\Key-pair generation} & CPU cycles, instruction count, wall-clock time\\
+        Throughput & \makecell{Encapsulation,\\Decapsulation,\\Key-pair generation} & CPU cycles, instruction count, wall-clock time\todo{Update? Branches, cache misses, page faults?}\\
         Hardware Utilization & \makecell{Encapsulation,\\Decapsulation,\\Key-pair generation} & Memory usage (heap and stack allocation), logical core utilization\footnotemark\\
         \bottomrule
     \end{tabularx}
@@ -155,34 +159,34 @@ In table \ref{table:method:experiment:dependent-variables} below, the dependant 
 This section describes the tools and instrumentation used in the experiment.
 
 \subsubsection{Toolset - Processor}
-\textbf{Selected tools:}\\
-The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API may work externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}\\ 
+\todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
+\subsubsubsection{Selected Tools}
+The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API functions externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
 
-As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm.
+As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
 
-To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
+Valgrind (Callgrind) was identified as usable for identifying hot paths in the code.
 
 \noindent
-\textbf{Rejected tools:}\\
-Other measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the performed instructions, cycles or time spent inside of the kernel.\todo{Cite this properly?}
+\subsubsubsection{Rejected Tools}
+Other sampling-based measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the retired instructions or time spent inside of the kernel\footnote{\href{https://ftp.gnu.org/old-gnu/Manuals/gprof-2.9.1/html\_mono/gprof.html}{https://ftp.gnu.org/old-gnu/Manuals/gprof-2.9.1/html\_mono/gprof.html}}
 
-Another tool that monitor the entire lifetime of a process, Valgrind (Callgrind) emulates the running code in a simplified machine, meaning the measurements are not applicable in our case where the underlying platform is of great importance.\todo{Cite this properly?}
+Another, non-sampling-based tool that monitor the entire lifetime of a process, Valgrind and its sub-tool Callgrind was found to not support running all of our samples on all targeted environments and was therefore deemed inappropriate for use as the main instrumentation tool. Callgrind can and will however be used for identifying the hot paths of the reference implementations as the implementation can be run in a working environment with its results general to wherever the implementation may be run.\todo{Revisit Valgrind comments}
 
-Other libraries or APIs such as those used in \gls{supercop} and PAPI were identified to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of \gls{supercop}, some measurements were identified to rely on extrapolation and estimation of data.\todo{Cite this properly?}
-
-Valgrind (Callgrind) was identified as usable for identifying hot paths in the code, but as perf provides the same capability with less overhead and better support, perf will be used for that analysis as well.
-
-
+Other libraries or APIs such as those available in \gls{supercop} and PAPI were identified via testing and a source code analysis to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of \gls{supercop}, some measurements were identified to rely on extrapolation and estimation of data which led us to reject the tool.
 
 \subsubsection{Toolset - Memory}
-\textbf{Selected tools:}\\
-As previously mentioned, Valgrind is a tool that emulates the machine code of a binary in order to analyze its behaviour in its entirety. Although we found it was not applicable for us to use for processor profiling, it was identified as the tool of choice for memory analysis.\\ 
+\todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
+\subsubsubsection{Selected Tools}
+As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as the tool of choice\todo{Revisit Valgrind comments} for memory analysis.
 
 \noindent
-\textbf{Rejected tools:}\\
+\subsubsubsection{Rejected Tools}
+\todo[inline]{vTune????}
 
 \subsubsection{Measurements}
 
+\todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
 \todo[inline]{Describe what each measurement is and what we aim to get out of them. Describe what system, user and wall-clock time is}
 
 Using the aforementioned toolset, we will instrument the subjects and measure the following values.
@@ -195,9 +199,9 @@ Using the aforementioned toolset, we will instrument the subjects and measure th
     \item Heap allocation in bytes
     \item Stack usage in bytes
     \item Wall clock time in nanosecond resolution
-\end{itemize}
+\end{itemize}\todo{Describe why these are not the same as in Table 1.4}
 
-The measurements will be taken at different points in the algorithms' lifecycles as explained in table \ref{table:method:instrumentation} below. The same measurements are to be repeated for the three phases - key-generation, encryption (key encapsulation) and decryption (key decapsulation). By first analyzing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+The measurements will be taken at different points in the algorithms' lifecycles as explained in table \ref{table:method:instrumentation}. The same measurements are to be repeated for the three phases - key-generation, encryption (key encapsulation) and decryption (key decapsulation). By first analyzing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
 
 \begin{table}[H]
     \centering
@@ -309,6 +313,8 @@ The following compiler configurations will be assessed where applicable.
     \end{tabularx}
 \end{table}
 
+\todo[inline]{-march=native räcker väl inte för att optimera mycket? Vilka kommer ni egentligen att använda?}
+
 In order to see the exact flags used to compile each sample, please refer to the source code for the experiment\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
 
 \subsubsection{Implementation Configurations}
@@ -317,7 +323,7 @@ The following implementation details will be changed in order to evaluate potent
 
 \begin{table}[H]
     \centering
-    \caption{Mainframe Hardware}
+    \caption{Implementation configurations}
     \label{table:method:implementation-configurations}
     \begin{tabularx}{\linewidth}{l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
         \toprule
@@ -335,7 +341,9 @@ The following implementation details will be changed in order to evaluate potent
 
 \subsubsection{Configuration Summary}
 
-The following section summarizes the configurations that are to be tested.
+The configurations presented in table \ref{table:method:configuration-summary} summarizes the configurations that are to be tested.
+
+\todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
 
 \begin{table}[H]
     \centering
