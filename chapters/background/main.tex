@@ -27,6 +27,10 @@ A \gls{kem} is form of key transport protocol designed to generate a new random 
 
 \subsection{Forward Secrecy}
 
+Forward Secrecy is a term used to describe the security of session keys after one or more long-term keys have been exposed. A key establishment protocol is said to provide forward secrecy if the compromise of long-term keys does not compromise any previously exchanged session key\cite{boyd2020:forward-secrecy}.
+
+Key agreement protocols may provide forward secrecy if the long-term keys are only used for authentication of the exchange. Another way to provide forward secrecy is to use ephemeral keys - keys that are only used for a single run of a key establishment protocol\cite{boyd2020:forward-secrecy}.
+
 \subsection{Applications}
 
 In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography\cite{bernstein2017}.
@@ -51,6 +55,8 @@ The threat these algorithms and performance increases impose has led to a new ep
 Pre-Quantum public-key cryptography suites are based on one of the following problems being hard to solve; integer factorization and elliptic-curve discrete logarithm. Shor's algorithm can solve these problems, rendering the cryptosystems useless\cite{shor1997}. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. But today's quantum computers are not powerful enough to execute Shor's algorithm on the large numbers used in modern cryptography\cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million noisy qubits to break 2048 bits RSA. Today's most powerful quantum computer is Google's 53-qubits system\cite{google2019:quantum-computer} IBM's 65-qubits system\cite{ibm2020:quantum-computer}. IBM has a 1000-qubits system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
 
 \subsection{Grover's Algorithm}
+
+
 
 \subsection{Bit Security}
 
@@ -89,9 +95,27 @@ Bit security corresponds to the best security a key of $n$ bits can provide unde
 \label{section:background:pre-quantum}
 % Establish today's use of cryptography, RSA and ECC
 
-In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} were used for key exchange. Algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\footnote{\href{https://tools.ietf.org/html/rfc8446}{https://tools.ietf.org/html/rfc8446}}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\footnote{\href{https://tools.ietf.org/html/rfc2409}{https://tools.ietf.org/html/rfc2409}} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
+In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} were used for key exchange. Algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\cite{rfc8446}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\cite{rfc2409} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
 
-Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\footnote{\href{https://tools.ietf.org/html/rfc7748}{https://tools.ietf.org/html/rfc7748}}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+
+\subsection{Diffie-Hellman}
+
+The \acrfull{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
+
+The base \gls{dh} protocol has since been altered and made part of several protocols, such as \gls{dh} using \gls{rsa} and \gls{dh} using \gls{ecc}.
+
+\subsection{RSA Diffie-Hellman}
+
+In the \gls{rsa} \gls{dh} protocol, two parties (Alice and Bob) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. Alice calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not necessarily secure. Alice and Bob may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020:diffie-hellman}.
+
+The security of the key exchange comes from the assumption that it is computationally difficult for a malicious party to recover $g^{r_A r_B}$ from the public channel. The problem is that of a discrete logarithm which was deemed unfeasible in the pre-quantum era, given a sufficient key size\cite{boyd2020:diffie-hellman}. In the post-quantum era, \gls{rsa} \gls{dh} is considered to be broken\cite{bernstein2017}.
+
+\subsection{Elliptic-Curve Diffie-Hellman}
+
+\subsection{Ephemeral Diffie-Hellman}
+
+\subsection{X25519}
 
 \section{Post-Quantum Cryptography}
 
