@@ -1,4 +1,4 @@
-% Contains information on experimentation and why it is applicable
+% Contains information on e2551perimentation and why it is applicable
 @Book{wohlin2012,
  author = {Wohlin, Claes},
  title = {Experimentation in software engineering},
@@ -239,6 +239,22 @@ institution = {EU}
  url={https://tmo.jpl.nasa.gov/progress_report2/42-44/44N.PDF},
 }
 
+@Inbook{sendrier2011,
+author="Sendrier, Nicolas",
+editor="van Tilborg, Henk C. A.
+and Jajodia, Sushil",
+title="Code-Based Cryptography",
+bookTitle="Encyclopedia of Cryptography and Security",
+year="2011",
+publisher="Springer US",
+address="Boston, MA",
+pages="215--216",
+isbn="978-1-4419-5906-5",
+doi="10.1007/978-1-4419-5906-5_378",
+url="https://doi.org/10.1007/978-1-4419-5906-5_378"
+}
+
+
 % Original paper on NTRU
 @InProceedings{ntru1998,
 author="Hoffstein, Jeffrey
@@ -328,5 +344,76 @@ isbn="978-3-540-69113-6"
   month = apr,
   publisher = {National Institute of Standards and Technology},
   author = {Elaine Barker and Lily Chen and Allen Roginsky and Apostol Vassilev and Richard Davis},
-  title = {Recommendation for pair-wise key-establishment schemes using discrete logarithm cryptography}
+  title = {Recommendation for pair-wise key-establishment schemes using discrete logarithm cryptography},
+  institution = {National Institute of Standards and Technology}
+}
+
+% Papper om optimering, avx, vektorisering
+@article{dickson2011,
+title = {Importance of explicit vectorization for CPU and GPU software performance},
+journal = {Journal of Computational Physics},
+volume = {230},
+number = {13},
+pages = {5383-5398},
+year = {2011},
+issn = {0021-9991},
+doi = {https://doi.org/10.1016/j.jcp.2011.03.041},
+url = {https://www.sciencedirect.com/science/article/pii/S0021999111002026},
+author = {Neil G. Dickson and Kamran Karimi and Firas Hamze},
+keywords = {Performance, Optimization, Vectorization, Monte Carlo, Ising model, GPU},
+}
+
+% Flynn's taxonomy
+% Also: http://www.cs.utah.edu/~hari/teaching/paralg/Flynn72.pdf
+@article{flynn1972,
+  author={M. J. {Flynn}},
+  journal={IEEE Transactions on Computers}, 
+  title={Some Computer Organizations and Their Effectiveness}, 
+  year={1972},
+  volume={C-21},
+  number={9},
+  pages={948-960},
+  doi={10.1109/TC.1972.5009071}
+}
+
+% Bok om optimering, SIMD etc.
+% Rekommenderad av Intel, NVIDIA etc.
+@book{hennessy2011:vectorization,
+    place={San Francisco, Calif.},
+    edition={5},
+    title={Computer architecture},
+    publisher={Morgan Kaufmann},
+    author={Hennessy, John L and Patterson, David A},
+    year={2011},
+    pages={262},
+}
+@book{hennessy2011:avx,
+    place={San Francisco, Calif.},
+    edition={5},
+    title={Computer architecture},
+    publisher={Morgan Kaufmann},
+    author={Hennessy, John L and Patterson, David A},
+    year={2011},
+    pages={262},
+}
+
+% Bok om RISC, CISC
+@book{flynn1998,
+place={Boston [u.a.]},
+title={Computer architecture},
+publisher={Jones and Bartlett},
+author={Flynn, Michael J},
+year={1998},
+pages={11,20,66}
+}
+
+% Bok om RISC, CISC (mer information än tidigare böcker)
+% Innehåller även SIMD, AVX och mer fysiska beskrivningar
+@book{carter2002,
+place={New York, NY},
+title={Schaum's outline of computer architecture},
+publisher={McGraw-Hill},
+author={Carter, Nicholas},
+year={2002},
+pages={96-97}
 }

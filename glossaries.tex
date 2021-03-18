@@ -23,15 +23,18 @@
 \newglossaryentry{aes}{name=AES, description={Advanced Encryption Standard}}
 \newglossaryentry{crystals-kyber}{name={CRYSTALS-KYBER}, description={A post-quantum Key Encapsulation Mechanism}}
 \newglossaryentry{saber}{name={SABER}, description={A post-quantum Key Encapsulation Mechanism}}
-\newglossaryentry{avx}{name=AVX, description={Advanced Vector Extensions - an instruction set for SIMD on CPUs}}
+\newglossaryentry{avx}{name=AVX, description={Advanced Vector Extensions - an instruction set for SIMD on CPUs}, see=simd}
 \newglossaryentry{avx2}{name=AVX2, description={An expansion of AVX, also known as AVX-256}, see=avx}
 \newglossaryentry{avx512}{name=AVX512, description={An expansion of AVX}, see=avx}
+\newglossaryentry{sse}{name=SSE, description={Streaming SIMD Extensions - an instruction set for SIMD on CPUs}, see=simd}
 \newglossaryentry{aes-instruction-set}{name={AES (Instruction Set)}, text=AES, description={An instruction set for accelerated AES operations}, see=aes}
 \newglossaryentry{aes-ni}{name={AES-NI}, description={An instruction set for accelerated AES operations}, see=aes}
-\newglossaryentry{x86}{name=x86, description={A family of processor architectures}}
+\newglossaryentry{x86}{name=x86, description={A family of processor architectures. Typically used to refer to x86-64 (x64, amd64 etcetera)}}
 \newglossaryentry{s390x}{name=s390x, description={A Linux kernel architecture designation for IBM's Z architectures}}
 \newglossaryentry{pqcrypto}{name=PQCRYPTO, description={Post-Quantum Cryptography for Long-Term Security}}
 \newglossaryentry{ind-cca2}{name={IND-CCA2}, description={Indistinguishability of encryption against adaptively Chosen-Ciphertext Attacks}}
+\newglossaryentry{owcpa}{name={OW-CPA}, description={One-Wayness against Chosen-Plaintext Attack}}
+\newglossaryentry{qubit}{name={qubit}, description={A Quantum Bit}}
 
 \newacronym{kex}{KEX}{Key Exchange Algorithm}
 \newacronym{kem}{KEM}{Key Encapsulation Mechanism}
@@ -43,7 +46,6 @@
 \newacronym{mdn}{MDN}{Mozilla Developer Network}
 \newacronym{ietf}{IETF}{Internet Engineering Task Force}
 \newacronym{cpacf}{CPACF}{Central Processor Assist for Cryptographic Function}
-\newacronym{simd}{SIMD}{Single Instruction Multiple Data}
 \newacronym{hsm}{HSM}{Hardware Security Module}
 \newacronym{hcm}{HCM}{Hardware Cryptographic Module}
 \newacronym{fpga}{FPGA}{Field-Programmable Gate Array}
@@ -51,6 +53,13 @@
 \newacronym{jit}{JIT}{Just In Time}
 \newacronym{vcpu}{vCPU}{virtual CPU}
 \newacronym{tls}{TLS}{Transport Layer Security}
+\newacronym{vpn}{VPN}{Virtual Private Network}
+\newacronym{sisd}{SISD}{Single Instruction Single Data}
+\newacronym{simd}{SIMD}{Single Instruction Multiple Data}
+\newacronym{misd}{MISD}{Multiple Instruction Single Data}
+\newacronym{mimd}{MIMD}{Multiple Instruction Multiple Data}
+\newacronym{cisc}{CISC}{Complex Instruction Set Computer}
+\newacronym{risc}{RISC}{Reduced Instruction Set Computer}
 
 % These are all available but not used in references
 \newglossaryentry{diffie-hellman}{name={Diffie-Hellman}, description={A key-exchange algorithm}, nonumberlist}

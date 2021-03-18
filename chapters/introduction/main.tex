@@ -14,28 +14,31 @@ For a long time, it has been known that the cryptography in use today will event
 % Provide relevant background facts or information.
 % Define key terminology (if required).
 % Introducera McEliece med vänner
-As previously mentioned, the fact that today's cryptography will likely become obsolete has been known for a long time. There has therefore been ongoing research to find new candidates to replace these algorithms, called \textit{post-quantum} cryptography algorithms. For the past few years, NIST has held a competition of sorts where it seeks to find one or more candidates it can standardize for future use. Two of these candidates, McEliece and NTRU have been prominent\cite{nist2020}.
+As previously mentioned, the fact that today's cryptography will likely become obsolete has been known for a long time. There has therefore been ongoing research to find new candidates to replace these algorithms, called \textit{post-quantum} cryptography algorithms. For the past few years, \gls{nist} has held a competition of sorts where it seeks to find one or more candidates it can standardize for future use. Two of these candidates, \gls{mceliece} and \gls{ntru} have been prominent\cite{nist2020}.
 
 % Provide relevant background facts or information.
 % Define key terminology (if required).
 % Behövs "binary Goppa codes" här? Eller hur djupt ska man gå?
-McEliece is a so called \textit{code-based} cryptography algorithm that is based on binary Goppa codes. It exploits the problem of decoding random linear codes, which has been proven to be practically impossible for conventional computers and quantum computers\cite{mceliece1978}. Another post-quantum algorithm, NTRU is a ring-based cryptosystem which exploits the difficulty of finding the shortest vector in a lattice\cite{ntru1998}.
+\gls{mceliece} is a so called \textit{code-based} cryptography algorithm that is based on binary Goppa codes. It exploits the problem of decoding random linear codes, which has been proven to be practically impossible for conventional computers and quantum computers\cite{mceliece1978}. Another post-quantum algorithm, \gls{ntru} is a ring-based cryptosystem which exploits the difficulty of finding the shortest vector in a lattice\cite{ntru1998}.
 
 % Provide relevant background facts or information.
 % Introducera mainframe och koppla ihop med introduktionen till kryptering
 The mainframe computer is a uniquely engineered computer that is designed to handle a large amount of data and bulk transactions. Their availability, resilience, high throughput and security are core features. Although they might not be used directly by most people, mainframes are used all around the world to process transactions and more. The fact that personal information, trade secrets etc. is kept secure when transferring them for processing and storage is critical. The use of these modern cryptography algorithms make mainframes susceptible to the issues imposed by the progress of quantum computing and the the use of Shor's algorithm.
 
 % Give a brief overview over existing research/~contributions in the specific area you are dealing with.
-The field of post-quantum cryptography has been heavily researched throughout the years. Given that the eventual obsoleteness of current-day cryptographics schemes is approaching, research on actual implementations of post-quantum cryptography has increased lately. Despite this, little research has been done on evaluating the performance of post-quantum public-key cryptography.
+The field of post-quantum cryptography has been heavily researched throughout the years. Given that the eventual obsoleteness of current-day cryptographics schemes is approaching, research on actual implementations of post-quantum cryptography has increased lately. Despite this, little research has been done on evaluating the performance of post-quantum public-key cryptography.\todo{Not Ture "Despite this, little research has been done on evaluating the performance of post-quantum public-key cryptography"}
 
-One study focuses on the performance of post-quantum public-key cryptography on smart phones. It concludes that post-quantum cryptography is feasible on mobile devices, mentioning several of the same algorithms contesting in the NIST standardization process. Although they discuss the performance of the algorithms, their focus lies with memory consumption and power consumption. They do not cover potential performance gains from optimizing the algorithms for various architectures.%\cite{Chikouche2018}.
+One study focuses on the performance of post-quantum public-key cryptography on smart phones. It concludes that post-quantum cryptography is feasible on mobile devices, mentioning several of the same algorithms contesting in the \gls{nist} standardization process. Although they discuss the performance of the algorithms, their focus lies with memory consumption and power consumption. They do not cover potential performance gains from optimizing the algorithms for various architectures.%\cite{Chikouche2018}.
+\todo{rewrite}
 
-Another study focuses on an implementation of post-quantum cryptography on FPGAs. The work centers around public and private key generation using the Niederreiter algorithm. The work does not cover the performance of the encryption and decryption using the scheme. Niederreiter is also not considered to be one of the main contestans of the NIST standardization problem.%\cite{Wang2018}.
+Another study focuses on an implementation of post-quantum cryptography on FPGAs. The work centers around public and private key generation using the Niederreiter algorithm. The work does not cover the performance of the encryption and decryption using the scheme. Niederreiter is also not considered to be one of the main contestans of the \gls{nist} standardization problem.%\cite{Wang2018}.
+\todo{rewrite}
 
-There's also a study covering a performant parallel implementation of the post-quantum algorithm FrodoKEM on a GPU. FrodoKEM is not part of the finalists in the third round of the NIST standardization and is therefore less likely to be standardized than McEliece and NTRU\cite{nist2020}. As the study focuses on a GPU implementation, it is unknown if the results generalize to other architectures such as IBM Z or x86.%\cite{Seo2020}.
+There's also a study covering a performant parallel implementation of the post-quantum algorithm FrodoKEM on a GPU. FrodoKEM is not part of the finalists in the third round of the \gls{nist} standardization and is therefore less likely to be standardized than \gls{mceliece} and \gls{ntru}\cite{nist2020}. As the study focuses on a GPU implementation, it is unknown if the results generalize to other architectures such as IBM Z or x86.%\cite{Seo2020}.
+\todo{rewrite}
 
 % Identify a gap in this work.
-We've identified a gap in research when it comes to the application of post-quantum cryptography on mainframes. We have not been able to find any work focusing on the performance of using McEliece or NTRU - two prominent candidates in NIST's standardization progress. We also failed to find any relevant work taking into account the differences in architecture between various platforms. For example, mainframes are by nature focused on specialized processing and IBM's z/15 has dedicated instruction sets and features to handle common encryption procedures\cite{ibm2020:quantum-computer}. We therefore seek to evaluate the application of post-quantum cryptography on mainframes.
+We've identified a gap in research when it comes to the application of post-quantum cryptography on mainframes. We have not been able to find any work focusing on the performance of using \gls{mceliece} or \gls{ntru} - two prominent candidates in \gls{nist}'s standardization progress. We also failed to find any relevant work taking into account the differences in architecture between various platforms. For example, mainframes are by nature focused on specialized processing and IBM's z15 has dedicated instruction sets and features to handle common encryption procedures\cite{ibm2020:quantum-computer}. We therefore seek to evaluate the application of post-quantum cryptography on mainframes.
 
 % Describe the specific problem you will address (as a result from 6.).
 In short, we want to investigate if the transition to post-quantum cryptography can be made in the near future, with a focus on its applications on mainframe computers.
@@ -50,6 +53,10 @@ Due to the vast use of mainframes and their reliance on strong public-key crypto
 \noindent\textbf{RQ1} Does the performance of \gls{post-quantum} key encapsulation mechanisms differ between architectures and if so, how?\label{rq1}\hfill\par
 \noindent\textbf{RQ2} What specialized instructions and features applicable for \gls{post-quantum} key encapsulation mechanisms are available in \gls{z15} and how are they used in context?\label{rq2}\hfill\par
 \noindent\textbf{RQ3} What techniques may be used to increase the performance of \gls{post-quantum} key encapsulation mechanisms?\label{rq3}\hfill\par
+
+\subsection{Scope}
+
+Define the scope of the paper.
 
 \todo[inline]{motivate the chosen research questions}
 % Outline

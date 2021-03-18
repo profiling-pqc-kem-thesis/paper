@@ -7,7 +7,7 @@ Cryptographic functions are sorted into two categories - \textit{symmetric} func
 
 In the case of symmetric functions, the same key is known to both parties. The key is used for both encryption and decryption. Symmetric functions can also be used to provide authenticity - if only the two parties know of the secret key, one of them may request the other to prove possession of the key\cite{bernstein2017}.
 
-In the case of public-key cryptography, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}. \todo{Mention quantum supremacy?}
+In the case of public-key cryptography, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}.
 
 \section{Key Establishment}
 
@@ -23,7 +23,7 @@ In a key agreement protocol, the parties jointly influence the outcome of the sh
 
 A \gls{kem} is form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs\cite{boyd2020:key-encapsulation}.
 
-\todo{Should this be more descriptive? boyd2020:key-encapsulation has information on a definition of the protocol}
+\todo{Should this be more descriptive? boyd2020:key-encapsulation has information on a definition of a protocol}
 
 \subsection{Forward Secrecy}
 
@@ -31,31 +31,23 @@ Forward Secrecy is a term used to describe the security of session keys after on
 
 Key agreement protocols may provide forward secrecy if the long-term keys are only used for authentication of the exchange. Another way to provide forward secrecy is to use ephemeral keys - keys that are only used for a single run of a key establishment protocol\cite{boyd2020:forward-secrecy}.
 
-\subsection{Applications}
-
-In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography\cite{bernstein2017}.
-
-In Wireguard...
-
-In SSH...
-
 \section{Post-Quantum}
 
 Cryptography usually does not come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical. As the performance of conventional computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using conventional algorithms. As Moore's law has come to a halt, the threat of traditional computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
 
-Since \todo{when?}, research has been made to utilize quantum mechanics for computation, introducing the quantum computer. By utilizing quantum bits or qubits instead of the bits used in traditional computers, quantum computers are able to represent several states per qubit. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a traditional computer. Recent progress in the field has shown that, as progress have halted in the area of traditional computers, progress made on quantum computers has been increasing exponentially.
+Since \todo{when?}, research has been made to utilize quantum mechanics for computation, introducing the quantum computer. By utilizing quantum bits or \glspl{qubit} instead of the bits used in traditional computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a traditional computer. Recent progress in the field has shown that, as progress have halted in the area of traditional computers, progress made on quantum computers has been increasing exponentially.
 
 Parallel to the development of the theoretical quantum computer, algorithms were developed to make use of the mechanics. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical to implement or use on a traditional system, but feasible to use on a quantum computer.
 
 The threat these algorithms and performance increases impose has led to a new epoch in computing and cryptography - post-quantum.
-\todo[inline]{Cite prop-erly?}
+\todo[inline]{Cite properly?} \todo{Mention quantum supremacy?}
 
 \subsection{Shor's Algorithm}
 
-Pre-Quantum public-key cryptography suites are based on one of the following problems being hard to solve; integer factorization and elliptic-curve discrete logarithm. Shor's algorithm can solve these problems, rendering the cryptosystems useless\cite{shor1997}. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. But today's quantum computers are not powerful enough to execute Shor's algorithm on the large numbers used in modern cryptography\cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million noisy qubits to break 2048 bits RSA. Today's most powerful quantum computer is Google's 53-qubits system\cite{google2019:quantum-computer} IBM's 65-qubits system\cite{ibm2020:quantum-computer}. IBM has a 1000-qubits system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
+Pre-Quantum public-key cryptography suites are based on one of the following problems being hard to solve; integer factorization and elliptic-curve discrete logarithm. Shor's algorithm can solve these problems, rendering the cryptosystems useless\cite{shor1997}. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. But today's quantum computers are not powerful enough to execute Shor's algorithm on the large numbers used in modern cryptography\cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million noisy \glspl{qubit} to break 2048 bits \gls{rsa}. Today's most powerful quantum computer is Google's 53-\glspl{qubit} system\cite{google2019:quantum-computer} IBM's 65-\glspl{qubit} system\cite{ibm2020:quantum-computer}. IBM has a 1000-\glspl{qubit} system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
 
 \subsection{Grover's Algorithm}
-Grover's algorithm was first proposed as a way to search in databases with N items in $O(\sqrt N)$ quantum operations\cite{grover1996}. However, a more practical application for the algorithm is to find the root of a function\cite{bernstein2017}. This enables an attack on some cryptosystem such as AES, and the attack will slice the bit security in half. To mitigate this attack, you can double the size of the AES key.
+Grover's algorithm was first proposed as a way to search in databases in $O(\sqrt N)$ quantum operations where N is the number of items\cite{grover1996}. However, a more practical application for the algorithm is to find the root of a function\cite{bernstein2017}. This enables an attack on some cryptosystem such as \gls{aes}, and the attack will slice the bit security in half. To mitigate this attack, you can double the size of the \gls{aes} key.
 
 \subsection{Bit Security}
 
@@ -92,11 +84,23 @@ Bit security corresponds to the best security a key of $n$ bits can provide unde
 
 \section{Pre-Quantum Cryptography}
 \label{section:background:pre-quantum}
-% Establish today's use of cryptography, RSA and ECC
 
-In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} were used for key exchange. Algorithms such as \gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), \gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\cite{rfc8446}, SSH\cite{williams2011}, VPNs such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\cite{rfc2409} and Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
+In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+
+\todo[inline] {
+Is this even relevant? Perhaps under the introduction instead?
+
+In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography\cite{bernstein2017}. \gls{tls} may use any of wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+
+% Commented out due too footnote in todo not working
+%\gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), is used for key exchange in the \gls{vpn} Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
+
+
+% Commented out due too footnote in todo not working
+%\gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\cite{rfc8446}, SSH\cite{williams2011}, \glspl{vpn} such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\cite{rfc2409} and Wireguard.
 
 Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+}
 
 \subsection{Diffie-Hellman}
 
@@ -108,15 +112,15 @@ The security of the key exchange comes from the assumption that it is computatio
 
 \subsection{Elliptic-Curve Diffie-Hellman}
 
-The \acrfull{ecc} \acrfull{dh} \gls{kex} is an adaption of \gls{dh} over elliptic curves. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.).
+The \acrfull{ecc} \acrfull{dh} \gls{kex} is an adaption of \gls{dh} over elliptic curves. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.)\cite{nist2018}.
+
+Alice computes the point $P=hd_aQ_b$, where $d_A$ is Alice's private key, $Q_B$ Bob's public key and $h$ a \gls{ecc} domain parameter. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
+
+The \gls{x25519} \gls{kex} is a special case of \gls{ecc} \gls{dh} where \gls{curve25519} is used\cite{rfc7748}. 
 
 \subsection{Ephemeral Diffie-Hellman}
 
 In the case of both \gls{dh} and \gls{ecc} \gls{dh}, ephemeral keys may be used to provide forward secrecy. As mentioned in section \ref{section:background:pre-quantum}, the use of ephemeral keys is recommended for Diffie-Hellman.
-
-\subsection{X25519}
-
-The \gls{x25519} \gls{kex} is a special case of \gls{ecc} \gls{dh} where \gls{curve25519} is used.
 
 \section{Post-Quantum Cryptography}
 
@@ -129,7 +133,7 @@ The organization is split into various divisions. One of these divisions, the Co
 
 The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for post-quantum cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions \footnote{\href{https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/Call-for-Proposals}{https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/Call-for-Proposals}}.
 
-At the time of writing, the contest has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\footnote{\href{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}}.
+At the time of writing, the process has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\footnote{\href{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}}.
 
 The public-key encryption and key-establishment algorithms finalists were the following.
 
@@ -150,7 +154,9 @@ The digital signature finalists were the following.
 
 \subsection{IND-CCA2}
 
-\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack. Resistence to such an attack is referred to as \gls{ind-cca2} security\cite{nist2017}.
+\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack. Resistence to such an attack is referred to as \gls{ind-cca2} security\cite{nist2017}. 
+
+\todo{Explain entire random oracle model, talk about the actual meaning and the different categories?}
 
 \subsection{Security Categories}
 
@@ -166,52 +172,99 @@ The digital signature finalists were the following.
     \item 5. Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. AES 256)
 \end{itemize}
 
-\subsection{OWCPA}
+\section{Lattice-Based Cryptography}
 
-\section{Lattice-Based Key Encapsulation Mechanisms}
+\todo[inline]{todo}
+%\todo{include security category}
 
 \subsection{NTRU}
 
-\todo{include security category}
+\todo[inline]{todo}
+%\todo{include security category}
 
 \subsection{CRYSTALS-KYBER}
 
-\todo{include security category}
+\todo[inline]{todo}
+%\todo{include security category}
 
 \subsection{SABER}
 
-\todo{include security category}
+\todo[inline]{todo}
+%\todo{include security category}
 
-\section{Code-Based Key Encapsulation Mechanisms}
+\section{Code-Based Cryptography}
+Code-based cryptosystems take advantage of error-correction code. Typically error-correction code is used to detect or correct a bit flip that occurred. But in cryptography, you can use it to encrypt by adding errors, which can be corrected when you decrypt\cite{bernstein2017}. There are different types of error-correction codes, for example, quasi-cyclic codes and Goppa codes.\cite{sendrier2011}.
 
 \subsection{Classic McEliece}
+Classic McEliece is a code-based cryptosystem. It uses random binary Goppa codes.
+
+
+\todo[inline]{
+% From nist 2020
+Classic McEliece is a code-based KEM based on the 1979 McEliece cryptosystem built from a hidden Goppa code. Classic McEliece includes some modern improvements for efficiency and to provide CCA security. The security of these improvements is reduced to the one-wayness against chosen-plaintext attack (OW-CPA) security of the original construction as proposed in 1979 [17]. The original construction is not based on a particularly natural computational assumption; however, Goppa code McEliece and related cryptosystems have a long history of study\cite{nist2020}.
+}
 
 \todo{include security category}
 
 \section{Performance Optimization}
 
-"Theoretical" topics on performance optimization
+% "Theoretical" topics on performance optimization
 
-\subsection{SIMD}
+\subsection{Vectorization}
 
-Vectorization ...
+The classification of computer architectures proposed by Flynn, later named to Flynn's taxonomy, describes the four classifications presented below. \cite{flynn1972}.
+
+\begin{itemize}
+    \item The \gls{sisd} organization represents the most conventional type of computer. Such an organization is limited by data dependencies. Branching is particularily limiting.
+    \item The \gls{simd} organization represents array processes. The performance of such a process increases as $\mathcal{O}(\log_2 N)$ with respect to then number of data stream processors. 
+    \item The \gls{misd} organization was typically represented by the plug-board type machines no longer in use.
+    \item The \gls{mimd} organization is typically referred to as multi-processors. The organization may be subject to saturation.
+\end{itemize}
+
+Due to the properties of \gls{simd}, it has been an attractive target for software optimization with practical use seeing significant throughput increases\cite{dickson2011}.
+
+In order to use the properties of \gls{simd}, the target architecture has to be a vector architecture or one that supports \gls{simd} extensions. Such a target will work on sets of data elements in memory, placing them in sequential registers, operate on the vectors of data using a single instruction and then disperse the results back to main memory. In the case of a vector architecture, these vector payloads are heavily pipelined. The memory overhead is consistent for an entire vector of operands as opposed to linear in regular \gls{sisd} architectures\cite{hennessy2011:vectorization}. Furthermore, a piece of code may have to be vectorized to use the properties offered by \gls{simd}. That is, it will need to be written in such a way that the same operation can be performed on multiple units of data. Not all algorithms can be written in such a way, however\cite{dickson2011}.
+
+Although usage of a CPU's vectorization capabilities may require explicit input from a programmer, advanced compilers may in some cases be able to automatically vectorize code in order to make it run more efficiently\cite{dickson2011}.
 
 \section{CPU Architectures}
 
-Alla datorer är inte likadana. Olika instruktionsset, o.s.v. Det finns massvis med olika.
+The \acrfull{risc} design methodology is centered around a load/store architecture\cite{flynn1998}. This means that only the load and store instructions may access the memory system\cite{carter2002}. The aim is to reduce the amount of complexity in the instruction set and regularize the instruction format. The regularization simplifies the decoding of the instructions with the aim to improve the overall performance\cite{flynn1998}. The \acrfull{cisc} design methodology, on the other hand, is centered around a register/memory architecture\cite{flynn1998}. The architecture permits arithmetic and other instructions to read their input from, or write to the memory system\cite{carter2002}.
+
+A \gls{cisc} computer generally requires fewer instructions than a \gls{risc} computer to perform a computation. A \gls{cisc} computer may therefore perform better than a \gls{risc} computer that performs instructions at the same rate. A \gls{risc} computer may be implemented at a higher clock rate than a \gls{cisc} computer as the instructions can more efficiently be decoded\cite{carter2002}.
+
+The nature load/store and register/memory architectures of \gls{risc} and \gls{cisc} results in memory-related arithemtic requiring fewer instructions on a \gls{cisc} machine than a \gls{risc} machine. The hardware required for the machine is more complex, however. This trade-off is one of many when comparing the architectures\cite{carter2002}.
+
+An example of an architecture using \gls{cisc} is \gls{x86}. Examples of architectures using \gls{risc} are ARM and RISC-V.
 
 \section{Consumer and Server Hardware}
 
-x86, ARM, RISC-V. RISC vs CISC. 
+\subsection{x86}
 
-\subsection{AVX}
+The \gls{x86} family of architectures are some of the most popular architectures for consumer and server hardware. The family contains architectures such as i386 and x86-64. It is not uncommon for the architectures to be referred to as just \gls{x86}\cite{carter2002}.
 
-AVX2 = AVX-256
+\gls{x86} is in theory a \gls{cisc}, but there has been a fair amount of convergence between \gls{risc} and \gls{cisc}, which makes them a hybrid of sorts\cite{carter2002}.
+
+\subsection{Advanced Vector Extensions (AVX)}
+
+In 1996 the x86 architecture saw the addition of the MMX instruction set. The instruction set used the 64-bit floating-point registers of the CPU to enable performing eight 8-bit operations, or four 16-bit operations simultaneously. The instruction set was superseeded by \gls{sse} in 1999, which added special registers of 128 bits. This enabled instructions to simultaneously perform sixteen 8-bit operations, eight 16-bit operations, or four 32-bit operations. \gls{sse} was in turn superseeded by SSE2 in 2001, SSE3 in 2004 and SSE4 in 2007. Each generation saw improvements in available instructions and floating-point performance\cite{hennessy2011:avx}.
+
+In 2010, the \gls{avx} doubled the width of the registers to 256 bits. This increase effectively doubled the number of simultaneous operations that could be performed. The 256-bit width supported 64-bit operands in parallel\cite{hennessy2011:avx}. \gls{avx} was superseeded by \gls{avx2} and \gls{avx512}, 256-bit\footnote{\href{https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/intrinsics/intrinsics-for-intel-advanced-vector-extensions-2/overview-intrinsics-for-intel-advanced-vector-extensions-2-intel-avx2-instructions.html}{https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/intrinsics/intrinsics-for-intel-advanced-vector-extensions-2/overview-intrinsics-for-intel-advanced-vector-extensions-2-intel-avx2-instructions.html}} and 512-bit\footnote{\href{https://www.intel.com/content/www/us/en/architecture-and-technology/avx-512-overview.html}{https://www.intel.com/content/www/us/en/architecture-and-technology/avx-512-overview.html}} wide respectively.
+
+By using AVX, a developer may optimize a program and make use of the performance properties offered by \gls{simd}\cite{hennessy2011:avx}.
 
 \section{Mainframe Hardware}
 
-IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.
+\todo[inline]{IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.}
+
+\subsection{Z}
+\todo[inline]{todo}
+
+\subsection{POWER}
+\todo[inline]{todo}
 
 \subsection{CPACF}
+\todo[inline]{todo}
 
 \subsection{HSM}
+\todo[inline]{todo}
