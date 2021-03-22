@@ -102,7 +102,7 @@ Variants of the mentioned key exchange algorithms are also used in messaging app
 
 \subsection{Diffie-Hellman}
 
-The \acrfull{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
+The \gls{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
 
 In the \gls{dh} protocol, two parties (Alice and Bob) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. Alice calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not necessarily secure. Alice and Bob may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020:diffie-hellman}.
 
@@ -110,28 +110,28 @@ The security of the key exchange comes from the assumption that it is computatio
 
 \subsection{Elliptic-Curve Diffie-Hellman}
 
-The \acrfull{ecc} \acrfull{dh} \gls{kex} is an adaption of \gls{dh} over elliptic curves. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.)\cite{nist2018}.
+The \gls{ecdh} \gls{kex} is an adaption of \gls{dh} over elliptic curves. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.)\cite{nist2018}.
 
 Alice computes the point $P=hd_aQ_b$, where $d_A$ is Alice's private key, $Q_B$ Bob's public key and $h$ a \gls{ecc} domain parameter. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
 
-The \gls{x25519} \gls{kex} is a special case of \gls{ecc} \gls{dh} where \gls{curve25519} is used\cite{rfc7748}. 
+The \gls{x25519} \gls{kex} is a special case of \gls{ecdh} where \gls{curve25519} is used\cite{rfc7748}. 
 
 \subsection{Ephemeral Diffie-Hellman}
 
-In the case of both \gls{dh} and \gls{ecc} \gls{dh}, ephemeral keys may be used to provide forward secrecy. As mentioned in section \ref{section:background:pre-quantum}, the use of ephemeral keys is recommended for Diffie-Hellman.
+In the case of both \gls{dh} and \gls{ecdh}, ephemeral keys may be used to provide forward secrecy. These ephemeral variants are referred to as \gls{dhe} and \gls{ecdhe}. As mentioned in section \ref{section:background:pre-quantum}, the use of ephemeral keys is recommended for all versions of \gls{dh}.
 
 \section{Post-Quantum Cryptography}
 
-Post-quantum cryptography relies on an entirely different set of underlying mathematical problems...
+\todo[inline]{Post-quantum cryptography relies on an entirely different set of underlying mathematical problems...}
 
 \section{The NIST Post-Quantum Standardization Process}
-\gls{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\footnote{\href{https://www.nist.gov/about-nist}{https://www.nist.gov/about-nist}}.
+\gls{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\cite{nist:about}.
 
-The organization is split into various divisions. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and post-quantum cryptography\footnote{\href{https://www.nist.gov/itl/csd/cryptographic-technology}{https://www.nist.gov/itl/csd/cryptographic-technology}}.
+The organization is split into various divisions. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and post-quantum cryptography\cite{nist:ct}.
 
-The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for post-quantum cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions \footnote{\href{https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/Call-for-Proposals}{https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/Call-for-Proposals}}.
+The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for post-quantum cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions\cite{nist:call-for-proposals}.
 
-At the time of writing, the process has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\footnote{\href{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}{https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions}}.
+At the time of writing, the process has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\cite{nist:round-three-submissions}.
 
 The public-key encryption and key-establishment algorithms finalists were the following.
 
@@ -247,7 +247,7 @@ The \gls{x86} family of architectures are some of the most popular architectures
 
 In 1996 the x86 architecture saw the addition of the MMX instruction set. The instruction set used the 64-bit floating-point registers of the CPU to enable performing eight 8-bit operations, or four 16-bit operations simultaneously. The instruction set was superseeded by \gls{sse} in 1999, which added special registers of 128 bits. This enabled instructions to simultaneously perform sixteen 8-bit operations, eight 16-bit operations, or four 32-bit operations. \gls{sse} was in turn superseeded by SSE2 in 2001, SSE3 in 2004 and SSE4 in 2007. Each generation saw improvements in available instructions and floating-point performance\cite{hennessy2011:avx}.
 
-In 2010, the \gls{avx} doubled the width of the registers to 256 bits. This increase effectively doubled the number of simultaneous operations that could be performed. The 256-bit width supported 64-bit operands in parallel\cite{hennessy2011:avx}. \gls{avx} was superseeded by \gls{avx2} and \gls{avx512}, 256-bit\footnote{\href{https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/intrinsics/intrinsics-for-intel-advanced-vector-extensions-2/overview-intrinsics-for-intel-advanced-vector-extensions-2-intel-avx2-instructions.html}{https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/intrinsics/intrinsics-for-intel-advanced-vector-extensions-2/overview-intrinsics-for-intel-advanced-vector-extensions-2-intel-avx2-instructions.html}} and 512-bit\footnote{\href{https://www.intel.com/content/www/us/en/architecture-and-technology/avx-512-overview.html}{https://www.intel.com/content/www/us/en/architecture-and-technology/avx-512-overview.html}} wide respectively.
+In 2010, the \gls{avx} doubled the width of the registers to 256 bits. This increase effectively doubled the number of simultaneous operations that could be performed. The 256-bit width supported 64-bit operands in parallel\cite{hennessy2011:avx}. \gls{avx} was superseeded by \gls{avx2} and \gls{avx512}, 256-bit\cite{intel:avx2} and 512-bit\cite{intel:avx512} wide respectively.
 
 By using AVX, a developer may optimize a program and make use of the performance properties offered by \gls{simd}\cite{hennessy2011:avx}.
 
@@ -260,9 +260,19 @@ By using AVX, a developer may optimize a program and make use of the performance
 
 \subsection{POWER}
 \todo[inline]{todo}
+% \gls{power} finns definierat
 
 \subsection{CPACF}
 \gls{cpacf} are a part of the CPU on the Z platform
 
-\subsection{HSM}
-\todo[inline]{todo}
+\subsection{CryptoCards}
+
+CryptoCards are IBM's cryptographic \glspl{hsm}. A \gls{hsm} is a physical device placed into a computer to deliver high throughput for cryptographic functions. The devices are designed to be physically secured from tampering and their firmware may be cryptographically verifiable\cite{ibm:hsms}.
+
+CryptoCards are available for \gls{ibmz}, \gls{power} and \gls{x86}, depending on the chosen \gls{hsm}.
+
+At the time of writing, the newest card for \gls{ibmz} and \gls{x86} is the CEX7S / 4769\cite{ibm:4769}. The newest card for the \gls{power} platform is the CEX5S / 4767\cite{ibm:4767}.
+
+Common to both cards is support for both \gls{fips} 140-2 Level 4. The CEX7S / 4769 is also certified according to the \gls{pci-payment} \gls{hsm} standard\cite{ibm:4769,ibm:4767}.
+
+The two cards highly accelerate the use of common cryptographic algorithms such as \gls{aes}, \gls{sha3} and \gls{dh}\cite{ibm:4767,ibm:4769}.
