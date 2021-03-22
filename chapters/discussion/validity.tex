@@ -92,7 +92,7 @@ Another factor that may hurt the generalizability of the results is the potentia
 The implementations used for benchmarks are not created by us. They have, however, been slightly altered in order to support various forms of optimization. This fact may result in the tested implementations performing differently than if the original implementers would have applied the optimizations. It is therefore plausible that the measurements of the samples will not be general to other implementations using the same techniques.
 
 % Aptitude treatment.
-As there are several optimization techniques such as vectorization and compiler flags applied simultaneously, there is a potential for techniques to cancel each other out or in other ways impact the performance negatively. We will mitigate this risk by evaluating each form of optimization in isolation, before combining all techniques into a truly optimized implementation. These evaluations are listed in table \ref{table:method:instrumentation}.
+As there are several optimization techniques such as vectorization and compiler flags applied simultaneously, there is a potential for techniques to cancel each other out or in other ways impact the performance negatively. We will mitigate this risk by evaluating each form of optimization in isolation, before combining all techniques into a truly optimized implementation.
 
 % Situation effect.
 Factors such as various settings, time of day and location may limit the generalizability of the presented findings. We have identified several mitigative actions as defined under \ref{section:method:internal-validity}, internal validity.
