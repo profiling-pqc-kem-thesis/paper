@@ -253,6 +253,8 @@ By using AVX, a developer may optimize a program and make use of the performance
 
 \section{Mainframe Hardware}
 
+
+
 \todo[inline]{IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.}
 
 \subsection{Z}
@@ -263,7 +265,7 @@ By using AVX, a developer may optimize a program and make use of the performance
 % \gls{power} finns definierat
 
 \subsection{CPACF}
-\gls{cpacf} are a part of the CPU on the Z platform
+\gls{cpacf} is an on-chip coprocessor integrated into all cores on the z15 that assists in cryptographic functions, delivering high speed, low latency encryption, decryption, hashing, and random number generation. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. In this thesis, we will be using an \gls{openssl} engine that has support for \gls{cpacf}.
 
 \subsection{CryptoCards}
 

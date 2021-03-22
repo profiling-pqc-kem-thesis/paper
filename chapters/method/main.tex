@@ -1,38 +1,26 @@
 \chapter{Method}
 \label{chapter:method}
 
-This chapter explains and motivates the chosen methods in greater depth.
-
-Section \ref{section:method:selected-method} discusses the selected research method. The application of the selected method is then discussed and explained in greater depth in section \ref{section:method:literature-study} as well as section \ref{section:method:experiment}.
-
-The research questions are listed below for the reader's convenience.
-
-\begin{itemize}
-    \item Does performance of \gls{post-quantum} cryptography algorithms differ between architectures and if so, how?
-    \item What specialized instructions and features applicable for \gls{post-quantum} cryptography are available in \gls{z15} and how are they used in context?
-    \item What techniques may be used to increase performance of \gls{post-quantum} cryptography algorithms for different architectures?
-\end{itemize}
-
 \section{Selected Methods}
 \label{section:method:selected-method}
 
 %Argue for one or more methods that are applicable for our questions...
 We are using two methods to answer our three research questions - a literature study and an experiment.
 
-A literature study will be conducted to answer \researchquestion{1}. We have chosen a study based in literature as the scope of the question, as well as our limited access to mainframe hardware makes it difficult for us to perform a practical study in the performance potentials of using various hardware features.\todo{revisit}
+A literature study will be conducted to answer \researchquestion{2} and \researchquestion{3}. We have chosen a study based in literature as the scope of the question, as well as our limited access to mainframe hardware makes it difficult for us to perform a practical study in the performance potentials of using various hardware features.
 
-To provide information to help us answer \researchquestion{2} as well as \researchquestion{3}, we will conduct a performance test. In this case, an experiment is the most appropriate method. We can isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we are not interested in user experience, just the algorithms' raw performance on various platforms. Neither is a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}.
+To provide information to help us answer \researchquestion{1}, we will conduct an experiment in form of a performance test. An experiment was chosen as we may isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we are not interested in user experience, rather the algorithms' performance on various platforms. Neither is a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}\todo{revisit motivation}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
 
-As previously mentioned, we aim to answer \researchquestion{2} by conducting a literature study. We will limit the scope to the four finalists in \gls{nist}'s standardization process, round 3.
+As previously mentioned, we aim to answer \researchquestion{2} and \researchquestion{3} by conducting a literature study. We will limit the scope to the four finalists in \gls{nist}'s standardization process, round 3.
 
 By studying the algorithms' underlying mathematics, the authors' own optimizations on \gls{x86}, and relevant literature on cryptography optimization, we aim to identify what parts of the algorithms are possible and suitable to optimize.
 
-When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third-parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
+When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
 
-To identify relevant research papers, we will search for peer-reviewed papers in reputable journals, such as IEEE and Springer. By searching for keywords related to our research topic, we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
+To identify relevant research papers, we will search for peer-reviewed papers by using databases such as Scopus and Web of Science\todo{update databases used}. By searching for relevant keywords such as \texit{post-quantum cryptography}, \textit{cpacf performance}, \textit{opencryptoki hsm}\todo{update keywords}, we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
 \todo[inline]{Här bör ni istället beskrive sökmetoden, vilka databaser, t ex scopus och web of science, och vilka nyckelord ni kommer att använda.}
 
 The selected papers, as well as the the papers submitted to \gls{nist}, will be included in a start set. The start set will then be used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
@@ -55,21 +43,19 @@ I discussion argumentera saker som borde finnas i framtiden.
 \section{Experiment}
 \label{section:method:experiment}
 
-This section describes and discusses the experiment design and rationale. The experiment has two phases. In phase one, we profile a run of the key exchange, and in phase two, we test how the performance scalability for millions of key exchanges over multiple cores.
-
-\todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
-
 \subsection{Goal}
 \label{section:method:experiment-goal}
 
-Our goal with the experiment is to analyze \textbf{\gls{post-quantum} \glspl{kem}} for the purpose of evaluating \textbf{the readiness of today's consumer, server and mainframe hardware} with the respect to their \textbf{performance} from the point of view of \textbf{businesses and professionals}, in the context of \textbf{replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.}
+Our goal with the experiment is to analyze \textbf{\gls{post-quantum} \glspl{kem}} for the purpose of evaluating \textbf{the readiness of today's consumer, server and cloud hardware} with the respect to their \textbf{performance} from the point of view of \textbf{businesses and professionals}, in the context of \textbf{replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.}
 
-% The context is an analysis of a model of a crypto system using a "physical" implementation.
+The experiment has two phases. In phase one, we aim to study the effects of changing variables possibly related to the performance of the subjects. By studying the performance characteristics of a single run of the algorithms, we aim to identify how an implementation is best optimized.
+
+In the second phase, we aim to test the performance characteristics of the algorithms in a parallel fashion. By evaluating the performance of the algorithms when performed in parallel in a large batch over multiple cores, we aim to identify how the underlying platform takes advantage of the available hardware to run the best optimized implementation as identified in the first phase.
 
 \subsection{Subjects}
 
 The test subjects of the experiment are two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{crystals-kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and has a long and excellent reputation\cite{nist2020}.
-\todo[inline]{Finns fler NIST submissions? Varför är dessa bortvalda?\\ har jag inte readn svart på det ovan?????}
+
 The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also rely on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded\cite{eu2015}.
 
 \begin{table}[H]
@@ -113,10 +99,9 @@ As the control subjects are intended to represent the algorithms already in use,
 
 \subsection{Variables}
 
-The identified independent variables are presented in table \ref{table:method:experiment:independent-variables}.
+The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:independent-variables}.
 
-\todo{Mention lack of SSE, HMC, FPGA etc.? Argue that it is out of scope.}
-
+As the thesis is interested in the performance characteristics of consumer, cloud and mainframe hardware, FPGA implementations have been left out from the table. Furthermore, older vectorization extensions sets such as SSE is not considered as they have been superseeded by AVX. 
 \begin{table}[H]
     \centering
     \caption{Independent Variables}
@@ -129,13 +114,13 @@ The identified independent variables are presented in table \ref{table:method:ex
         Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications)\todo{Research correct flags} \\
         Implementation & Libraries & \gls{sha3} / \gls{shake} / \gls{keccak}, \gls{aes-instruction-set}, \gls{cpacf} & \\
         Implementation & Optimizations & \gls{avx}, \gls{avx2}, \gls{avx512}, \gls{simd} (GPU), \gls{simd} on \gls{ibmz}, \gls{hsm} & These are the optimizations available in the selected implementations \\
-        Environment & OS & OS Type and version, Scheduling & \\
-        Environment & Hardware & CPU model, CPU Architecture, available cores, available RAM, RAM model and specification & \\
+        Environment & OS & OS type and version, scheduling etc. & \\
+        Environment & Hardware & CPU model, CPU architecture, available cores, available RAM, RAM model and specification & \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-In table \ref{table:method:experiment:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, its "encapsulation" and "decapsulation" is the same stage. As such, only one measurement is necessary and will henceforth be referred to as the encapsulation phase.
+In table \ref{table:method:experiment:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment-goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, it has an exchange phase, not an encapsulation nor decapsulation phase. As such, only one measurement is necessary and will henceforth be referred to as the exchange phase. For implementation details, please refer to section \ref{section:method:instrumentation}
 
 \begin{table}[H]
     \centering
@@ -145,16 +130,15 @@ In table \ref{table:method:experiment:dependent-variables}, the dependant variab
         \toprule
         \thead{Group} & \thead{Stages} & \thead{Comments}\\
         \midrule
-        Throughput & \makecell{Encapsulation,\\Decapsulation,\\Key-pair generation} & CPU cycles, instruction count, wall-clock time\todo{Update? Branches, cache misses, page faults?}\\
-        Hardware Utilization & \makecell{Encapsulation,\\Decapsulation,\\Key-pair generation} & Memory usage (heap and stack allocation), logical core utilization\footnotemark\\
+        Throughput & \makecell{Key-pair generation,\\Encapsulation/Decapsulation,\\Exchange} & CPU cycles, instruction count, wall-clock time, branches, branch misses, page faults\\
+        Hardware Utilization & \makecell{Key-pair generation,\\Encapsulation/Decapsulation,\\Exchange} & Memory usage (heap and stack allocation), logical core utilization\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\addtocounter{footnote}{-1}
-\addtocounter{footnote}{1}
-\footnotetext{Note that some of the chosen environments may not expose physical core, rather \glspl{vcpu} or logical cores.}
+\todo{update - not final}
 
 \subsection{Instrumentation}
+\label{section:method:instrumentation}
 
 This section describes the tools and instrumentation used in the experiment.
 
