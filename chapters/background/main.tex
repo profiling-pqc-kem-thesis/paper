@@ -1,7 +1,6 @@
 \chapter{Background}
 \label{chapter:background}
 
-
 \section{Symmetric and Public-Key Cryptography}
 Cryptographic functions are sorted into two categories - \textit{symmetric} functions and \textit{public-key} functions. Both categories refer to how the keys to the data are used\cite{bernstein2017}.
 
@@ -33,14 +32,13 @@ Key agreement protocols may provide forward secrecy if the long-term keys are on
 
 \section{Post-Quantum}
 
-Cryptography usually does not come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical. As the performance of conventional computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using conventional algorithms. As Moore's law has come to a halt, the threat of traditional computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
+Cryptography does not usually come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical\cite{nist2019}. As the performance of conventional computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using conventional algorithms\cite{thome2019}. As Moore's law is coming to a halt\cite{theis2017}, the threat of traditional computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
 
-Since \todo{when?}, research has been made to utilize quantum mechanics for computation, introducing the quantum computer. By utilizing quantum bits or \glspl{qubit} instead of the bits used in traditional computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a traditional computer. Recent progress in the field has shown that, as progress have halted in the area of traditional computers, progress made on quantum computers has been increasing exponentially.
+Since the 1980s, research has been made to utilize quantum mechanics for computation, thus introducing the quantum computer\cite{benioff1980}. By utilizing quantum bits or \glspl{qubit} instead of the bits used in traditional computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a traditional computer\cite{jordan2021}. Recent progress in the field has shown that, as progress have halted in the area of traditional computers, progress made on quantum computers has been increasing exponentially\cite{ibm2020:quantum-computer}.
 
-Parallel to the development of the theoretical quantum computer, algorithms were developed to make use of the mechanics. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical to implement or use on a traditional system, but feasible to use on a quantum computer.
+Parallel to the development of the theoretical quantum computer, algorithms were developed to make use of the mechanics. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical or impossible to implement or use on a traditional system, but feasible to use on a quantum computer\cite{shor1997, jordan2021}. Demonstrating that a quantum computer is able to feasibly perform an algorithm that a classical computer cannot is referred to as Quantum Supremacy\cite{farhi2019}.
 
-The threat these algorithms and performance increases impose has led to a new epoch in computing and cryptography - post-quantum.
-\todo[inline]{Cite properly?} \todo{Mention quantum supremacy?}
+The performance increase these machines offer and the threats that the algorithms impose has led to a new epoch in computing and cryptography - post-quantum.
 
 \subsection{Shor's Algorithm}
 
@@ -264,7 +262,7 @@ By using AVX, a developer may optimize a program and make use of the performance
 \todo[inline]{todo}
 
 \subsection{CPACF}
-\todo[inline]{todo}
+\gls{cpacf} are a part of the CPU on the Z platform
 
 \subsection{HSM}
 \todo[inline]{todo}
