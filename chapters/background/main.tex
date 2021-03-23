@@ -172,6 +172,19 @@ The digital signature finalists were the following.
 
 \section{Lattice-Based Cryptography}
 
+A lattice is the set of linear combinations of the basis vectors in a euclidean space. It is defined as follows, where $\mathcal{Z}$ refers to an integral coefficient and $x_1,x_2,...,x_n$ a basis in the euclidean space $\mathcal{R}^n$.
+
+$$
+L=\mathcal{Z}x_1+\mathcal{Z}x_2+...+\mathcal{Z}x_n=\left\{\sum_{i=1}^n a_ix_i|a_1,a_2,...,a_n\in\mathcal{Z}\right\}
+$$
+
+A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices is taken advantage of. The most significant problem is the Shortest Vector Problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike.
+
+% https://books.google.se/books?hl=sv&lr=&id=i5AkDxkrjPcC&oi=fnd&pg=PP1&dq=lattice+introduction&ots=PAW__I7tB3&sig=teKBp5L19aItLe5Y857epoxvb9s&redir_esc=y#v=onepage&q=lattice%20introduction&f=false
+pp2, pp 5
+
+% https://ieeexplore-ieee-org.miman.bib.bth.se/stamp/stamp.jsp?tp=&arnumber=9224855
+
 \todo[inline]{todo}
 %\todo{include security category}
 
@@ -225,6 +238,10 @@ In order to use the properties of \gls{simd}, the target architecture has to be 
 
 Although usage of a CPU's vectorization capabilities may require explicit input from a programmer, advanced compilers may in some cases be able to automatically vectorize code in order to make it run more efficiently\cite{dickson2011}.
 
+\subsection{Measurements}
+
+\todo[inline]{Should we have a section here on what page faults, cycles, wall-clock time, cache misses are?}
+
 \section{CPU Architectures}
 
 The \acrfull{risc} design methodology is centered around a load/store architecture\cite{flynn1998}. This means that only the load and store instructions may access the memory system\cite{carter2002}. The aim is to reduce the amount of complexity in the instruction set and regularize the instruction format. The regularization simplifies the decoding of the instructions with the aim to improve the overall performance\cite{flynn1998}. The \acrfull{cisc} design methodology, on the other hand, is centered around a register/memory architecture\cite{flynn1998}. The architecture permits arithmetic and other instructions to read their input from, or write to the memory system\cite{carter2002}.
@@ -235,11 +252,11 @@ The nature load/store and register/memory architectures of \gls{risc} and \gls{c
 
 An example of an architecture using \gls{cisc} is \gls{x86}. Examples of architectures using \gls{risc} are ARM and RISC-V.
 
-\section{Consumer and Server Hardware}
+\section{Consumer and Cloud Hardware}
 
 \subsection{x86}
 
-The \gls{x86} family of architectures are some of the most popular architectures for consumer and server hardware. The family contains architectures such as i386 and x86-64. It is not uncommon for the architectures to be referred to as just \gls{x86}\cite{carter2002}.
+The \gls{x86} family of architectures are some of the most popular architectures for consumer and cloud hardware. The family contains architectures such as i386 and x86-64. It is not uncommon for the architectures to be referred to as just \gls{x86}\cite{carter2002}.
 
 \gls{x86} is in theory a \gls{cisc}, but there has been a fair amount of convergence between \gls{risc} and \gls{cisc}, which makes them a hybrid of sorts\cite{carter2002}.
 
