@@ -7,7 +7,7 @@
 %Argue for one or more methods that are applicable for our questions...
 We are using two methods to answer our three research questions - a literature study and an experiment.
 
-A literature study will be conducted to answer \researchquestion{2} and \researchquestion{3}. We have chosen a study based in literature as the scope of the question, as well as our limited access to mainframe hardware makes it difficult for us to perform a practical study in the performance potentials of using various hardware features.
+A literature study will be conducted to answer \researchquestion{2} and \researchquestion{3}. We have chosen a study based in literature as the scope of the question, as well as our limited access to mainframe hardware, makes it difficult for us to perform a practical study of the performance potentials of using various hardware features.
 
 To provide information to help us answer \researchquestion{1}, we will conduct an experiment in form of a performance test. An experiment was chosen as we may isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we are not interested in user experience, rather the algorithms' performance on various platforms. Neither is a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}\todo{revisit motivation}.
 
@@ -21,7 +21,6 @@ By studying the algorithms' underlying mathematics, the authors' own optimizatio
 When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
 
 To identify relevant research papers, we will search for peer-reviewed papers by using databases such as Scopus and Web of Science\todo{update databases used}. By searching for relevant keywords such as \textit{post-quantum cryptography}, \textit{cpacf performance}, \textit{opencryptoki hsm}\todo{update keywords}, we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
-\todo[inline]{Här bör ni istället beskrive sökmetoden, vilka databaser, t ex scopus och web of science, och vilka nyckelord ni kommer att använda.}
 
 The selected papers, as well as the the papers submitted to \gls{nist}, will be included in a start set. The start set will then be used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
 \todo[inline]{Kommer ni att ha specificerade inclusion/exclusion criteria?}
@@ -107,7 +106,7 @@ The consumer hardware was chosen to represent different tiers of personal comput
 
 The cloud hardware was chosen to represent various cloud providers' Virtual Private Server offerings - a common target for many applications.
 
-The select mainframe hardware is intended to represent the latest mainframes available from IBM.\todo{needs rewrite}
+The selected mainframe hardware is intended to represent the latest mainframes available from IBM.\todo{needs rewrite}
 
 \begin{table}[H]
     \centering
@@ -195,7 +194,7 @@ As the thesis is interested in the performance characteristics of consumer, clou
     \end{tabularx}
 \end{table}
 
-In table \ref{table:method:experiment:phase1:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment:goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, it has an exchange phase, not an encapsulation nor decapsulation phase. For implementation details, please refer to section \ref{section:method:experiment:phase1:measurements}.
+In table \ref{table:method:experiment:phase1:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment:goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, it has an exchange phase, not an encapsulation nor decapsulation phase. For implementation details, please refer to section \ref{section:method:experiment:phase1:measurements}\todo{points to the main section, not sub sub sub section}.
 
 \begin{table}[H]
     \centering
@@ -255,7 +254,7 @@ Using the aforementioned toolset, we will instrument the subjects and measure th
     \item Wall clock time in nanosecond resolution
 \end{itemize}
 
-The measurements will be taken at different points in the algorithms' lifecycles as explained in table \ref{table:method:experiment:phase1:instrumentation}. The same measurements are to be repeated for all of the phases of the algorithms as presented in table \ref{table:method:experiment:phase1:dependent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+The measurements will be taken at different points in the algorithms' lifecycles as explained in table \ref{table:method:experiment:phase1:instrumentation}. The same measurements are to be repeated for all of the stages of the algorithms as presented in table \ref{table:method:experiment:phase1:dependent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
 
 \begin{table}[H]
     \centering
@@ -304,6 +303,7 @@ The following compiler configurations will be assessed where applicable.
         \bottomrule
     \end{tabularx}
 \end{table}
+\todo{Update with accurate information}
 
 \todo[inline]{-march=native räcker väl inte för att optimera mycket? Vilka kommer ni egentligen att använda?}
 
@@ -359,6 +359,7 @@ The configurations presented in table \ref{table:method:experiment:phase1:config
         \bottomrule
     \end{tabularx}
 \end{table}
+\todo{Update with accurate information}
 
 \subsection{Phase Two - Parallelism}
 \label{section:method:experiment:phase2}
@@ -385,14 +386,14 @@ As previously mentioned, the algorithms under test will be run in parallel. As t
         \toprule
         \thead{Group} & \thead{Label} & \thead{Potential Values} & \thead{Comment} \\
         \midrule
-        Parallelism & Thread Count & \\
+        Parallelism & Thread Count & 1, 2, 4, ... &\\
         Environment & Hardware & CPU model, CPU architecture, available cores, available RAM, RAM model and specification & \\
         Environment & OS & OS type and version, scheduling etc. & \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-In table \ref{table:method:experiment:phase2:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment:goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, it has an exchange phase, not an encapsulation nor decapsulation phase. For implementation details, please refer to section \ref{section:method:experiment:phase2:measurements}
+In table \ref{table:method:experiment:phase2:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment:goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, it has an exchange phase, not an encapsulation nor decapsulation phase. For implementation details, please refer to section \ref{section:method:experiment:phase2:measurements}\todo{points to the main section, not sub sub sub section}.
 
 \begin{table}[H]
     \centering

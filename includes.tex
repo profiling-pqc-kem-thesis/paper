@@ -4,6 +4,16 @@
 \usepackage[hidelinks]{hyperref}
 \hypersetup{linktocpage, linktoc=all}
 
+% Add support for more than one URL
+% Separate URLs like so: \url{https://one.com https://two.com}
+% Mostly meant for the references
+\let\URL\url
+\makeatletter
+\def\url{\begingroup \catcode`\%=12\catcode`\#=12\relax\printurl}
+\def\printurl#1{\@URL#1 \@nil\endgroup}
+\def\@URL#1 #2\@nil{\URL{#1}\ifx\relax#2\relax \else; \url{#2\relax}\fi}
+\makeatother
+
 % Improvements for tables
 \usepackage{ragged2e}
 \usepackage{booktabs, makecell, tabularx}
