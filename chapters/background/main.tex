@@ -172,26 +172,22 @@ The digital signature finalists were the following.
 
 \section{Lattice-Based Cryptography}
 
-A lattice is the set of linear combinations of the basis vectors in a euclidean space. It is defined as follows, where $\mathcal{Z}$ refers to an integral coefficient and $x_1,x_2,...,x_n$ a basis in the euclidean space $\mathcal{R}^n$.
+A lattice is the set of linear combinations of the basis vectors in a euclidean space. It is defined as follows, where $\mathbb{Z}$ refers to an integral coefficient and $\mathbf{x}_1,\mathbf{x}_2,...,\mathbf{x}_n$ a basis in the euclidean space $\mathbb{R}^n$\cite{bremner2012}.
 
 $$
-L=\mathcal{Z}x_1+\mathcal{Z}x_2+...+\mathcal{Z}x_n=\left\{\sum_{i=1}^n a_ix_i|a_1,a_2,...,a_n\in\mathcal{Z}\right\}
+L=\mathbb{Z}\mathbf{x}_1+\mathbb{Z}\mathbf{x}_2+...+\mathbb{Z}\mathbf{x}_n=\left\{\sum_{i=1}^n a_i\mathbf{x}_i|a_1,a_2,...,a_n\in\mathbb{Z}\right\}
 $$
 
-A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices is taken advantage of. The most significant problem is the Shortest Vector Problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike.
-
-% https://books.google.se/books?hl=sv&lr=&id=i5AkDxkrjPcC&oi=fnd&pg=PP1&dq=lattice+introduction&ots=PAW__I7tB3&sig=teKBp5L19aItLe5Y857epoxvb9s&redir_esc=y#v=onepage&q=lattice%20introduction&f=false
-pp2, pp 5
-
-% https://ieeexplore-ieee-org.miman.bib.bth.se/stamp/stamp.jsp?tp=&arnumber=9224855
-
-\todo[inline]{todo}
-%\todo{include security category}
+\noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices is taken advantage of\cite{bremner2012}. The most significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike\cite{sun2020}.
 
 \subsection{NTRU}
 
-\todo[inline]{todo}
-%\todo{include security category}
+The \gls{ntru} \gls{kem} is a unification of several variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM.
+
+The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. The security of \gls{ntru} relied on the short vector problem being hard to solve\cite{ntru1998}.
+
+\todo[inline]{more information on the KEM?}
+\todo{include security category}
 
 \subsection{CRYSTALS-KYBER}
 
@@ -212,7 +208,8 @@ Classic McEliece is a code-based cryptosystem. It uses random binary Goppa codes
 
 \todo[inline]{
 % From nist 2020
-Classic McEliece is a code-based KEM based on the 1979 McEliece cryptosystem built from a hidden Goppa code. Classic McEliece includes some modern improvements for efficiency and to provide CCA security. The security of these improvements is reduced to the one-wayness against chosen-plaintext attack (OW-CPA) security of the original construction as proposed in 1979 [17]. The original construction is not based on a particularly natural computational assumption; however, Goppa code McEliece and related cryptosystems have a long history of study\cite{nist2020}.
+Classic McEliece is a code-based KEM based on the 1979 McEliece cryptosystem built from a hidden Goppa code. Classic McEliece includes some modern improvements for efficiency and to provide CCA security. The security of these improvements is reduced to the one-wayness against chosen-plaintext attack (OW-CPA) security of the original construction as proposed in 1979 [17]. The original construction is not based on a particularly natural computational assumption; however, Goppa code McEliece and related cryptosystems have a long history of study\cite{nist2020}.\\
+Combination av olika McEliece implementationer
 }
 
 \todo{include security category}
@@ -269,19 +266,20 @@ In 2010, the \gls{avx} doubled the width of the registers to 256 bits. This incr
 By using AVX, a developer may optimize a program and make use of the performance properties offered by \gls{simd}\cite{hennessy2011:avx}.
 
 \section{Mainframe Hardware}
-
+Mainframe hardware is designed to handle a large amount of data and bulk transactions. To achieve this, they are using custom-made CPUs and special coprocessors. Further are availability, resilience, backward compatibility, and security core features.
 
 
 \todo[inline]{IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.}
 
 \subsection{z15}
-\todo[inline]{todo}
+In z15, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into LPARs that runs its own virtual environment. z15 is a 64-bit CISC architecture. Ther each CPU has 12 custom cores with \gls{smt}2 which means that each core has two logical cores. Special coprocessors are built into the CPU, \gls{cpacf} accelerates some cryptographic functions see more in section \ref{subsection:cpacf}, and \gls{nxu} to accelerate compersion are two examples. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations.
 
 \subsection{POWER9}
 \todo[inline]{todo}
 % \gls{power} finns definierat
 
 \subsection{CPACF}
+\label{subsection:cpacf}
 \gls{cpacf} is an on-chip coprocessor integrated into all cores on the z15 that assists in cryptographic functions, delivering high speed, low latency encryption, decryption, hashing, and random number generation. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. In this thesis, we will be using an \gls{openssl} engine that has support for \gls{cpacf}.
 
 \subsection{CryptoCards}
