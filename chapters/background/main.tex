@@ -272,7 +272,7 @@ Mainframe hardware is designed to handle a large amount of data and bulk transac
 \todo[inline]{IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.}
 
 \subsection{z15}
-In z15, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into LPARs that runs its own virtual environment. z15 is a 64-bit CISC architecture. Ther each CPU has 12 custom cores with \gls{smt}2 which means that each core has two logical cores. Special coprocessors are built into the CPU, \gls{cpacf} accelerates some cryptographic functions see more in section \ref{subsection:cpacf}, and \gls{nxu} to accelerate compersion are two examples. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations.
+In z15, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into \glspl{lpar} that runs its own virtual system. z15 is a 64-bit \gls{cisc} architecture. Ther each CPU has 12 custom cores with \gls{smt}2 which means that each core has two logical cores. Special coprocessors are built into the CPU, \gls{cpacf} accelerates some cryptographic functions see more in section \ref{subsection:cpacf}, and \gls{nxu} to accelerate compersion are two examples. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations.
 
 \subsection{POWER9}
 \todo[inline]{todo}
