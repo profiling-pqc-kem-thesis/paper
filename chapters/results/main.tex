@@ -3,13 +3,15 @@
 
 \section{Hot Paths}
 
-The following sections analyzes the submissions to the \gls{nist} standardization process, in terms of the reference implementations and what branches the code takes as well as how many instructions is spent in a function. Unless otherwise stated, the measurements are the percentage of instructions performed in a function or in a line of code, relative to the parent.
+The following sections analyzes the submissions to the \gls{nist} standardization process, in terms of the reference implementations and what branches the code takes, how many times they are taken\footnote{In applicable cases}, as well as how many instructions is spent in a function. Unless otherwise stated, the measurements are the percentage of instructions performed in a function or in a line of code, relative to the parent. 
+
+All of the data as well as further visualizations not included in this work is published on GitHub\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
 
 \subsection{NTRU}
 
-The \gls{ntru} reference implementations consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions, such as the polynomial math library which functions are prefixed \textit{poly\_}.
+The \gls{ntru} reference implementations consists of three API methods - keypair generation via \textit{crypto\_kem\_keypair}, encryption (encapsulation) via \textit{crypto\_kem\_enc} and decryption (decapsulation) via \textit{crypto\_kem\_dec}  decryption (decapsulation). These API functions may in turn call several internal functions, such as the polynomial math library which functions are prefixed \textit{poly\_}.
 
-The following graphs contain relative measurements denoting the percentage of instructions spent in each method. Both the HPS and HRSS variants of NTRU perform alike, hence only one set of graphs is shown for NTRU as a whole.
+The following graphs contain relative measurements denoting the percentage of instructions spent in each method. Both the HPS and HRSS variants of \gls{ntru} perform alike, hence only one set of graphs is shown for \gls{ntru} as a whole.
 
 Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $60\%$ of the time spent on generating a keypair.
 
@@ -20,7 +22,7 @@ Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%
     \label{figure:result:hot-paths:ntru:crypto_kem_keypair}
 \end{figure}
 
-Figure \ref{figure:result:hot-paths:ntru:crypto_kem_enc} describes the encapsulation API function. The key is generated using random bytes which are fed through 256-bit \gls{aes} Electric Code Book (ECB) to produce uniformly random bytes. Again, we see a significant percentage of the instructions spent in the polynomial library - in \textit{poly\_Rq\_mul}.
+Figure \ref{figure:result:hot-paths:ntru:crypto_kem_enc} describes the encapsulation API function. The key is generated using random bytes which are fed through 256-bit \gls{aes} in its Electronic Code Book (ECB) configuration to produce uniformly random bytes. Again, we see a significant percentage of the instructions spent in the polynomial library - in \textit{poly\_Rq\_mul}.
 
 \begin{figure}[H]
     \centering
@@ -61,5 +63,9 @@ void poly_Rq_mul(poly *r, const poly *a, const poly *b) {
 
 To summarize, it is shown that factors such as the speed of \gls{aes} has little to do with the overall performance of the algorithm. Furthermore, it seems as if the polynomial library functions account for the vast majority of instructions spent on key-pair generation, encryption and decryption. The function \textit{poly\_Rq\_mul}, which multiplies two polynomials in $\mathbb{R}^q$), accounts for most of the calculations performed.
 
+\todo[inline]{Förtydliga varför vi inte egentligen använder hot paths här? Det är ju bara tid per funktion - inte hur ofta branches tas.}
+
 \subsection{Classic McEliece}
 The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions, such as the \textit{pk\_gen} function that takes up most of the execution time. 
+
+\todo[inline]{Var tydliga med hot paths och tid. Exempelvis så lär diagrammet för pk\_gen visa 0\% för vissa funktioner så som root, men om vi ser till hot paths så lär vi se att de kallas flera miljoner gånger. Kanske ha en graf som visar antalet invocations?}
