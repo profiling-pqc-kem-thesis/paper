@@ -1,36 +1,98 @@
 \chapter{Background}
 \label{chapter:background}
 
-\section{Symmetric and Public-Key Cryptography}
+\section{Cryptography}
+
+\subsection{Symmetric Cryptography}
+\todo[inline]{Revisit}
 Cryptographic functions are sorted into two categories - \textit{symmetric} functions and \textit{public-key} functions. Both categories refer to how the keys to the data are used\cite{bernstein2017}.
 
 In the case of symmetric functions, the same key is known to both parties. The key is used for both encryption and decryption. Symmetric functions can also be used to provide authenticity - if only the two parties know of the secret key, one of them may request the other to prove possession of the key\cite{bernstein2017}.
 
+\subsection{Public-Key Cryptography}
+\todo[inline]{Revisit}
 In the case of public-key cryptography, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}.
 
-\section{Key Establishment}
+\subsection{Key Establishment}
 
-A key establishment protocol, sometimes referred to as a \gls{kex}, is a process in which two or more parties exchange a shared session key known only to them. The protocol should be able to be performed on an untrusted communication channel\cite{boyd2020:key-establishment}.
+\todo{Make it more clear that this is connected to both symmetric and public-key}
 
-There are typically two classes of key establishment, key transport and key agreement.
+A key establishment protocol, sometimes referred to as a \gls{kex}, is a process in which two or more parties exchange a shared session key known only to them. The protocol should be able to be performed on an untrusted communication channel\cite{boyd2020}.
 
-A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties\cite{boyd2020:key-transport}.
+There are typically two classes of key establishment, key transport and key agreement\todo{Too short sentence}.
 
-In a key agreement protocol, the parties jointly influence the outcome of the shared key by deriving the key from information supplied by the involved parties. This should be performed in such a way that no single party can predetermine the resulting shared key on their own\cite{boyd2020:key-agreement}.
+A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties\cite{boyd2020}.
+
+In a key agreement protocol, the parties jointly influence the outcome of the shared key by deriving the key from information supplied by the involved parties. This should be performed in such a way that no single party can predetermine the resulting shared key on their own\cite{boyd2020}.
 
 \subsection{Key Encapsulation Mechanism}
 
-A \gls{kem} is form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs\cite{boyd2020:key-encapsulation}.
+A \gls{kem} is form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs\cite{boyd2020}.
 
-\todo{Should this be more descriptive? boyd2020:key-encapsulation has information on a definition of a protocol}
+\todo{Should this be more descriptive? boyd2020 has information on a definition of a protocol. Also make it more descriptive for non-security students}
 
 \subsection{Forward Secrecy}
 
-Forward Secrecy is a term used to describe the security of session keys after one or more long-term keys have been exposed. A key establishment protocol is said to provide forward secrecy if the compromise of long-term keys does not compromise any previously exchanged session key\cite{boyd2020:forward-secrecy}.
+Forward Secrecy is a term used to describe the security of session keys after one or more long-term keys have been exposed. A key establishment protocol is said to provide forward secrecy if the compromise of long-term keys does not compromise any previously exchanged session key\cite{boyd2020}.
 
-Key agreement protocols may provide forward secrecy if the long-term keys are only used for authentication of the exchange. Another way to provide forward secrecy is to use ephemeral keys - keys that are only used for a single run of a key establishment protocol\cite{boyd2020:forward-secrecy}.
+Key agreement protocols may provide forward secrecy if the long-term keys are only used for authentication of the exchange. Another way to provide forward secrecy is to use ephemeral keys - keys that are only used for a single run of a key establishment protocol\cite{boyd2020}.
 
-\section{Post-Quantum}
+\section{Classical Cryptography}
+
+\todo[inline]{Define classical cryptography - why isn't this included in the previous section?}
+
+In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+
+\todo[inline] {
+Is this even relevant? Perhaps under the introduction instead?
+
+In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography\cite{bernstein2017}. \gls{tls} may use any of wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+
+% Commented out due too footnote in todo not working
+%\gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), is used for key exchange in the \gls{vpn} Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
+
+
+% Commented out due too footnote in todo not working
+%\gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\cite{rfc8446}, SSH\cite{williams2011}, \glspl{vpn} such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\cite{rfc2409} and Wireguard.
+
+Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+}
+
+\subsection{RSA}
+
+\todo[inline]{Ha exempel kring public-key, introducera RSA och ECC. Förklara RSA, ECC etc. mer - mindre antagande än nu. Utveckla mer kring grund-begrepp.}
+
+\subsection{Elliptic Curve Cryptography}
+
+\todo[inline]{Ha exempel kring public-key, introducera RSA och ECC. Förklara RSA, ECC etc. mer - mindre antagande än nu. Utveckla mer kring grund-begrepp.}
+
+\subsection{Diffie-Hellman}
+
+The \gls{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978\cite{merkle1978}. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
+
+In the \gls{dh} protocol, two parties (Alice and Bob) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. Alice calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not necessarily secure. Alice and Bob may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020}.
+
+The security of the key exchange comes from the assumption that it is computationally difficult for a malicious party to recover $g^{r_A r_B}$ from the public channel. The problem is that of a discrete logarithm which was deemed unfeasible in the pre-quantum era, given a sufficient key size\cite{boyd2020}. In the post-quantum era, \gls{dh} is considered to be broken\cite{bernstein2017}.
+
+\subsection{Elliptic-Curve Diffie-Hellman}
+
+The \gls{ecdh} \gls{kex} is an adaption of \gls{dh} over elliptic curves. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.)\cite{nist2018}.
+
+Alice computes the point $P=hd_aQ_b$, where $d_A$ is Alice's private key, $Q_B$ Bob's public key and $h$ a \gls{ecc} domain parameter. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
+
+The \gls{x25519} \gls{kex} is a special case of \gls{ecdh} where \gls{curve25519} is used\cite{rfc7748}. 
+
+\subsection{Ephemeral Diffie-Hellman}
+
+In the case of both \gls{dh} and \gls{ecdh}, ephemeral keys may be used to provide forward secrecy. These ephemeral variants are referred to as \gls{dhe} and \gls{ecdhe}. As mentioned in section \ref{section:background:pre-quantum}, the use of ephemeral keys is recommended for all versions of \gls{dh}.
+
+\subsection{Threats to classical cryptography}
+
+\todo[inline]{Skriv en subsection om varför dessa inte kommer att räcka till framöver (kvantdatorer). Då kommer det naturligt, man har beskrivit traditionella krypton, man har beskrivit utmaningarna och varför det inte fungerar efter kvantdatorer. Sedan blir det naturligt att gå över till post-quantum. Använd befintlig text om post-quantum för att motivera problem med dagens krypton? "Threats to traditional crypto"?}
+
+\todo[inline]{Write about why RSA isn't used, but ECDH etc. is?}
+
+\todo[inline]{End with something something classical cryptography is sometimes also referred to as pre-quantum cryptography or the pre-quantum era}.
 
 Cryptography does not usually come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical\cite{nist2019}. As the performance of conventional computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using conventional algorithms\cite{thome2019}. As Moore's law is coming to a halt\cite{theis2017}, the threat of traditional computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
 
@@ -40,16 +102,17 @@ Parallel to the development of the theoretical quantum computer, algorithms were
 
 The performance increase these machines offer and the threats that the algorithms impose has led to a new epoch in computing and cryptography - post-quantum.
 
-\subsection{Shor's Algorithm}
-
+%\subsection{Shor's Algorithm}
+\todo[inline]{Utveckla Shor's algoritm}
 Pre-Quantum public-key cryptography suites are based on one of the following problems being hard to solve; integer factorization and elliptic-curve discrete logarithm. Shor's algorithm can solve these problems, rendering the cryptosystems useless\cite{shor1997}. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. But today's quantum computers are not powerful enough to execute Shor's algorithm on the large numbers used in modern cryptography\cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million noisy \glspl{qubit} to break 2048 bits \gls{rsa}. Today's most powerful quantum computer is Google's 53-\glspl{qubit} system\cite{google2019:quantum-computer} IBM's 65-\glspl{qubit} system\cite{ibm2020:quantum-computer}. IBM has a 1000-\glspl{qubit} system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
 
-\subsection{Grover's Algorithm}
+%\subsection{Grover's Algorithm}
+\todo[inline]{Utveckla Grover's algoritm}
 Grover's algorithm was first proposed as a way to search in databases in $O(\sqrt N)$ quantum operations where N is the number of items\cite{grover1996}. However, a more practical application for the algorithm is to find the root of a function\cite{bernstein2017}. This enables an attack on some cryptosystem such as \gls{aes}, and the attack will slice the bit security in half. To mitigate this attack, you can double the size of the \gls{aes} key.
 
-\subsection{Bit Security}
+%\subsection{Bit Security}
 
-Bit security corresponds to the best security a key of $n$ bits can provide under the best known attack. Values for some widely deployed cryptographic systems are presented in table \ref{table:background:post-quantum:bit-security}.
+Bit security corresponds to the best security a key of $n$ bits can provide under the best known attack. Values for some widely deployed cryptographic systems are presented in Table \ref{table:background:post-quantum:bit-security}.
 
 \begin{table}[H]
     \centering
@@ -80,52 +143,12 @@ Bit security corresponds to the best security a key of $n$ bits can provide unde
     \end{tabularx}
 \end{table}
 
-\section{Pre-Quantum Cryptography}
-\label{section:background:pre-quantum}
-
-In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
-
-\todo[inline] {
-Is this even relevant? Perhaps under the introduction instead?
-
-In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography\cite{bernstein2017}. \gls{tls} may use any of wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
-
-% Commented out due too footnote in todo not working
-%\gls{x25519} (in some contexts known as \gls{curve25519}\footnote{\href{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}{https://mailarchive.ietf.org/arch/msg/cfrg/-9LEdnzVrE5RORux3Oo\_oDDRksU/}}), is used for key exchange in the \gls{vpn} Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
-
-
-% Commented out due too footnote in todo not working
-%\gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\cite{rfc8446}, SSH\cite{williams2011}, \glspl{vpn} such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\cite{rfc2409} and Wireguard.
-
-Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
-}
-
-\subsection{Diffie-Hellman}
-
-The \gls{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
-
-In the \gls{dh} protocol, two parties (Alice and Bob) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. Alice calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not necessarily secure. Alice and Bob may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020:diffie-hellman}.
-
-The security of the key exchange comes from the assumption that it is computationally difficult for a malicious party to recover $g^{r_A r_B}$ from the public channel. The problem is that of a discrete logarithm which was deemed unfeasible in the pre-quantum era, given a sufficient key size\cite{boyd2020:diffie-hellman}. In the post-quantum era, \gls{dh} is considered to be broken\cite{bernstein2017}.
-
-\subsection{Elliptic-Curve Diffie-Hellman}
-
-The \gls{ecdh} \gls{kex} is an adaption of \gls{dh} over elliptic curves. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.)\cite{nist2018}.
-
-Alice computes the point $P=hd_aQ_b$, where $d_A$ is Alice's private key, $Q_B$ Bob's public key and $h$ a \gls{ecc} domain parameter. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
-
-The \gls{x25519} \gls{kex} is a special case of \gls{ecdh} where \gls{curve25519} is used\cite{rfc7748}. 
-
-\subsection{Ephemeral Diffie-Hellman}
-
-In the case of both \gls{dh} and \gls{ecdh}, ephemeral keys may be used to provide forward secrecy. These ephemeral variants are referred to as \gls{dhe} and \gls{ecdhe}. As mentioned in section \ref{section:background:pre-quantum}, the use of ephemeral keys is recommended for all versions of \gls{dh}.
-
 \section{Post-Quantum Cryptography}
 
 \todo[inline]{Post-quantum cryptography relies on an entirely different set of underlying mathematical problems...}
 
-\section{The NIST Post-Quantum Standardization Process}
-\gls{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\cite{nist:about}.
+\subsection{The NIST Post-Quantum Standardization Process}
+\acrfull{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\cite{nist:about}.
 
 The organization is split into various divisions. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and post-quantum cryptography\cite{nist:ct}.
 
@@ -133,7 +156,8 @@ The Cryptographic Technology Group has previously held standardization processes
 
 At the time of writing, the process has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\cite{nist:round-three-submissions}.
 
-The public-key encryption and key-establishment algorithms finalists were the following.
+The public-key encryption and key-establishment algorithms finalists were the following. \todo{ref}
+\todo[inline]{Write about the types of cryptography to refer to later / knyt ihop säcken för lattice-based-sektionerna o.s.v. sedan}
 
 \begin{itemize}
     \item Classic McEliece
@@ -142,7 +166,7 @@ The public-key encryption and key-establishment algorithms finalists were the fo
     \item SABER
 \end{itemize}
 
-The digital signature finalists were the following.
+The digital signature finalists were the following. \todo{ref}
 
 \begin{itemize}
     \item CRYSTALS-DILITHIUM
@@ -151,12 +175,14 @@ The digital signature finalists were the following.
 \end{itemize}
 
 \subsection{IND-CCA2}
+\todo[inline]{Is this really necessary? Have it as text under the nist section?}
 
 \gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack. Resistence to such an attack is referred to as \gls{ind-cca2} security\cite{nist2017}. 
 
 \todo{Explain entire random oracle model, talk about the actual meaning and the different categories?}
 
 \subsection{Security Categories}
+\todo[inline]{Is this really necessary? Have it as text under the nist section?}
 
 \gls{nist} anticipated that submissions to the standardization effort would face uncertainties in terms of estimating the security strength of post-quantum algorithms. They state that the uncertainties are largely caused by two issues. The first issue is the possibility that new attacks will be discovered and the second that there is a limited ability to predict how a quantum computer will behave in terms of cost, speed and memory\cite{nist2017}.
 
@@ -170,7 +196,7 @@ The digital signature finalists were the following.
     \item 5. Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. AES 256)
 \end{itemize}
 
-\section{Lattice-Based Cryptography}
+\subsection{Lattice-Based Cryptography}
 
 A lattice is the set of linear combinations of the basis vectors in a euclidean space. It is defined as follows, where $\mathbb{Z}$ refers to an integral coefficient and $\mathbf{x}_1,\mathbf{x}_2,...,\mathbf{x}_n$ a basis in the euclidean space $\mathbb{R}^n$\cite{bremner2012}.
 
@@ -182,6 +208,8 @@ $$
 
 \subsection{NTRU}
 
+\todo{NTRU is a lattice-based crypto}
+
 The \gls{ntru} \gls{kem} is a unification of several variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM.
 
 The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. The security of \gls{ntru} relied on the short vector problem being hard to solve\cite{ntru1998}.
@@ -191,15 +219,19 @@ The original paper on the \gls{ntru} cryptosystem was published in 1998, followi
 
 \subsection{CRYSTALS-KYBER}
 
+\todo{CRYSTALS-KYBER is a lattice-based crypto}
+
 \todo[inline]{todo}
 %\todo{include security category}
 
 \subsection{SABER}
 
+\todo{SABER is a lattice-based crypto}
+
 \todo[inline]{todo}
 %\todo{include security category}
 
-\section{Code-Based Cryptography}
+\subsection{Code-Based Cryptography}
 Code-based cryptosystems take advantage of error-correction code. Typically error-correction code is used to detect or correct a bit flip that occurred. But in cryptography, you can use it to encrypt by adding errors, which can be corrected when you decrypt\cite{bernstein2017}. There are different types of error-correction codes, for example, quasi-cyclic codes and Goppa codes.\cite{sendrier2011}.
 
 \subsection{Classic McEliece}
@@ -214,7 +246,8 @@ Combination av olika McEliece implementationer
 
 \todo{include security category}
 
-\section{Performance Optimization}
+\section{Architectures and Performance}
+\todo[inline]{Se över ordning på stycken.}
 
 % "Theoretical" topics on performance optimization
 
@@ -235,11 +268,9 @@ In order to use the properties of \gls{simd}, the target architecture has to be 
 
 Although usage of a CPU's vectorization capabilities may require explicit input from a programmer, advanced compilers may in some cases be able to automatically vectorize code in order to make it run more efficiently\cite{dickson2011}.
 
-\subsection{Measurements}
+\subsection{CPU Architectures}
 
-\todo[inline]{Should we have a section here on what page faults, cycles, wall-clock time, cache misses are?}
-
-\section{CPU Architectures}
+\todo[inline]{Utöka information kring 32, 64-bitars, förklara mer vad som är karakteristiskt för x86. Kanske lite historik. De är lite "cisc" allihop, men power är lite mer "risc".}
 
 The \acrfull{risc} design methodology is centered around a load/store architecture\cite{flynn1998}. This means that only the load and store instructions may access the memory system\cite{carter2002}. The aim is to reduce the amount of complexity in the instruction set and regularize the instruction format. The regularization simplifies the decoding of the instructions with the aim to improve the overall performance\cite{flynn1998}. The \acrfull{cisc} design methodology, on the other hand, is centered around a register/memory architecture\cite{flynn1998}. The architecture permits arithmetic and other instructions to read their input from, or write to the memory system\cite{carter2002}.
 
@@ -249,9 +280,11 @@ The nature load/store and register/memory architectures of \gls{risc} and \gls{c
 
 An example of an architecture using \gls{cisc} is \gls{x86}. Examples of architectures using \gls{risc} are ARM and RISC-V.
 
-\section{Consumer and Cloud Hardware}
-
 \subsection{x86}
+
+\todo[inline]{Clarify history, talk about intel x86 vs others amd64 instead?}.
+
+\todo[inline]{Utöka information kring 32, 64-bitars, förklara mer vad som är karakteristiskt för x86. Kanske lite historik. De är lite "cisc" allihop, men power är lite mer "risc". AMD64??}
 
 The \gls{x86} family of architectures are some of the most popular architectures for consumer and cloud hardware. The family contains architectures such as i386 and x86-64. It is not uncommon for the architectures to be referred to as just \gls{x86}\cite{carter2002}.
 
@@ -265,14 +298,17 @@ In 2010, the \gls{avx} doubled the width of the registers to 256 bits. This incr
 
 By using AVX, a developer may optimize a program and make use of the performance properties offered by \gls{simd}\cite{hennessy2011:avx}.
 
-\section{Mainframe Hardware}
+\subsection{Mainframe Hardware}
+\todo[inline]{En bra artikel i IEEE Micro publicerades nyligen. Bra översikt av utvecklingen av Z-serien. Jacobi & Webb History of IBM Z mainframe proc. nov/dec 2020}
+
 Mainframe hardware is designed to handle a large amount of data and bulk transactions. To achieve this, they are using custom-made CPUs and special coprocessors. Further are availability, resilience, backward compatibility, and security core features.
 
 
 \todo[inline]{IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.}
 
 \subsection{z15}
-In z15, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into \glspl{lpar} that runs its own virtual system. z15 is a 64-bit \gls{cisc} architecture. Ther each CPU has 12 custom cores with \gls{smt}2 which means that each core has two logical cores. Special coprocessors are built into the CPU, \gls{cpacf} accelerates some cryptographic functions see more in section \ref{subsection:cpacf}, and \gls{nxu} to accelerate compersion are two examples. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations.
+\todo[inline]{En bra artikel i IEEE Micro publicerades nyligen. Bra översikt av utvecklingen av Z-serien. Jacobi & Webb History of IBM Z mainframe proc.}
+In z15, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into \glspl{lpar} that runs its own virtual system. z15 is a 64-bit \gls{cisc} architecture. Their each CPU has 12 custom cores with \gls{smt}2 which means that each core has two logical cores. A mainfram contains multiple of these CPUs. Special coprocessors are built into the CPU, \gls{cpacf} accelerates some cryptographic functions see more in section \ref{subsection:cpacf}, and \gls{nxu} to accelerate compersion are two examples. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations\cite{redbook:z15}.
 
 \subsection{POWER9}
 \todo[inline]{todo}
@@ -280,7 +316,7 @@ In z15, virtualization is a core feature. It is designed from the bottom up with
 
 \subsection{CPACF}
 \label{subsection:cpacf}
-\gls{cpacf} is an on-chip coprocessor integrated into all cores on the z15 that assists in cryptographic functions, delivering high speed, low latency encryption, decryption, hashing, and random number generation. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. In this thesis, we will be using an \gls{openssl} engine that has support for \gls{cpacf}.
+\gls{cpacf} is an on-chip coprocessor integrated into all cores on the z15 that assists in cryptographic functions, delivering high speed, low latency encryption, decryption, hashing, and random number generation. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. In this thesis, we will be using an \gls{openssl} engine that has support for \gls{cpacf}\cite{redbook:z15}.
 
 \subsection{CryptoCards}
 

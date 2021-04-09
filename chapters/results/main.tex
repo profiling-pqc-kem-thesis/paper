@@ -66,6 +66,42 @@ To summarize, it is shown that factors such as the speed of \gls{aes} has little
 \todo[inline]{Förtydliga varför vi inte egentligen använder hot paths här? Det är ju bara tid per funktion - inte hur ofta branches tas.}
 
 \subsection{Classic McEliece}
-The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions, such as the \textit{pk\_gen} function that takes up most of the execution time. 
+The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants. In the appendix, all hot-paths can be found. 
+
+In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}, we can see the \textit{crypto\_kem\_keypair} function and its only significant internal function, the \textit{pk\_gen} function that takes up 98.57\% of the execution time. In figure \ref{figure:result:hot-paths:classic-mceliece:pk_gen}, we can see the deeper look into the \textit{pk\_gen} function there we can see that all its internal functions and that they do not make up much of the instructions. Most of the instructions are inside of the \textit{pk\_gen} function itself.\todo{explain better}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm, height=10cm, keepaspectratio]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_keypair.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_keypair}}
+    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm, height=10cm, keepaspectratio]{chapters/results/hot-paths/classic-mceliece/8192128/pk_gen.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{pk\_gen}}
+    \label{figure:result:hot-paths:classic-mceliece:pk_gen}
+\end{figure}
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm, height=10cm, keepaspectratio]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_enc.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_keypair}}
+    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_enc}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm, height=10cm, keepaspectratio]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_dec.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_dec}}
+    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_dec}
+\end{figure}
+
+
 
 \todo[inline]{Var tydliga med hot paths och tid. Exempelvis så lär diagrammet för pk\_gen visa 0\% för vissa funktioner så som root, men om vi ser till hot paths så lär vi se att de kallas flera miljoner gånger. Kanske ha en graf som visar antalet invocations?}
+
+\todo[inline]{Ingen microbenchmark för eval, gf\_mul och gf\_add - de körs så många gånger att overheaden för profiling blev 1000x. McEliece kallar på många många tusen funktioner (hundra tusen, uppemot miljoner?) - det i sig bör ge mer overhead. }
