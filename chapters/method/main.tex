@@ -211,15 +211,15 @@ In table \ref{table:method:experiment:phase1:dependent-variables}, the dependant
 \end{table}
 \todo{update - not final}
 
-% \todo[inline]{Förtydliga att hot-paths enbart utförs på referens-implementationen på en plattform. Förtydliga att minneskontroll enbart utförs på de enkla beräkningar och att ingen minneskontroll när vi kör i bulk. Minneskontroll görs inte vid multicore-benchmark p.g.a. att vi allokerar minne o.s.v.}
+\todo[inline]{Förtydliga att hot-paths enbart utförs på referens-implementationen på en plattform. Förtydliga att minneskontroll enbart utförs på de enkla beräkningar och att ingen minneskontroll när vi kör i bulk. Minneskontroll görs inte vid multicore-benchmark p.g.a. att vi allokerar minne o.s.v.}
 
 \subsubsection{Selected Instrumentation Toolset - Processor}
 \label{section:method:experiment:phase1:selected-toolset-processor}
 The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API functions externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
 
-As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. To help aid the usage of the API, we developed a small library which we used to instrument the algorithms. The library is open source and published as part of this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perf}{https://github.com/profiling-pqc-kem-thesis/perf}}.
+As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. To help aid the usage of the API, we used a small tool\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perforator}{https://github.com/profiling-pqc-kem-thesis/perforator}} which enabled us to monitor the algorithms during their lifetime.
 
-Valgrind (Callgrind) was identified as usable for identifying hot paths in the code.
+Valgrind (Callgrind) was identified as usable for identifying hot paths in the code. The tool was run on the subjects to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce graphs of the hot paths.
 
 \subsubsection{Rejected Instrumentation Toolset - Processor}
 \label{section:method:experiment:phase1:rejected-toolset-processor}
@@ -242,7 +242,7 @@ As previously mentioned, Valgrind is a non-sampling-based tool which enables it 
 
 \todo[inline]{Describe what each measurement is and what we aim to get out of them. Describe what system, user and wall-clock time is}
 
-Using the aforementioned toolset, we will instrument the subjects and measure the following values.
+Using the aforementioned toolset, we will monitor the subjects and measure the following values.
 
 \begin{itemize}
     \item Retired instruction count
@@ -279,6 +279,7 @@ The measurements will be taken at different points in the algorithms' lifecycles
 
 \todo{Mention how many times each algorithm will be run?}
 
+
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
 
 \subsubsection{Compiler Configurations}
@@ -297,15 +298,13 @@ The following compiler configurations will be assessed where applicable.
         GCC Minimal & GCC & 8 & Minimal required\\
         Clang Minimal & Clang & 8 & Minimal required\\
         IBM XL Minimal & IBM XL & 8 & Minimal required\\
-        GCC Optimized & GCC & 8 & -march=native\\
-        Clang Optimized & Clang & 8 & -march=native\\
-        IBM XL Optimized & IBM XL & 8 & -march=native\\
+        GCC Optimized & GCC & 8 & -march=native -mtune=native -O3\\
+        Clang Optimized & Clang & 8 & -march=native -mtune=native -O3\\
+        IBM XL Optimized & IBM XL & 8 & -march=native -mtune=native -O3\\
         \bottomrule
     \end{tabularx}
 \end{table}
 \todo{Update with accurate information}
-
-\todo[inline]{-march=native räcker väl inte för att optimera mycket? Vilka kommer ni egentligen att använda?}
 
 In order to see the exact flags used to compile each sample, please refer to the source code for the experiment\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
 

@@ -99,3 +99,34 @@ Factors such as various settings, time of day and location may limit the general
 
 % Counter threats.
 To counter threats across the experiment we aim to improve replication of the results by enabling third parties to carry out the experiment on their own. This is done by providing detailed methodology, the used tools and any accumulated data. The data, tools and the tested implementations used are available as open source\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
+
+\todo[inline]{Perforator, perf lib, go, perf eller något verkar ibland returnera -1 vilket ger talet 9223372036854775808 (int64). Detta är antagligen en bugg i verktygen som vi bortsåg ifrån i resultaten. Vi dubbelkollade så att vi säkert kunde ta bort resultaten utan att det påverkade statistiken. Totalt verkade det utgöra 0.7\% av värdena.
+
+Data från körning på workstation:
+
+Antal "fel":
+    330 gen_e
+    339 poly_R2_inv
+    164 poly_R2_inv_to_Rq_inv
+     49 poly_Rq_inv
+   2293 poly_Rq_mul
+     56 poly_S3_inv
+    713 poly_Sq_mul
+    281 randombytes
+     24 root
+     50 syndrome
+    522 syndrome_asm
+
+Totalt antal:
+  16048 gen_e
+   12036 poly_R2_inv
+    4012 poly_R2_inv_to_Rq_inv
+   12036 poly_Rq_inv
+  204504 poly_Rq_mul
+   12036 poly_S3_inv
+   24036 poly_Sq_mul
+   36108 randombytes
+   30673 root
+    8024 syndrome
+    1578 syndrome_asm
+}
