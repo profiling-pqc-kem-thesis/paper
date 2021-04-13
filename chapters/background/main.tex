@@ -3,27 +3,36 @@
 
 \section{Cryptography}
 
-\subsection{Symmetric Cryptography}
-\todo[inline]{Revisit}
-Cryptographic functions are sorted into two categories - \textit{symmetric} functions and \textit{public-key} functions. Both categories refer to how the keys to the data are used\cite{bernstein2017}.
+Electronic communication has grown rapidly. This expansion has led to increased requirements on digital confidentiality - keeping data safe from manipulation and prying eyes. Although just a part of the vast field of cryptology, cryptography studies keeping information safe - encrypting it on one end and decrypting it on another\cite{delfs2007}.
 
-In the case of symmetric functions, the same key is known to both parties. The key is used for both encryption and decryption. Symmetric functions can also be used to provide authenticity - if only the two parties know of the secret key, one of them may request the other to prove possession of the key\cite{bernstein2017}.
+Cryptographic functions are sorted into two categories - \textit{symmetric-key} functions and \textit{public-key} functions. Both categories refer to how the keys to the data are used\cite{bernstein2017}.
+
+This section further discusses the generals\todo{is this proper English?} of symmetric-key, public-key and related topics.
+
+\subsection{Symmetric-Key Cryptography}
+
+In symmetric-key cryptography, the same key is known to both parties. The key is used for both encryption and decryption. Symmetric functions can also be used to provide authenticity - if only the two parties know of the secret key, one of them may request the other to prove possession of the key\cite{bernstein2017}.
+
+Communication using a symmetric key relies on the fact that the two parties has somehow securely exchanged a secret key. In practice, this is not a trivial task as anyone may intercept their communication channel\cite{delfs2007}. There are many ways of securely exchanging a symmetric key. Such methods rely on public-key cryptography\cite{delfs2007}.
 
 \subsection{Public-Key Cryptography}
-\todo[inline]{Revisit}
-In the case of public-key cryptography, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}.
+\label{section:background:public-key-cryptography}
+
+One may describe the functions of a public-key cryptosystem as follows. Let $E_A$ be an encryption algorithm created by party $A$, \gls{alice}, known by the public. Let $D_A$ be a decryption algorithm created and kept secret by \gls{alice}. Then, a public-key cryptosystem can be described as $D_A(E_A(M))=M$ for any message $M$. Such a cryptosystem must be efficiently computable. Furthermore, it is assumed that \gls{alice} does not compromise $D_A$ by revealing $E_A$ \cite{rsa1977}.
+
+Whenever a part $B$, \gls{bob}, wants to send a confidential message $M$ to \gls{alice}, they use \gls{alice}'s public encryption algorithm $E_A$ and send to \gls{alice} the ciphertext $C$ received from $C=E_A(M)$. On the receiving end, \gls{alice} may access the plaintext message $M$ by decrypting the ciphertext, $M=D_A(C)$\cite{rsa1977}.
+
+For the cryptosystem to be considered secure, it must be computationally unfeasible for an evil party, \gls{eve}, to efficiently compute $D_A$ from information found in $E_A$. A trivial, but inefficient way of deciphering a ciphertext $C$ is to enumerate all possible messages $M$ until $E_A(M)=C$ \cite{rsa1977}.
+
+In practice, each party is in possession of two keys - a public key and a private key. The public key is known to everyone, the private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party\cite{bernstein2017}.
 
 \subsection{Key Establishment}
 
-\todo{Make it more clear that this is connected to both symmetric and public-key}
+A key establishment protocol, sometimes referred to as a \gls{kex}, is a process in which two or more parties securely exchange a shared symmetric key known only to them. The protocol should be able to be performed securely over an untrusted communication channel\cite{boyd2020}.
 
-A key establishment protocol, sometimes referred to as a \gls{kex}, is a process in which two or more parties exchange a shared session key known only to them. The protocol should be able to be performed on an untrusted communication channel\cite{boyd2020}.
+One class of key establishments protocols is the key transport protocols. A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties\cite{boyd2020}.
 
-There are typically two classes of key establishment, key transport and key agreement\todo{Too short sentence}.
-
-A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties\cite{boyd2020}.
-
-In a key agreement protocol, the parties jointly influence the outcome of the shared key by deriving the key from information supplied by the involved parties. This should be performed in such a way that no single party can predetermine the resulting shared key on their own\cite{boyd2020}.
+In another class of protocols, the key agreement protocols, the parties jointly influence the outcome of the shared key by deriving the key from information supplied by the involved parties. This should be performed in such a way that no single party can predetermine the resulting shared key on their own\cite{boyd2020}.
 
 \subsection{Key Encapsulation Mechanism}
 
@@ -39,9 +48,9 @@ Key agreement protocols may provide forward secrecy if the long-term keys are on
 
 \section{Classical Cryptography}
 
-\todo[inline]{Define classical cryptography - why isn't this included in the previous section?}
+Classical cryptography is cryptography in use on classical computers such as consumer PCs, smart phones and cloud servers. In classical cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange. Some of these algorithms and parameter sets are recommended for use in a classical era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
 
-In the pre-quantum era of cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+This section will further describe cryptographic systems in use to keep data confidential from attacks run on classical hardware, as well as the threats they face.
 
 \todo[inline] {
 Is this even relevant? Perhaps under the introduction instead?
@@ -60,7 +69,15 @@ Variants of the mentioned key exchange algorithms are also used in messaging app
 
 \subsection{RSA}
 
-\todo[inline]{Ha exempel kring public-key, introducera RSA och ECC. Förklara RSA, ECC etc. mer - mindre antagande än nu. Utveckla mer kring grund-begrepp.}
+In 1977, Ronald L. Rivest, Adi Shamir and Len Adleman wrote a paper on digital signatures and public-key cryptosystems \cite{rsa1977}. In the paper they introduced a public-key cryptosystem based on powers and modulo operations \cite{rsa1977}.
+
+In the system, Alice first decides on two different primes $p$ and $q$ as well as an integer $s$ which is relatively prime to $(p-1)(q-1)$. Alice makes $r=p*q$ and $s$ public, but keeps $r$ and $q$ secret \cite{rsa1977}.
+
+As seen in section \ref{section:background:public-key-cryptography}, the encryption function in a public-key cryptosystem is defined as $E_A(M)$. In RSA, the function $E_A$ is defined as $E_A(M)=M^s\;(mod r)$, for any message $M$ \cite{rsa1977}.
+
+The decryption function, previously defined as $D_A$, is defined as $D_A(C)=C^t\;(mod\;r)$ where $t$ is solved from $s*t=1\;(mod\;\phi(r))$. The value $\phi(r)$ is the so called Euler totient function, which produces the number of positive integers less than $r$ which are relatively prime to $r$ \cite{rsa1977}.
+
+The security of the cryptosystem is based on the mathematical problem of factorizing a composite prime. That is, under the assumption that it is difficult to factorize a number $n=p*q$ into its factors $p$ and $q$, the system is considered secure \cite{rsa1977}.
 
 \subsection{Elliptic Curve Cryptography}
 
@@ -70,7 +87,7 @@ Variants of the mentioned key exchange algorithms are also used in messaging app
 
 The \gls{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978\cite{merkle1978}. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
 
-In the \gls{dh} protocol, two parties (Alice and Bob) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. Alice calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not necessarily secure. Alice and Bob may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020}.
+In the \gls{dh} protocol, two parties (\gls{alice} and \gls{bob}) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. \gls{alice} calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not necessarily secure. \gls{alice} and \gls{bob} may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020}.
 
 The security of the key exchange comes from the assumption that it is computationally difficult for a malicious party to recover $g^{r_A r_B}$ from the public channel. The problem is that of a discrete logarithm which was deemed unfeasible in the pre-quantum era, given a sufficient key size\cite{boyd2020}. In the post-quantum era, \gls{dh} is considered to be broken\cite{bernstein2017}.
 
@@ -146,6 +163,8 @@ Bit security corresponds to the best security a key of $n$ bits can provide unde
 \section{Post-Quantum Cryptography}
 
 \todo[inline]{Post-quantum cryptography relies on an entirely different set of underlying mathematical problems...}
+
+\todo[inline]{Clarify that post-quantum cryptography does not run on quantum computers, rather are resistent to}
 
 \subsection{The NIST Post-Quantum Standardization Process}
 \acrfull{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\cite{nist:about}.
