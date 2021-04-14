@@ -133,22 +133,16 @@ The selected mainframe hardware is intended to represent the latest mainframes a
         \toprule
         \thead{Label} & \thead{CPU} & \thead{RAM}\\
         \midrule
-        Cloud Provider 1 - Shared CPU\footnotemark & 1 vCPU & 1GB RAM \\
-        Cloud Provider 1 - Dedicated CPU\footnotemark & 1 CPU & 1GB RAM \\
-        Cloud Provider 2 - Shared CPU\footnotemark & 1 vCPU & 1GB RAM \\
-        Cloud Provider 2 - Dedicated CPU\footnotemark & 1 CPU & 1GB RAM \\
+        Cloud Provider 1\footnotemark & Xeon Platinum 8168 4 vCPU & 4GB\\
+        Cloud Provider 2\footnotemark & Intel 2 vCPU & 4GB\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\addtocounter{footnote}{-4}
+\addtocounter{footnote}{-2}
 \addtocounter{footnote}{1}
-\footnotetext{A DigitalOcean "small droplet"}
+\footnotetext{An Azure "Fsv2" Virtual Private Server in USA East}
 \addtocounter{footnote}{1}
-\footnotetext{A DigitalOcean "small droplet"}
-\addtocounter{footnote}{1}
-\footnotetext{A Google Cloud Platform "small droplet"}
-\addtocounter{footnote}{1}
-\footnotetext{A Google Cloud Platform "small droplet"}
+\footnotetext{A DigitalOcean "Basic \$20 Droplet" in Amsterdam}
 \todo{The above table requires more up-to-date information.}
 
 \begin{table}[H]
@@ -159,10 +153,15 @@ The selected mainframe hardware is intended to represent the latest mainframes a
         \toprule
         \thead{Label} & \thead{Model} & \thead{CPU} & \thead{RAM}\\
         \midrule
-        Mainframe & IBM \gls{z15} & \gls{z15} (\gls{s390x}) & 4GB\\
+        Mainframe\footnotemark & T01 & \gls{z15} 2 cores\footnotemark & 4GB\\
         \bottomrule
     \end{tabularx}
 \end{table}
+\addtocounter{footnote}{-2}
+\addtocounter{footnote}{1}
+\footnotetext{A "General Purpose VM" accessed via LinuxOne Community Cloud}
+\addtocounter{footnote}{1}
+\footnotetext{It is unknown if they are dedicated or virtual}
 \todo{The above table requires more up-to-date information.}
 
 \subsection{Phase One - Profiling}

@@ -7,7 +7,7 @@ Electronic communication has grown rapidly. This expansion has led to increased 
 
 Cryptographic functions are sorted into two categories - \textit{symmetric-key} functions and \textit{public-key} functions. Both categories refer to how the keys to the data are used\cite{bernstein2017}.
 
-This section further discusses the generals\todo{is this proper English?} of symmetric-key, public-key and related topics.
+In this section, symmetric-key, public-key and related topics will be further discussed to provide an overview of cryptographic subjects.
 
 \subsection{Symmetric-Key Cryptography}
 
@@ -94,7 +94,16 @@ To use an elliptic curve for cryptography, one must establish the following doma
     \item $h$ - the cofactor defined by $hn=|E(\mathbb{F_q})|$
 \end{itemize}
 
-The domain parameters $a,b\in\mathbb{F}_q$ describe the curve $E$ as $y^2=x^3+ax+b$. For \todo[inline]{continue here}.
+The domain parameters $a,b\in\mathbb{F}_q$ describe the curve $E$ as $y^2=x^3+ax+b$. Illustrations of these curves may be seen in figure \ref{figure:background:elliptic-curves}. Not all curves are suitable for elliptic-curve cryptography, which has led to some being standardized for mass usage\todo{cite}.
+
+\begin{figure}
+    \centering
+    \includegraphics{chapters/background/figures/elliptic-curves.pdf}
+    \caption{Illustrations of $y^2=x^3+ax+b$ for various values for $a$ and $b$}
+    \label{figure:background:elliptic-curves}
+\end{figure}
+
+Elliptic curves are used to replace the multiplicative subgroup $\mathbb{Z}_p^*$ in other cryptosystems based on discrete logarithms, such as ElGamal and DSA\cite{delfs2007}. The key difference is that elliptic curves define the group operation as $(P, Q)\to P+Q\in E(\mathbb{F}_q)$ for some curve $E$ and two points on the curve $P$ and $Q$ - that is, the group operation of two points on the curve will result in another point on the curve \cite{delfs2007}.
 
 \subsection{Diffie-Hellman}
 
