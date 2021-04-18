@@ -77,6 +77,8 @@ For our other research questions we examine optimizations of different parts of 
 
 When measuring memory usage, we cannot measure any other performance metric as it could induce a higher memory load unrelated to the algorithm under test. Instead, we perform the measurement of the memory usage of the key-pair generation, encryption, and decryption separate from the CPU measurements.
 
+\todo{Measurement issues with perf - overflow or negative numbers in uint64}
+
 \subsection{Criterion validity}
 In the publications for the \gls{nist} submissions, the authors have written their own performance analysis using the \gls{supercop} benchmark tool. The presented measurements are for the total number of cycles used by the algorithms for generating keys, encapsulation and decapsulation. As these figures have not been validated by a third party, we will not use them to validate ours. We will however present comparisons in order to identify potential issue in their measurements or ours.
 
@@ -130,3 +132,13 @@ Totalt antal:
     8024 syndrome
     1578 syndrome_asm
 }
+
+% ========== READ ME
+%\todo[inline]{
+%only a single run of callgrind on mceliece and ntru's tests. mceliece is non-deterministic and may behave weird in a single run.
+%}
+
+
+%\todo{Validity: vänd på körschemat när man kör så att inte NTRU får köras på natten varje gång - utan att sådana saker slås ut.}
+%\todo{Shell-script som kör alla tester - vänta 10-20 minuter mellan varje test}
+%\todo{Taskigt att mäta avx på intel, men inget vektoriserat på IBM}

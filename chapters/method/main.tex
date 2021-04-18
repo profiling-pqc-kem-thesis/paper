@@ -16,7 +16,7 @@ To provide information to help us answer \researchquestion{1}, we will conduct a
 
 As previously mentioned, we aim to answer \researchquestion{2} and \researchquestion{3} by conducting a literature study. We will limit the scope to the four finalists in \gls{nist}'s standardization process, round 3.
 
-By studying the algorithms' underlying mathematics, the authors' own optimizations on \gls{x86}, and relevant literature on cryptography optimization, we aim to identify what parts of the algorithms are possible and suitable to optimize.
+By studying the algorithms' underlying mathematics, the authors' own optimizations as well as relevant literature on cryptography optimization, we aim to identify what parts of the algorithms are possible and suitable to optimize.
 
 When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
 
@@ -45,11 +45,11 @@ I discussion argumentera saker som borde finnas i framtiden.
 \subsection{Goal}
 \label{section:method:experiment:goal}
 
-Our goal with the experiment is to analyze \textbf{\gls{post-quantum} \glspl{kem}} for the purpose of evaluating \textbf{the readiness of today's consumer, server and cloud hardware} with the respect to their \textbf{performance} from the point of view of \textbf{businesses and professionals}, in the context of \textbf{replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.}
+Our goal with the experiment is to analyze \gls{post-quantum} \glspl{kem} for the purpose of evaluating the readiness of today's consumer, mainframe and cloud hardware with the respect to their performance from the point of view of businesses and professionals, in the context of replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.
 
 The experiment has two phases. In phase one, we aim to study the effects of changing variables possibly related to the performance of the subjects. By studying the performance characteristics of a single run of the algorithms, we also aim to be able to identify what implementation performs the best.
 
-In the second phase, we aim to test the performance characteristics of the algorithms in a parallel fashion. By evaluating the performance of the algorithms when performed in parallel in a large batch over multiple cores, we aim to identify how the underlying platform takes advantage of the available hardware to run the best optimized implementation as identified in the first phase.
+In the second phase, we aim to test the performance characteristics of the algorithms in a parallel fashion. By evaluating the performance of the algorithms when performed in parallel over multiple threads, we aim to identify how the underlying platform takes advantage of the available hardware to run the best optimized implementation as identified in the first phase.
 
 \subsection{Subjects}
 \label{section:method:experiment:subjects}
@@ -77,7 +77,7 @@ The \gls{nist} submissions under test are presented in table \ref{table:method:e
 
 \end{table}
 
-As previously mentioned in section \ref{section:background:pre-quantum}, there are several recommended classical \glspl{kex}. These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:phase1:control-subjects}.
+As previously mentioned in section \ref{section:background:classical-cryptography}, there are several recommended classical \glspl{kex}. These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:phase1:control-subjects}. Although the control subjects may not be directly comparable to the \glspl{kem}, we hope to provide context for how these classical algorithms perform.
 
 \begin{table}[H]
     \centering
@@ -104,22 +104,24 @@ To fulfil the goal of the experiment, several hardware configurations will be te
 
 The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes.
 
-The cloud hardware was chosen to represent various cloud providers' Virtual Private Server offerings - a common target for many applications.
+The cloud hardware was chosen to represent various cloud providers' Virtual Private Server offerings - a common target for many applications\todo{cite}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment.
 
-The selected mainframe hardware is intended to represent the latest mainframes available from IBM.\todo{needs rewrite}
+The selected mainframe hardware is intended to represent the latest mainframes available from IBM at the time of writing.\todo{needs rewrite}
+
+Where possible and applicable, the environments run on the same version of Ubuntu (20.04) and use the same versions of GCC (9.3.0) and Clang (10.0.0). The exact version of each tool in each environment is available in the data published alongside this work in a GitHub repository\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
 
 \begin{table}[H]
     \centering
     \caption{Consumer Hardware - x86}
     \label{table:method:experiment:phase1:consumer-hardware}
-    \begin{tabularx}{\linewidth}{X c c}
+    \begin{tabularx}{\linewidth}{X c c c}
         \toprule
-        \thead{Label} & \thead{CPU} & \thead{RAM}\\
+        \thead{Label} & \thead{CPU} & \thead{RAM} & \thead{OS}\\
         \midrule
-        Modern Workstation & Intel i9-9900k & 32GB 3600MHz DDR4\\
-        Modern Laptop & Intel i7-8565u & 16 GB 2600MHz DDR4\\
-        Old Mid-Range Laptop & Intel i5-3230m & 8GB 1600MHz DDR3\\
-        Old Low-Range Laptop & Intel i3-3120m & 8GB 1600MHz DDR3\\
+        Modern Workstation & Intel i9-9900k & 32GB 3600MHz DDR4 & Ubuntu 20.04\\
+        Modern Laptop & Intel i7-8565u & 16 GB 2600MHz DDR4 & Ubuntu 20.04\\
+        Old Mid-Range Laptop & Intel i5-3230m & 8GB 1600MHz DDR3 & Ubuntu 20.04\\
+        Old Low-Range Laptop & Intel i3-3120m & 8GB 1600MHz DDR3 & Ubuntu 20.04\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -129,45 +131,51 @@ The selected mainframe hardware is intended to represent the latest mainframes a
     \centering
     \caption{Cloud Hardware - x86}
     \label{table:method:experiment:phase1:server-hardware}
-    \begin{tabularx}{\linewidth}{X c c}
+    \begin{tabularx}{\linewidth}{X c c c}
         \toprule
-        \thead{Label} & \thead{CPU} & \thead{RAM}\\
+        \thead{Label} & \thead{CPU} & \thead{RAM} & \thead{OS}\\
         \midrule
-        Cloud Provider 1\footnotemark & Xeon Platinum 8168 4 vCPU & 4GB\\
-        Cloud Provider 2\footnotemark & Intel 2 vCPU & 4GB\\
+        Cloud Provider 1\footnotemark & Intel Xeon Platinum 8168, 4 vCPU & 4GB & Ubuntu 18.04\footnotemark\\
+        Cloud Provider 2\footnotemark & Intel Xeon Gold 5118\footnotemark,  vCPU & 4GB & Ubuntu 20.04\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\addtocounter{footnote}{-2}
+\addtocounter{footnote}{-4}
 \addtocounter{footnote}{1}
 \footnotetext{An Azure "Fsv2" Virtual Private Server in USA East}
 \addtocounter{footnote}{1}
+\footnotetext{The provider offered Ubuntu 20.04, but at an additional cost}
+\addtocounter{footnote}{1}
 \footnotetext{A DigitalOcean "Basic \$20 Droplet" in Amsterdam}
+\addtocounter{footnote}{1}
+\footnotetext{DigitalOcean does not disclose the exact CPU model used, but by using the available metrics we found one likely model}
 \todo{The above table requires more up-to-date information.}
 
 \begin{table}[H]
     \centering
     \caption{Mainframe Hardware}
     \label{table:method:experiment:phase1:mainframe-hardware}
-    \begin{tabularx}{\linewidth}{X c c c}
+    \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Label} & \thead{Model} & \thead{CPU} & \thead{RAM}\\
+        \thead{Label} & \thead{Model} & \thead{CPU} & \thead{RAM} & \thead{OS}\\
         \midrule
-        Mainframe\footnotemark & T01 & \gls{z15} 2 cores\footnotemark & 4GB\\
+        Mainframe\footnotemark & IBM T01 & IBM \gls{z15} 2 cores\footnotemark & 4GB & RHEL 8.3\footnotemark\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\addtocounter{footnote}{-2}
+\addtocounter{footnote}{-3}
 \addtocounter{footnote}{1}
 \footnotetext{A "General Purpose VM" accessed via LinuxOne Community Cloud}
 \addtocounter{footnote}{1}
 \footnotetext{It is unknown if they are dedicated or virtual}
+\addtocounter{footnote}{1}
+\footnotetext{The provider did not offer an Ubuntu distribution}
 \todo{The above table requires more up-to-date information.}
 
 \subsection{Phase One - Profiling}
 \label{section:method:experiment:phase1}
 
-In the first phase, we aim to identify how possibly performance-related variables alter the performance characteristics of the subjects. The performance of the algorithms in a single run will be evaluated.
+In the first phase, we aim to identify how possibly performance-related variables alter the performance characteristics of the subjects. The performance of the algorithms in a single sequential run will be evaluated.
 
 \subsubsection{Variables}
 \label{section:method:experiment:phase1:variables}
@@ -209,18 +217,19 @@ In table \ref{table:method:experiment:phase1:dependent-variables}, the dependant
     \end{tabularx}
 \end{table}
 \todo{update - not final}
+\todo{Update the above table with correct values}
 
 \todo[inline]{Förtydliga att hot-paths enbart utförs på referens-implementationen på en plattform. Förtydliga att minneskontroll enbart utförs på de enkla beräkningar och att ingen minneskontroll när vi kör i bulk. Minneskontroll görs inte vid multicore-benchmark p.g.a. att vi allokerar minne o.s.v.}
 
-\subsubsection{Selected Instrumentation Toolset - Processor}
+\subsubsection{Selected Toolset - Processor}
 \label{section:method:experiment:phase1:selected-toolset-processor}
 The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etc. may be counted or sampled. The API functions externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
 
 As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. To help aid the usage of the API, we used a small tool\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perforator}{https://github.com/profiling-pqc-kem-thesis/perforator}} which enabled us to monitor the algorithms during their lifetime.
 
-Valgrind (Callgrind) was identified as usable for identifying hot paths in the code. The tool was run on the subjects to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce graphs of the hot paths.
+Valgrind (Callgrind) was identified as usable for identifying hot paths in the code. The tool was run on a single iteration of the reference implementations' tests to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce data for graphs of the hot paths.
 
-\subsubsection{Rejected Instrumentation Toolset - Processor}
+\subsubsection{Rejected Toolset - Processor}
 \label{section:method:experiment:phase1:rejected-toolset-processor}
 Other sampling-based measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the retired instructions or time spent inside of the kernel\footnote{\href{https://ftp.gnu.org/old-gnu/Manuals/gprof-2.9.1/html\_mono/gprof.html}{https://ftp.gnu.org/old-gnu/Manuals/gprof-2.9.1/html\_mono/gprof.html}}
 
@@ -228,56 +237,57 @@ Another, non-sampling-based tool that monitor the entire lifetime of a process, 
 
 Other libraries or APIs such as those available in \gls{supercop} and PAPI were identified via testing and a source code analysis to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of \gls{supercop}, some measurements were identified to rely on extrapolation and estimation of data which led us to reject the tool.
 
-\subsubsection{Selected Instrumentation - Memory}
+\subsubsection{Selected Toolset - Memory}
 \label{section:method:experiment:phase1:selected-toolset-memory}
-As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as the tool of choice\todo{Revisit Valgrind comments} for memory analysis.
 
-\subsubsection{Rejected Instrumentation Tools - Memory}
+To identify the heap usage we resorted to heaptrack, a tool which allowed us to intercept each heap allocation and deallocation. The tool was found to be simple to build and run on all of our target environments, without yielding a significant overhead. Furthermore, the accompanying tools let us easily automate the process of identifying heap usage on a per-function basis.
+
+For stack analysis we aimed to identify what amount of memory was required to use a specific algorithm. To identify the stack usage we resorted to statically analyzing the assembly code and symbol table produced by the compilers used. The symbol table includes the size of each (non-inlined) function and the assembly code could be used to identify the stack allocation made by each function. The script we wrote to solve this automatically is produced is published alongside this work.
+
+\subsubsection{Rejected Toolset - Memory}
 \label{section:method:experiment:phase1:rejected-toolset-memory}
+
 \todo[inline]{vTune????}
+
+As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the runtime stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically\todo{revisit}.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase1:measurements}
 
-\todo[inline]{Describe what each measurement is and what we aim to get out of them. Describe what system, user and wall-clock time is}
-
-Using the aforementioned toolset, we will monitor the subjects and measure the following values.
+Using the aforementioned toolset, we will monitor the subjects and measure the following values\footnote{Not all platforms support all events}.
 
 \begin{itemize}
     \item Retired instruction count
     \item Total cycle count
     \item Page fault count
-    \item Cache miss count \footnote{x86 only - not available on s390x}
-    \item Heap allocation in bytes
-    \item Stack usage in bytes
-    \item Wall clock time in nanosecond resolution
+    \item Cache miss count
+    \item Task clock
+    \item Heap allocation
+    \item Stack usage
+    \item Wall clock time
 \end{itemize}
 
-The measurements will be taken at different points in the algorithms' lifecycles as explained in table \ref{table:method:experiment:phase1:instrumentation}. The same measurements are to be repeated for all of the stages of the algorithms as presented in table \ref{table:method:experiment:phase1:dependent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+The measurements will be taken at different points in the algorithms' lifecycles - such as when the algorithm is first invoked. The same measurements are to be repeated for all of the stages of the algorithms as presented in table \ref{table:method:experiment:phase1:dependent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+
+As we've identified that some tools may introduce overhead when monitoring a program, we have decided to split the tests into four parts. These parts are presented in Table \ref{table:method:experiment:phase1:benchmark-divisions}. By splitting the benchmarks we hope to capture accurate values for each measurements without affecting others.
 
 \begin{table}[H]
     \centering
-    \caption{Measurement Locations}
-    \label{table:method:experiment:phase1:instrumentation}
+    \caption{Benchmark Divisions}
+    \label{table:method:experiment:phase1:benchmark-divisions}
     \begin{tabularx}{\linewidth}{l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
         \toprule
-        \thead{Subject} & \thead{Location} & \thead{Comment}\\
+        \thead{Name} & \thead{Focus} & \thead{Measurements}\\
         \midrule
-        All & Right before and right after the algorithm is invoked & Provides the bounds of the timeline of the execution \\
-        \gls{mceliece} & Right before and right after the matrix multiplication is invoked & \\
-        \gls{mceliece}, \gls{ntru} & Right before and right after random bytes are requested & \\
-        \gls{mceliece}, \gls{ntru} & Right before and right after the SHAKE implementation is called & \\
-        \gls{mceliece} & int32\_sort & \\
-        \gls{mceliece} & syndrome, transpose, vec256\_sq, vec256\_copy, ... &\\
-        \gls{ntru} & Poly math - ntru\_poly\_S3\_inv, ntru\_poly\_rq\_to\_s3, ntru\_poly\_rq\_mul, square, ...& \\
-        \gls{ntru} & crypto\_sort\_int32 & \\
+        Micro benchmark & Measurements on a per-function basis & Retired instruction count, total cycle count, page fault count, cache miss count, task clock \\
+        Sequential benchmark & Accurate times & Wall clock time \\
+        Heap benchmark & Heap allocation on a per-function basis & Heap allocation \\
+        Stack benchmark & Stack allocation on a per-function basis & Stack usage \\
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{Update with accurate information}
 
-\todo{Mention how many times each algorithm will be run?}
-
+The measurement will be repeated 1000 times for each stage of the algorithms and each part of the benchmark\footnotemark{The heap benchmark will only run 10 iterations as the heap usage should be deterministic. Furthermore, the cost of running further iterations was deemed too large}. If the total duration of the benchmark surpassed 15 minutes, the test was set to timeout and the results recorded until then used. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated budget.
 
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
 
@@ -292,14 +302,14 @@ The following compiler configurations will be assessed where applicable.
     \label{table:method:experiment:phase1:compilers}
     \begin{tabularx}{\linewidth}{l c c X}
         \toprule
-        \thead{Label} & \thead{Name} & \thead{Version} & \thead{Flags}\\
+        \thead{Label} & \thead{Name} & \thead{Flags}\\
         \midrule
-        GCC Minimal & GCC & 8 & Minimal required\\
-        Clang Minimal & Clang & 8 & Minimal required\\
-        IBM XL Minimal & IBM XL & 8 & Minimal required\\
-        GCC Optimized & GCC & 8 & -march=native -mtune=native -O3\\
-        Clang Optimized & Clang & 8 & -march=native -mtune=native -O3\\
-        IBM XL Optimized & IBM XL & 8 & -march=native -mtune=native -O3\\
+        GCC Minimal & GCC & Minimal required\\
+        Clang Minimal & Clang & Minimal required\\
+        IBM XL Minimal & IBM XL & Minimal required\\
+        GCC Optimized & GCC & -march=native -mtune=native -O3\\
+        Clang Optimized & Clang & -march=native -mtune=native -O3\\
+        IBM XL Optimized & IBM XL & -march=native -mtune=native -O3\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -310,7 +320,7 @@ In order to see the exact flags used to compile each sample, please refer to the
 \subsubsection{Implementation Configurations}
 \label{section:method:experiment:phase1:implementation-configurations}
 
-The following implementation details will be changed in order to evaluate potential performance differences.
+The implementation details presented in Table \ref{table:method:experiment:phase1:implementation-configurations} will be changed in order to evaluate potential performance differences.
 
 \begin{table}[H]
     \centering
@@ -362,36 +372,29 @@ The configurations presented in table \ref{table:method:experiment:phase1:config
 \subsection{Phase Two - Parallelism}
 \label{section:method:experiment:phase2}
 
-In phase two, the performance characteristics of the best-performing algorithms from the first phase will be tested in a parallel environment. We aim to identify how the underlying platform takes advantage of the available hardware to run the subjects.
-
-\subsubsection{Instrumentation Toolset}
-\label{section:method:experiment:phase2:toolset}
-
-The same toolset used in the first phase will be used in this phase as well.\todo{more information?}
+In phase two, the performance characteristics of the best-performing algorithms from the first phase will be tested in a parallel environment. We aim to identify how the underlying platform takes advantage of the available hardware to run the subjects in a parallel fashion. The same toolset as previously presented was used in this phase.
 
 \subsubsection{Variables}
 \label{section:method:experiment:phase2:variables}
 
-The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase2:independent-variables}.
-
-As previously mentioned, the algorithms under test will be run in parallel. As the implementations are selected based on the result from the first phase, several independent variables identified in the first phase is omitted and not of interest in the second.
+The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase2:independent-variables}. As previously mentioned, the algorithms under test will be run in parallel. As the implementations are selected based on the result from the first phase, several independent variables identified in the first phase is omitted and not of interest in the second.
 
 \begin{table}[H]
     \centering
     \caption{Independent Variables}
     \label{table:method:experiment:phase2:independent-variables}
-    \begin{tabularx}{\linewidth}{l>{\RaggedRight}l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
+    \begin{tabularx}{\linewidth}{l>{\RaggedRight}l>{\RaggedRight\arraybackslash}X}
         \toprule
-        \thead{Group} & \thead{Label} & \thead{Potential Values} & \thead{Comment} \\
+        \thead{Group} & \thead{Label} & \thead{Comment} \\
         \midrule
-        Parallelism & Thread Count & 1, 2, 4, ... &\\
-        Environment & Hardware & CPU model, CPU architecture, available cores, available RAM, RAM model and specification & \\
-        Environment & OS & OS type and version, scheduling etc. & \\
+        Parallelism & Thread Count & Number of threads running sequential algorithms at the same time \\
+        Environment & Hardware & CPU model, CPU architecture, available cores, available RAM, RAM model and specification \\
+        Environment & OS & OS type and version, scheduling etc. \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-In table \ref{table:method:experiment:phase2:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment:goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, it has an exchange phase, not an encapsulation nor decapsulation phase. For implementation details, please refer to section \ref{section:method:experiment:phase2:measurements}\todo{points to the main section, not sub sub sub section}.
+In table \ref{table:method:experiment:phase2:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment:goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms - they have an exchange phase, not an encapsulation nor decapsulation phase. For implementation details, please refer to section \ref{section:method:experiment:phase2:measurements}.
 
 \begin{table}[H]
     \centering
@@ -406,23 +409,13 @@ In table \ref{table:method:experiment:phase2:dependent-variables}, the dependant
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{update - not final}
+
+The hardware utilization of the system will not be considered for this test, instead we focus on how the throughput differs between architectures and environments.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase2:measurements}
 
-\todo[inline]{Describe what each measurement is and what we aim to get out of them. Describe what system, user and wall-clock time is}
-
-Using the aforementioned toolset, we will instrument the subjects and measure the following values.
-
-\begin{itemize}
-    \item Wall clock time in nanosecond resolution
-    \item iostat
-\end{itemize}\todo{Explain further measurements that represent the hardware utilization}
-
-To evaluate the parallel performance behavior of the algorithm and environment, a simple tool was written. The tool creates a number of threads and lets each thread perform the algorithm under test for an equal portion of a batch of operations. The total wall-clock time for the batch to complete will be used to calculate the throughput.
-
-\todo{Mention how large the batch size will be and how many times it will execute?}
+Using the aforementioned toolset, we will instrument the subjects and measure the wall clock time whilst running the benchmark. To evaluate the parallel performance behavior of the algorithm and environment, a simple tool was written. The tool creates a number of threads and lets each thread perform the algorithm under test for 100 iterations. The total wall-clock time for all threads to complete their iterations will be used to calculate the throughput. If the total duration of the benchmark surpassed 15 minutes, the test was set to timeout and the results recorded until then used. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated budget.
 
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
 
@@ -434,8 +427,3 @@ The best-performing implementation for each subject as identified in phase one w
 The parallelism configurations is synonymous with the number of threads used and will depend on the degree of \gls{smt} and available physical cores on the target environment. The number of threads will start of at one and double, up to the product of the number of physical cores and the \gls{smt} degree, multiplied by four.
 
 For a machine with two physical cores and a \gls{smt} degree of two, this calculation yields the thread counts $1$, $2$, $4$, $8$ and $16$.
-
-\todo{Validity: vänd på körschemat när man kör så att inte NTRU får köras på natten varje gång - utan att sådana saker slås ut.}
-\todo{Shell-script som kör alla tester - vänta 10-20 minuter mellan varje test}
-\todo{Skriv om till att använda tid som begränsande faktor för batch istället för antal}
-\todo{Taskigt att mäta avx på intel, men inget vektoriserat på IBM}

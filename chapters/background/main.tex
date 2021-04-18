@@ -47,6 +47,7 @@ Forward Secrecy is a term used to describe the security of session keys after on
 Key agreement protocols may provide forward secrecy if the long-term keys are only used for authentication of the exchange. Another way to provide forward secrecy is to use ephemeral keys - keys that are only used for a single run of a key establishment protocol\cite{boyd2020}.
 
 \section{Classical Cryptography}
+\label{section:background:classical-cryptography}
 
 Classical cryptography is cryptography in use on classical computers such as consumer PCs, smart phones and cloud servers. In classical cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange. Some of these algorithms and parameter sets are recommended for use in a classical era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
 
@@ -127,12 +128,6 @@ In the case of both \gls{dh} and \gls{ecdh}, ephemeral keys may be used to provi
 
 \subsection{Threats to classical cryptography}
 
-\todo[inline]{Skriv en subsection om varför dessa inte kommer att räcka till framöver (kvantdatorer). Då kommer det naturligt, man har beskrivit traditionella krypton, man har beskrivit utmaningarna och varför det inte fungerar efter kvantdatorer. Sedan blir det naturligt att gå över till post-quantum. Använd befintlig text om post-quantum för att motivera problem med dagens krypton? "Threats to traditional crypto"?}
-
-\todo[inline]{Write about why RSA isn't used, but ECDH etc. is?}
-
-\todo[inline]{End with something something classical cryptography is sometimes also referred to as pre-quantum cryptography or the pre-quantum era}.
-
 Cryptography does not usually come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical\cite{nist2019}. As the performance of classical computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using classical algorithms\cite{thome2019}. As Moore's law is coming to a halt\cite{theis2017}, the threat of classical computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
 
 Since the 1980s, research has been made to utilize quantum mechanics for computation, thus introducing the quantum computer\cite{benioff1980}. By utilizing quantum bits or \glspl{qubit} instead of the bits used in classical computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a classical computer\cite{jordan2021}. Recent progress in the field has shown that, as progress have halted in the area of classical computers, progress made on quantum computers has been increasing exponentially\cite{ibm2020:quantum-computer}.
@@ -141,11 +136,11 @@ Parallel to the development of the theoretical quantum computer, algorithms have
 
 Shor's algorithm can solve the problems posed by many of the traditional cryptosystems - integer factorization and discrete logarithms, rendering the cryptosystems useless\cite{shor1997}. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. But today's quantum computers are not powerful enough to use Shor's algorithm to break the security offered by classical cryptography\cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million so called noisy \glspl{qubit} to break 2048 bits \gls{rsa}. Among today's most powerful quantum computers are Google's 53-\glspl{qubit} system\cite{google2019:quantum-computer} and IBM's 65-\glspl{qubit} system\cite{ibm2020:quantum-computer}. IBM has a 1000-\glspl{qubit} system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
 
-Another algorithm threatening classical cryptography is Grover's algorithm. The algorithm was first proposed as a way to search in databases in $O(\sqrt N)$ quantum operations where $N$ is the number of available items\cite{grover1996}. However, a more practical application for the algorithm is to find the root of a function\cite{bernstein2017}. This enables an attack on some cryptosystem such as \gls{aes}, leading to the bit security of the cryptosystems to be cut in half. The bit security corresponds to the best security a key of $n$ bits can provide under the best known attack. Values for some widely deployed cryptographic systems are presented in Table \ref{table:background:post-quantum:bit-security}. To mitigate this attack, one may double the size of the \gls{aes} key.
+Another algorithm threatening classical cryptography is Grover's algorithm. The algorithm was first proposed as a way to search in databases in $O(\sqrt N)$ quantum operations where $N$ is the number of available items\cite{grover1996}. However, a more practical application for the algorithm is to find the root of a function\cite{bernstein2017}. This enables an attack on some cryptosystem such as \gls{aes}, leading to the bit security of the cryptosystems to be cut in half. The bit security corresponds to the best security a key of $n$ bits can provide under the best known attack. Values for some widely deployed cryptographic systems are presented in Table \ref{table:background:post-quantum:bit-security}. Pre-quantum and post-quantum refers to the bit security of the algorithm for the corresponding epoch. To mitigate Grover's and Shor's algorithms, one may double the size of the \gls{aes} key. Some cryptosystems are completely broken, however.
 
 \begin{table}[H]
     \centering
-    \caption{Security levels for widely deployed cryptographic systems and the bit security\cite{bernstein2017}. Pre-quantum and post-quantum refers to the bit security of the algorithm for the corresponding epoch.}
+    \caption{Security levels for widely deployed cryptographic systems. Based on \cite{bernstein2017}.}
     \label{table:background:post-quantum:bit-security}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
@@ -236,16 +231,16 @@ $$
 
 The \gls{ntru} \gls{kem} is a unification of several lattice-based variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM.
 
-The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. The security of \gls{ntru} relies on the short vector problem being hard to solve\cite{ntru1998}.
+The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve \cite{sun2020, ntru1998}.
 
 \todo[inline]{more information on the KEM?}
 \todo{include security category}
 
 \subsection{CRYSTALS-KYBER}
+CRYSTALS-KYBER is a lattice-based cryptosystem that relies on the learning-with-errors problem over module lattices being hard to solve.
 
-\todo{CRYSTALS-KYBER is a lattice-based crypto}
 
-\todo[inline]{todo}
+
 %\todo{include security category}
 
 \subsection{SABER}
@@ -256,7 +251,7 @@ The original paper on the \gls{ntru} cryptosystem was published in 1998, followi
 %\todo{include security category}
 
 \subsection{Code-Based Cryptography}
-Code-based cryptosystems take advantage of error-correction code. Typically error-correction code is used to detect or correct a bit flip that occurred. But in cryptography, you can use it to encrypt by adding errors, which can be corrected when you decrypt\cite{bernstein2017}. There are different types of error-correction codes, for example, quasi-cyclic codes and Goppa codes.\cite{sendrier2011}.
+Code-based cryptosystems take advantage of error-correction code. Typically error-correction code is used to detect or correct a bit flip that occurred. But in cryptography, you can use it to encrypt by adding errors, which can be corrected when you decrypt\cite{bernstein2017}. There are different types of error-correction codes, for example, quasi-cyclic codes and Goppa codes \cite{sendrier2011}.
 
 \subsection{Classic McEliece}
 Classic McEliece is a code-based cryptosystem. It uses random binary Goppa codes.
@@ -272,9 +267,9 @@ Combination av olika McEliece implementationer
 
 \section{Architectures and Performance}
 
-\subsection{CPU Architectures}
+\todo[inline]{Talk about architectures in general, why performance might differ}
 
-\todo[inline]{Utöka information kring 32, 64-bitars, förklara mer vad som är karakteristiskt för x86. Kanske lite historik. De är lite "cisc" allihop, men power är lite mer "risc".}
+\subsection{RISC and CISC}
 
 The \acrfull{risc} design methodology is centered around a load/store architecture\cite{flynn1998}. This means that only the load and store instructions may access the memory system\cite{carter2002}. The aim is to reduce the amount of complexity in the instruction set and regularize the instruction format. The regularization simplifies the decoding of the instructions with the aim to improve the overall performance\cite{flynn1998}. The \acrfull{cisc} design methodology, on the other hand, is centered around a register/memory architecture\cite{flynn1998}. The architecture permits arithmetic and other instructions to read their input from, or write to the memory system\cite{carter2002}.
 
@@ -327,9 +322,7 @@ Mainframe hardware is designed to handle a large amount of data and bulk transac
 \subsection{IBM z15}
 \todo[inline]{En bra artikel i IEEE Micro publicerades nyligen. Bra översikt av utvecklingen av Z-serien. Jacobi & Webb History of IBM Z mainframe proc.}
 
-In z15, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into \glspl{lpar} that runs its own virtual system. z15 is a 64-bit \gls{cisc} architecture. Their each CPU has 12 custom cores with \gls{smt}2 which means that each core has two logical cores. A mainfram contains multiple of these CPUs. Special coprocessors are built into the CPU, \gls{cpacf} accelerates some cryptographic functions see more in section \ref{subsection:cpacf}, and \gls{nxu} to accelerate compersion are two examples. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations\cite{redbook:z15}.
-
-\gls{cpacf} is an on-chip co-processor integrated into all cores on the z15 that assists in cryptographic functions, delivering high speed, low latency encryption, decryption, hashing, and random number generation. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. In this thesis, we will be using an \gls{openssl} engine that has support for \gls{cpacf}\cite{redbook:z15}.
+In z15, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into \glspl{lpar} that runs its own virtual system. z15 is a 64-bit \gls{cisc} architecture. Their each CPU has 12 custom cores with \gls{smt}2 which means that each core has two logical cores. A mainfram contains multiple of these CPUs. Special co-processors are built into the CPU, two examples are \gls{nxu} to accelerate compersion, and\gls{cpacf} that assists in cryptographic functions, delivering high speed, low latency encryption, decryption, hashing, and random number generation. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. In this thesis, we will be using an \gls{openssl} engine that has support for \gls{cpacf}\cite{redbook:z15}. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations\cite{redbook:z15}.
 
 \subsection{IBM POWER9}
 \todo[inline]{todo}
