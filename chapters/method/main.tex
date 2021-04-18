@@ -191,8 +191,8 @@ As the thesis is interested in the performance characteristics of consumer, clou
         \toprule
         \thead{Group} & \thead{Label} & \thead{Potential Values} & \thead{Comment} \\
         \midrule
-        Compiler & Compilers & GCC, Clang, IBM XL, Intel C++ Compiler (ICC) & There are more, but these are the most commonly used compilers\todo{Cite properly?} \\
-        Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications)\todo{Research correct flags} \\
+        Compiler & Compilers & GCC, Clang, IBM XL, Intel C++ Compiler (ICC) & \\
+        Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications) \\
         Implementation & Libraries & \gls{sha3} / \gls{shake} / \gls{keccak}, \gls{aes-instruction-set}, \gls{cpacf} & \\
         Implementation & Optimizations & \gls{avx}, \gls{avx2}, \gls{avx512}, \gls{simd} (GPU), \gls{simd} on \gls{ibmz}, \gls{hsm} & These are the optimizations available in the selected implementations \\
         Environment & OS & OS type and version, scheduling etc. & \\
@@ -247,9 +247,9 @@ For stack analysis we aimed to identify what amount of memory was required to us
 \subsubsection{Rejected Toolset - Memory}
 \label{section:method:experiment:phase1:rejected-toolset-memory}
 
-\todo[inline]{vTune????}
+Intel's vTune is a profiling suite with support for x86. It was found to work well for gathering memory-related metrics of the CPU during execution of a program. It was unavailable on \gls{s390x}, however. It was therefore rejected as we could rely on other tools to yield cross-platform metrics. 
 
-As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the runtime stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically\todo{revisit}.
+As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the runtime stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase1:measurements}
@@ -294,7 +294,7 @@ For the exact instrumentation used in each subject, please refer to the source c
 \subsubsection{Compiler Configurations}
 \label{section:method:experiment:phase1:compiler-configurations}
 
-The following compiler configurations will be assessed where applicable.
+The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. With IBM XL on Power, for example, -O5 implies automatic \gls{simd} via -qsimd=auto and improved data locality via -qhot \cite{ibmxl2018}. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
 
 \begin{table}[H]
     \centering
@@ -309,11 +309,10 @@ The following compiler configurations will be assessed where applicable.
         IBM XL Minimal & IBM XL & Minimal required\\
         GCC Optimized & GCC & -march=native -mtune=native -O3\\
         Clang Optimized & Clang & -march=native -mtune=native -O3\\
-        IBM XL Optimized & IBM XL & -march=native -mtune=native -O3\\
+        IBM XL Optimized & IBM XL & -march=native -mtune=native -O5\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{Update with accurate information}
 
 In order to see the exact flags used to compile each sample, please refer to the source code for the experiment\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
 
