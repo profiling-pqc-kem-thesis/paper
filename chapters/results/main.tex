@@ -176,3 +176,233 @@ What techniques may be used to increase the performance of post-quantum key enca
 \todo[inline]{
 Talk about the parallel benchmark here, hardware throughput, hardware differences.
 }
+
+\subsection{Memory Usage}
+
+As outlined in the method, section \ref{section:method:experiment:phase1:measurements}, we measured the heap usage of the algorithms by monitoring heap allocation and deallocation methods such as malloc using the tool heaptrack. We found that the heap allocation did not change across environments nor between the analyzed optimizations except for some few occurances. As for the implementations, this is rather unsurprising as changing how the allocations worked would alter the behavior of the code. As we found that the heap behavior of the algorithms were consistent throughout our test, we will for the rest of this section not refer\todo{No longer true?} to any specific environment or optimization used for the algorithms unless otherwise noted. When talking about allocation, we will refer to the peak allocation - that is, the maximum allocated bytes recorded during a function's lifetime.
+
+At one point, the \gls{ntru} implementations allocated $264$ bytes generating a keypair. These bytes were allocated by OpenSSL to initialize the library's envelope suite of functions. In context, this is done as the \gls{ntru} implementation uses OpenSSL's \gls{aes} ECB implementation to generate uniform pseduo-random bytes. The invocation of the \gls{aes} function itself resulted in $168 + 40$ bytes being allocated by the OpenSSL \gls{aes} ECB implementation. Beyond these bytes, the \gls{ntru} implementation did not require any additional heap allocation during its runtime. It's important to note, however, that the algorithm relies on additional memory in the form of parameters given to the implementation\todo{Remove this part and talk about the parameters seperately and discuss the authors' results as well}.
+
+Just like the \gls{ntru} implementations, the \gls{mceliece} implementations make use of OpenSSL to create uniform pseudo-random bytes. As such, the same $264$ bytes are allocated to initialize OpenSSL's envelope suite of functions, as well as the $168 + 40$ bytes to actually encrypt random data to produce a uniformly distributed series of bytes. No further allocations were found to be made.
+
+The \gls{ecdhe} and \gls{dhe} implementations are based entirely on functions made available by OpenSSL. All of the implementations had an increase in the number of allocations made. The \gls{dhe} implementation in the IBM Community Cloud environment saw an allocation of $16960$ bytes during keypair generation made from a constant-time modulo exponentiation on an arbitrary large number. All other environments allocated $9024$ bytes for the same invocation. Furthermore, the keypair generation saw the allocation of a further $1024$ bytes in the IBM Community Cloud environment seemingly related to the same modulo operation.
+The operation of dividing an integer was found to correlate to an additional $536$ bytes in the Cloud Provider 1 environment and $528$ bytes in all of the other environments. The environments saw an additional $520 + 512 + 400$ bytes corresponding to the dealing of arbitrary large numbers whilst generating a keypair. Fetching random data raised the allocation with $360 + 272$ bytes in all environments except the Cloud Provider 1, which saw an allocation of $352 + 280$ bytes instead. There were further allocations made, all of which are summarized in Table \ref{table:results:memory:dhe-heap}. The \gls{ecdhe} implementation behaved much like the \gls{dhe}, with the peaks differing between some environments. The implementation too worked with arbitrary numbers and as such had several of the same allocations as the \gls{dhe} implementations. The peaks are presented in Table \ref{table:results:memory:ecdhe-heap}.
+
+
+\begin{table}
+    \centering
+    \caption{Heap Allocation in Bytes for \gls{dhe}}
+    \label{table:results:memory:deh-heap}
+    \begin{tabularx}{\linewidth}{X c c c}
+        \toprule
+        \thead{Environment} & \thead{OpenSSL Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
+        & & \thead{Keypair} & \thead{Exchange} \\
+        \midrule
+        IBM Community Cloud & 1.1.1g FIPS & 19772 & 19248 \\
+        Cloud Provider 1 & 1.1.1 & 12076 & 12080 \\
+        Cloud Provider 2 & 1.1.1f & 11852 & 11536\\
+        Modern Workstation & 1.1.1f & 11852 & 11536 \\
+        Modern Laptop & 1.1.1f & 11852 & 11536 \\
+        Old Mid-Range Laptop & 1.1.1f & 11852 & 11536\\
+        Old Low-Range Laptop & 1.1.1f & 11852 & 11536\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\todo{correct values in table}
+
+\begin{table}
+    \centering
+    \caption{Heap Allocation in Bytes for \gls{ecdhe}}
+    \label{table:results:memory:ecdhe-heap}
+    \begin{tabularx}{\linewidth}{X c c c c}
+        \toprule
+        \thead{Environment} & \thead{Curve} & \thead{OpenSSL Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
+        & & & \thead{Keypair} & \thead{Exchange} \\
+        \midrule
+        IBM Community Cloud & P-256 & 1.1.1g FIPS & 4920 & 1520 \\
+        IBM Community Cloud & 25519 & 1.1.1g FIPS & 4524 & 1520 \\
+
+        Cloud Provider 1 & P-256 & 1.1.1 & - & - \\
+        Cloud Provider 1 & 25519 & 1.1.1 & - & - \\
+
+        Cloud Provider 2 & P-256 & 1.1.1f & 2584 & 2136 \\
+        Cloud Provider 2 & 25519 & 1.1.1f & 1192 & 2005\\
+
+        Modern Workstation & P-256 & 1.1.1f & 2584 & 2136 \\
+        Modern Workstation & 25519 & 1.1.1f & 1192 & 2005 \\
+        
+        Modern Laptop & P-256 & 1.1.1f & 2584 & 2136 \\
+        Modern Laptop & 25519 & 1.1.1f & 1192 & 2005 \\
+        
+        Old Mid-Range Laptop & P-256 & 1.1.1f & 2584 & 2136\\
+        Old Mid-Range Laptop & 25519 & 1.1.1f & 1192 & 2005\\
+        
+        Old Low-Range Laptop & P-256 & 1.1.1f & 2584 & 2136\\
+        Old Low-Range Laptop & 25519 & 1.1.1f & 1192 & 2005\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\todo{correct values in table}
+
+In terms of stack usage, the results vary between the implementations, compilers and features. For instance, the polynomial math function poly\_Rq\_mul in \gls{ntru}, which was identified as constituting most of the time spent in the algorithm, varies between taking up $70499$ and $188$ bytes. In all environments, the HPS 4096821 AVX2 variant takes up $70499$ bytes. This does not change between compilers or optimization flags, which could be due to the fact that the implementation is written in assembly - leaving little room for the compiler to optimize for size. The same goes for the HRSS 701 variant of \gls{ntru} - the size is consistently $55317$ across environments and optimization flags. The lowest sizes are found when the reference implementation is compiled with optimization. The sizes are presented in Table \ref{table:results:memory:ntru-stack}. Although the optimization flags used were not chosen for improving the size of the binary, the size of the function has been lowered in all cases. Although the same version of GCC was used for several environments, the results differed between $188$ and $192$ bytes. Clang continually produced larger regions than GCC. Furthermore, more recent versions of the compilers seem to have produced smaller sizes.
+
+\begin{table}
+    \centering
+    \caption{Stack Size of poly\_Rq\_mul in Bytes for the Optimized Reference Implementation}
+    \label{table:results:memory:ntru-stack}
+    \begin{tabularx}{\linewidth}{X c c c c}
+        \toprule
+        \thead{Environment} & \thead{Compiler} & \thead{Compiler Version} & \thead{Optimized Size} & \thead{Reference Size}\\
+        \midrule
+        Cloud Provider 1 & clang & 6.0.0 & 702 & N/A \\
+        IBM Community Cloud & clang & 10.0.1 & 522 & N/A \\
+        Cloud Provider 2 & clang & 10.0.0 & 380 & N/A \\
+        Modern Laptop & clang & 10.0.0 & 380 & N/A \\
+        Modern Workstation & clang & 10.0.0 & 380 & N/A \\
+        Cloud Provider 2 & clang & 10.0.0 & 380 & N/A \\
+        Modern Laptop & clang & 10.0.0 & 380 & N/A \\
+        Old Low-Range Laptop & clang & 10.0.0 & 300 & N/A \\
+        Old Mid-Range Laptop & clang & 10.0.0 & 300 & N/A \\
+    
+        IBM Community Cloud & gcc & 8.3.1 & 242 & 382 \\
+        Old Low-Range Laptop & gcc & 9.3.0 & 196 & 255 \\
+        Old Mid-Range Laptop & gcc & 9.3.0 & 196 & 255 \\
+        Cloud Provider 1 & gcc & 7.5.0 & 192 & 253\\
+        Cloud Provider 2 & gcc & 9.3.0 & 188 & 255\\
+        Modern Laptop & gcc & 9.3.0 & 188 & 255\\
+        Modern Workstation & gcc & 9.3.0 & 188 & 255\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The same correlation between optimization flags and compiler versions could not be found in the case of \gls{mceliece} and pk\_gen. In that case, the largest recorded size was found in IBM Community Cloud's optimized reference implementation with $22858$ bytes. The optimized AVX2 implementation of the Modern Workstation and Modern Laptop came second with $22123$ bytes. Lastly, the smallest size recorded was found in the optimized reference implementation of Old Mid-Range Laptop and Old Low-Range Laptop at $2026$ bytes.
+
+As for other functions of the \glspl{kem}, the data is too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one can see that Clang seems to produce smaller binaries. Furthermore, the optimized AVX2 build results in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
+
+\todo[inline]{Discuss stack usage of ECDHE, DHE?}
+
+The measurements presented up until this point have been related to either the runtime behavior of the algorithms, or the static requirements they place on the environment. These measurements have not included the parameters fed to the algorithms - which could affect real-world applications. The remaining part of this section will present data gathered from the various implementations.
+
+The \glspl{kem} tested conform to the same API. Their signatures are presented in figure \ref{figure:result:memory:kem-api}. The function crypto\_kem\_keypair, which generates a keypair takes in a public key and a secret key. The encapsulation function, crypto\_kem\_enc, takes in a ciphertext buffer, a key buffer and the public key of a peer. Lastly, the decapsulation function, crypto\_kem\_dec takes in a key buffer, the ciphertext as received from a peer and the secret key. The sizes of these parameters differ between algorithms and implementations - but is not changed depending on the environment or optimizations. Table \ref{table:results:memory:kem-parameter-sizes} shows the sizes of the parameters in bytes. The sizes do not differ between the "f" variants of \gls{mceliece}. Therefore only two variants of \gls{mceliece} are presented.
+
+\begin{figure}
+    \centering
+    \begin{lstlisting}[language=C]
+int crypto_kem_keypair(unsigned char *public_key, unsigned char *private_key);
+int crypto_kem_enc(unsigned char *ciphertext, unsigned char *key, const unsigned char *public_key);
+int crypto_kem_dec(unsigned char *key, const unsigned char *ciphertext, const unsigned char *private_key);
+    \end{lstlisting}
+    \caption{The API of the \gls{kem} Implementations}
+    \label{figure:result:memory:kem-api}
+\end{figure}
+
+\begin{table}
+    \centering
+    \caption{Parameter Sizes in Bytes of the \glspl{kem} Under Test}
+    \label{table:results:memory:kem-parameter-sizes}
+    \begin{tabularx}{\linewidth}{X c c c c c}
+        \toprule
+        \thead{Algorithm} & \thead{Parameters} & \thead{public\_key} & \thead{private\_key} & \thead{ciphertext} & \thead{key}\\
+        \midrule
+        \gls{mceliece} & 8192128(f) & 1357824 & 14120 & 240 & 32 \\
+        \gls{mceliece} & 6960119(f) & 1047319 & 13948 & 226 & 32 \\
+        \gls{ntru} & HRSS 701 & 1138 & 1450 & 1138 & 32 \\
+        \gls{ntru} & HPS 4096821 & 1230 & 1590 & 1230 & 32 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+The APIs are similar, but not the same for the \gls{kex} implementations. That is due to \gls{dh} requiring the so called Diffie-Hellman Parameters $p$ and $g$. The APIs are shown in figure \ref{figure:results:memory:kex-api}. As with the \gls{kem} implementations, the \gls{kex} implementations use two buffers for a public and a private key when generating a keypair. The \gls{dh} implementation also requires the previously mentioned domain parameters $p$ and $g$ - both buffers of bytes containing the respective parameter. The crypto\_dh\_enc functions further use a key buffer. There is no analogous ciphertext as the \glspl{kex} are fundamentally different from the \glspl{kem} as covered in \ref{section:background:diffie-hellman}. The sizes of the parameters are presented in Table \ref{table:results:memory:kex-parameter-sizes}.
+
+\begin{figure}
+    \centering
+    \begin{lstlisting}[language=C]
+// Diffie-Hellman
+int crypto_dh_keypair(unsigned char *public_key, unsigned char *private_key, unsigned char *p, unsigned char *g);
+
+// Diffie-Hellman
+int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const unsigned char *public_key, unsigned char *p, unsigned char *g);
+
+// Elliptic-Curve Diffie-Hellman
+int crypto_dh_keypair(unsigned char *public_key, unsigned char *private_key);
+
+// Elliptic-Curve Diffie-Hellman
+int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const unsigned char *public_key);
+    \end{lstlisting}
+    \caption{The API of the \gls{kex} Implementations}
+    \label{figure:results:memory:kex-api}
+\end{figure}
+
+\begin{table}
+    \centering
+    \caption{Parameter Sizes in Bytes of the \glspl{kex} Under Test}
+    \label{table:results:memory:kex-parameter-sizes}
+    \begin{tabularx}{\linewidth}{X c c c c c c}
+        \toprule
+        \thead{Algorithm} & \thead{Parameters} & \thead{public\_key} & \thead{private\_key} & \thead{$p$} & \thead{$g$} & \thead{key}\\
+        \midrule
+        \gls{dh} & 2048    &255 & 255 & 256  & 1 & 32 \\
+        \gls{ecdh} & P-256 & 65 & 32 & - & - & 32 \\
+        \gls{ecdh} & 25519 & 32 & 32 & - & - & 32 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\section{Throughput Performance}
+
+As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing algorithm for each environment, as identified by the sequential benchmarks. Early results, however, were not conclusive and we therefore ended up running the parallel benchmarks on both GCC and Clang builds of the best-performing variant. The throughput of the algorithms differed depending on the environment and compiler used. The lowest throughput was found in Clang builds in the Old Low-Range Laptop, for which runs are presented in figure \ref{figure:results:throughput:mceliece:old-low-range-laptop} and figure \ref{figure:results:throughput:ntru:old-low-range-laptop}. As can be seen in figure \ref{figure:results:throughput:mceliece:old-low-range-laptop}, Clang yielded down to one fifth of the encryption throughput of the comparable GCC build, but also resulted in a roughly 5\% speedup over the comparable GCC implementation. The \gls{ntru} tests, as presented in figure \ref{figure:results:throughput:ntru:old-low-range-laptop}, Clang produced a 50\% lower keypair throughput, 20\% lower encryption and decryption throughput than comparable versions compiled with GCC. A similar difference in throughput was also found in the Old Mid-Range Laptop and the IBM Community Cloud environments.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.75]{chapters/results/throughput/McEliece 6960119f-8192128f Old Low-Range Laptop.pdf}
+    \caption{Throughput of \gls{mceliece} on Old Low-Range Laptop}
+    \label{figure:results:throughput:ntru:old-low-range-laptop}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.75]{chapters/results/throughput/NTRU hps4096821-hrss701 Old Low-Range Laptop.pdf}
+    \caption{Throughput of \gls{mceliece} on Old Low-Range Laptop}
+    \label{figure:results:throughput:mceliece:old-low-range-laptop}
+\end{figure}
+
+\section{Lekhörna}
+
+\begin{table}[H]
+    \centering
+    \caption{Parallel Throughput Runs for ntru hrss701 (keypair)}
+    \begin{tabularx}{\linewidth}{X c c c c c c c c c c}
+        \toprule
+        \thead{Environment} & \thead{Compiler} & \multicolumn{7}{c}{\thead{Threads}}\\
+        & & 1 & 2 & 4 & 8 & 16 & 32 & 64 & \\
+        \midrule
+        \multirowcell{4}{Cloud\\ Provider 1}
+        & \multirow{2}{*}{gcc} & 10021 & 15345 & 21810 & 22629 & 22963 & 7352\\
+        & & N/A & 54\% & 119\% & 128\% & 131\% & -25\%\\
+        
+        \cmidrule[0.05em](){3-10}
+        
+        & \multirow{2}{*}{clang} & 9918 & 20027 & 22637 & 22997 & 23753 & 23753\\
+        & & N/A & 101\% & 128\% & 131\% & 139\% & 139\%\\
+        \bottomrule
+        \end{tabularx}
+    \end{table}
+
+        \begin{table}[H]
+        \centering
+        \caption{Parallel Throughput Runs for ntru hrss701 (keypair)}
+        \begin{tabularx}{\linewidth}{l c c c c c c c c c c}
+            \toprule
+            \thead{Environment} & \thead{Compiler} & \multicolumn{7}{c}{\thead{Threads}}\\
+            & & 1 & 2 & 4 & 8 & 16 & 32 & 64 &\\
+            \midrule
+\multirow{4}{*}{Cloud Provider 1} & 
+\multirow{2}{*}{gcc} & 10021 & 15345 & 21810 & 22629 & 22963 & &\\
+\multirow{{2}}{{*}}{{gcc}} & 53\% & 117\% & 125\% & 129\% & \\
+\cmidrule[0.05em](){3-10} & 
+\multirow{2}{*}{clang} & 9918 & 20027 & 22637 & 22997 & 23753 & &
+\\ \multirow{{2}}{{*}}{{clang}} & 99\% & 125\% & 129\% & 137\%\\
+
+            \bottomrule
+        \end{tabularx}
+    \end{table}

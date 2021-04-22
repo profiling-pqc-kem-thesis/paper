@@ -107,6 +107,7 @@ The domain parameters $a,b\in\mathbb{F}_q$ describe the curve $E$ as $y^2=x^3+ax
 Elliptic curves are used to replace the multiplicative subgroup $\mathbb{Z}_p^*$ in other cryptosystems based on discrete logarithms, such as ElGamal and DSA\cite{delfs2007}. The key difference is that elliptic curves define the group operation as $(P, Q)\to P+Q\in E(\mathbb{F}_q)$ for some curve $E$ and two points on the curve $P$ and $Q$ - that is, the group operation of two points on the curve will result in another point on the curve \cite{delfs2007}.
 
 \subsection{Diffie-Hellman}
+\label{section:background:diffie-hellman}
 
 The \gls{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978\cite{merkle1978}. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
 
