@@ -388,7 +388,7 @@ As outlined in section \ref{section:method:experiment:phase2}, the throughput of
         \end{tabularx}
     \end{table}
 
-        \begin{table}[H]
+    \begin{table}[H]
         \centering
         \caption{Parallel Throughput Runs for ntru hrss701 (keypair)}
         \begin{tabularx}{\linewidth}{l c c c c c c c c c c}
@@ -397,12 +397,39 @@ As outlined in section \ref{section:method:experiment:phase2}, the throughput of
             & & 1 & 2 & 4 & 8 & 16 & 32 & 64 &\\
             \midrule
 \multirow{4}{*}{Cloud Provider 1} & 
-\multirow{2}{*}{gcc} & 10021 & 15345 & 21810 & 22629 & 22963 & &\\
-\multirow{{2}}{{*}}{{gcc}} & 53\% & 117\% & 125\% & 129\% & \\
+\multirow{2}{*}{gcc} & 10021 & 15345 & 21810 & 22629 & 22963 & & N/A & 53\% & 117\% & 125\% & 129\% & \\
 \cmidrule[0.05em](){3-10} & 
-\multirow{2}{*}{clang} & 9918 & 20027 & 22637 & 22997 & 23753 & &
-\\ \multirow{{2}}{{*}}{{clang}} & 99\% & 125\% & 129\% & 137\%\\
-
+\multirow{2}{*}{clang} & 9918 & 20027 & 22637 & 22997 & 23753 & &  & 99\% & 125\% & 129\% & 137\%\\
+            \midrule
+\multirow{4}{*}{Cloud Provider 2} & 
+\multirow{2}{*}{gcc} & 7805 & 10185 & 13663 & 13696 & & N/A & 30\% & 75\% & 75\% & \\
+\cmidrule[0.05em](){3-10} & 
+\multirow{2}{*}{clang} & 7352 & 12770 & 13289 & 11005 & &  & 63\% & 70\% & 41\%\\
+            \midrule
+\multirow{4}{*}{IBM Community Cloud} & 
+\multirow{2}{*}{gcc} & 137 & 277 & 273 & 275 & & N/A & 101\% & 98\% & 100\% & \\
+\cmidrule[0.05em](){3-10} & 
+\multirow{2}{*}{clang} & 113 & 226 & 223 & 225 & &  & 64\% & 62\% & 63\%\\
+            \midrule
+\multirow{4}{*}{Modern Laptop} & 
+\multirow{2}{*}{gcc} & 7061 & 12686 & 20221 & 33444 & 36381 & 40489 & & N/A & 79\% & 186\% & 373\% & 415\% & 473\% & \\
+\cmidrule[0.05em](){3-10} & 
+\multirow{2}{*}{clang} & 5216 & 12854 & 26546 & 35160 & 38757 & 39734 & &  & 82\% & 275\% & 397\% & 448\% & 462\%\\
+            \midrule
+\multirow{4}{*}{Modern Workstation} & 
+\multirow{2}{*}{gcc} & 9256 & 18275 & 36193 & 77144 & 104379 & 103050 & 131102 & & N/A & 97\% & 291\% & 733\% & 1027\% & 1013\% & 1316\% & \\
+\cmidrule[0.05em](){3-10} & 
+\multirow{2}{*}{clang} & 8771 & 26758 & 35118 & 85408 & 99441 & 101059 & 123903 & &  & 189\% & 279\% & 822\% & 974\% & 991\% & 1238\%\\
+            \midrule
+\multirow{4}{*}{Old Low-Range Laptop} & 
+\multirow{2}{*}{gcc} & 124 & 251 & 267 & 267 & 267 & & N/A & 101\% & 114\% & 114\% & 114\% & \\
+\cmidrule[0.05em](){3-10} & 
+\multirow{2}{*}{clang} & 63 & 127 & 135 & 135 & 135 & &  & 2\% & 8\% & 8\% & 8\%\\
+            \midrule
+\multirow{4}{*}{Old Mid-Range Laptop} & 
+\multirow{2}{*}{gcc} & 159 & 299 & 319 & 320 & 320 & & N/A & 88\% & 100\% & 101\% & 101\% & \\
+\cmidrule[0.05em](){3-10} & 
+\multirow{2}{*}{clang} & 81 & 154 & 163 & 165 & 165 & &  & -3\% & 2\% & 4\% & 4\% \\
             \bottomrule
         \end{tabularx}
     \end{table}
