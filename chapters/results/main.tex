@@ -1,6 +1,8 @@
 \chapter{Results and Analysis}
 \label{chapter:results}
 
+\todo[inline]{data on github}
+
 \section{Acceleration of Post-Quantum Key Encapsulation Mechanisms}
 
 \todo[inline]{
@@ -22,7 +24,7 @@ The \gls{ntru} reference implementations consists of three API methods - keypair
 
 The following graphs contain relative measurements denoting the percentage of instructions spent in each method. Both the HPS and HRSS variants of \gls{ntru} perform alike, hence only one set of graphs is shown for \gls{ntru} as a whole.
 
-Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $60\%$ of the time spent on generating a keypair.
+Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $60\%$ of the time spent on generating a keypair.\todo{60 är väll lite lågt?}
 
 \begin{figure}[H]
     \centering
@@ -73,7 +75,7 @@ void poly_Rq_mul(poly *r, const poly *a, const poly *b) {
 To summarize, it is shown that factors such as the speed of \gls{aes} has little to do with the overall performance of the algorithm. Furthermore, it seems as if the polynomial library functions account for the vast majority of instructions spent on key-pair generation, encryption and decryption. The function \textit{poly\_Rq\_mul}, which multiplies two polynomials in $\mathbb{R}^q$, accounts for most of the calculations performed.
 
 \subsubsection{Classic McEliece}
-The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants. In the appendix, all hot-paths can be found. 
+The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants. On our GitHub\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}, all hot-paths can be found. 
 
 In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}, we can see the \textit{crypto\_kem\_keypair} function and its only significant internal function, the \textit{pk\_gen} function that takes up 98.57\% of the execution time. In figure \ref{figure:result:hot-paths:classic-mceliece:pk_gen}, we can see the deeper look into the \textit{pk\_gen} function there we can see that all its internal functions and that they do not make up much of the instructions. Most of the instructions are inside of the \textit{pk\_gen} function itself.\todo{explain better}
 
@@ -122,6 +124,7 @@ Litteraturstudien.
 This section presents the results of the experiment as outlined in section \ref{section:method:experiment}. It further discusses the performance of \gls{post-quantum} \glspl{kem} and how they may differ on various architectures and hardware.
 
 \subsection{Algorithm Performance}
+\todo[inline]{Add footnote to throughput table}
 
 In section \ref{section:method:experiment:phase1:implementation-configurations} it was written that the monitored functions for the micro benchmark would be based off of data found in the hot paths analysis. In the end, the functions presented in Table \ref{table:results:performance:micro-functions} were monitored during the micro benchmark. Note that although the randombytes function is available in both \gls{ntru} and \gls{mceliece}, it was found in section \ref{section:results:hot-paths} to not be significant enough to warrant further analysis.
 
@@ -138,6 +141,7 @@ In section \ref{section:method:experiment:phase1:implementation-configurations} 
         crypto\_kem\_keypair & Generate a keypair \\
         crypto\_kem\_enc & Generate and encapsulate a key \\
         crypto\_kem\_dec & Decapsulate an encapsulated key \\
+        \midrule
         \multicolumn{3}{c}{\thead[l]{\gls{mceliece}}} \\
         pk\_gen & \\
         gen\_e & \\
@@ -145,6 +149,7 @@ In section \ref{section:method:experiment:phase1:implementation-configurations} 
         % syndrome\_asm & The same as syndrome, but implemented in assembly targeting AVX2\\
         root & \\
         synd & \\
+        \midrule
         \multicolumn{3}{c}{\thead[l]{\gls{ntru}}} \\
         poly\_Rq\_mul & Multiply a polynomial with another in $\mathbb{R}_q$\\
         poly\_S3\_inv & Invert a polynomial in $\mathbb{S}_3$\\
@@ -156,6 +161,7 @@ In section \ref{section:method:experiment:phase1:implementation-configurations} 
         \bottomrule
     \end{tabularx}
 \end{table}
+\todo{Update the table with descriptions for McEliece}
 
 \todo[inline]{
 Does the performance of post-quantum key encapsulation mechanisms differ between architectures and if so, how?
@@ -179,7 +185,7 @@ Talk about the parallel benchmark here, hardware throughput, hardware difference
 
 \subsection{Heap Usage}
 
-As outlined in the method, section \ref{section:method:experiment:phase1:measurements}, we measured the heap usage of the algorithms by monitoring heap allocation and deallocation methods such as malloc using heaptrack. We found that the heap allocation did not change across environments nor between the analyzed optimizations except for some few . As for the implementations, this is rather unsurprising as changing how the allocations worked would alter the behavior of the code. As we found that the heap behavior of the algorithms were consistent throughout our test, we will for the rest of this section not refer to any specific environment or optimization used for the algorithms unless otherwise noted. When talking about allocation, we will refer to the peak allocation - that is, the maximum allocated bytes recorded during a function's lifetime. Our measurements did not capture the peak heap allocation during a benchmark as it would include memory allocations introduced by our tooling. The heap usage metrics do not reflect total memory usage as memory in the form of parameters passed to the algorithms or memory that's part of the stack is not included.
+As outlined in the method, section \ref{section:method:experiment:phase1:measurements}, we measured the heap usage of the algorithms by monitoring heap allocation and deallocation methods such as malloc using heaptrack. We found that the heap allocation did not change across environments nor between the analyzed optimizations except for some few. As for the implementations, this is rather unsurprising as changing how the allocations worked would alter the behavior of the code. As we found that the heap behavior of the algorithms were consistent throughout our test, we will for the rest of this section not refer to any specific environment or optimization used for the algorithms unless otherwise noted. When talking about allocation, we will refer to the peak allocation - that is, the maximum allocated bytes recorded during a function's lifetime. Our measurements did not capture the peak heap allocation during a benchmark as it would include memory allocations introduced by our tooling. The heap usage metrics do not reflect total memory usage as memory in the form of parameters passed to the algorithms or memory that's part of the stack is not included.
 
 At one point, the \gls{ntru} implementations allocated $264$ bytes generating a keypair. These bytes were allocated by OpenSSL to initialize the library's envelope suite of functions. In context, this is done as the \gls{ntru} implementation uses OpenSSL's \gls{aes} ECB implementation to generate uniform pseduo-random bytes. The invocation of the \gls{aes} function itself resulted in $208$ bytes being allocated by the OpenSSL \gls{aes} ECB implementation. Beyond these bytes, the \gls{ntru} implementation did not require any additional heap allocation during its runtime.
 
@@ -274,11 +280,11 @@ In terms of stack usage, the results vary between the implementations, compilers
         Modern Workstation & gcc & 9.3.0 & 188 & 255\\
         \bottomrule
     \end{tabularx}
-\end{table}
+\end{table}\todo{Fix table, Cloud Provider 2 & Cloud Provider 2 är med 3 ggr}
 
 The same correlation between optimization flags and compiler versions could not be found in the case of \gls{mceliece} and pk\_gen. In that case, the largest recorded size was found in IBM Community Cloud's optimized reference implementation with $22858$ bytes. The optimized AVX2 implementation of the Modern Workstation and Modern Laptop came second with $22123$ bytes. Lastly, the smallest size recorded was found in the optimized reference implementation of Old Mid-Range Laptop and Old Low-Range Laptop at $2026$ bytes.
 
-As for other functions of the \glspl{kem}, the data is too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one may see that Clang seems to produce smaller binaries. Furthermore, the optimized AVX2 build results in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
+As for other functions of the \glspl{kem}, the data is too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one may see that Clang seems to produce smaller binaries. Furthermore, the optimized AVX2 builds result in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
 
 \todo[inline]{Discuss stack usage of ECDHE, DHE?}
 
@@ -353,140 +359,87 @@ int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const un
 
 \subsection{Sequential Performance}
 
-The performance of the algorithms were analyzed by performing a thousand sequential runs in series, for each algorithm under test. The complete method is outlined in section \ref{section:method:experiment:phase1}.
+The performance of the algorithms were analyzed by performing a thousand sequential runs in series, for each algorithm under test. The complete method is outlined in section \ref{section:method:experiment:phase1}.\todo{Two runs?}
 
-As covered in section \ref{section:background:mceliece}, \gls{mceliece} supports two forms of keypair-generation algorithms - a non-systematic form and a semi-systematic form. The authors of the \gls{nist} submission state that these two forms may have different performance characteristics \cite{mceliece2020}. In Table \ref{table:results:sequential-mceliece-6960119-keypair-modern-workstation}, these two forms can be seen with every set of performance improvements tested in the experiment. As can bee seen in the table, the reference implementation in its non-systematic form is remarkably inconsistent, with a standard deviation of $20580.20$ as compared to the $6.91$ of the semi-systematic form. The change in performance characteristics is also visible in the mean, with the semi-systematic form taking about $30\%$ of the time on average as compared to the non-systematic form. In both cases, the \gls{avx2} implementation has the second largest standard deviation with $302.58$ and $6.91$ for the non-systematic form and the semi-systematic form, respectively. Despite being a \gls{simd} implementation, \gls{avx2} performs worse than the optimized reference implementation in both forms of the algorithm. The optimized \gls{avx2}, however, outperforms the optimized reference implementation with a 4-6 times the performance. The same results were found to generalize for several environments, as shown in Table \ref{table:results:sequential:mceliece-6960119-keypair} and \ref{table:results:sequential:mceliece-6960119f-keypair}.
+As covered in section \ref{section:background:mceliece}, \gls{mceliece} supports two forms of keypair-generation algorithms - a non-systematic form and a semi-systematic form. The authors of the \gls{nist} submission state that these two forms may have different performance characteristics \cite{mceliece2020}. In Table \ref{table:results:sequential-mceliece-6960119-keypair-modern-workstation}, these two forms can be seen with every set of performance improvements tested in the experiment. As can be seen in the table, the reference implementation in its non-systematic\todo{tydliggör vilken som är systematic/semi-systematic, f eller non-f} form is remarkably inconsistent, with a standard deviation of $20580.20$ as compared to the $6.91$ of the semi-systematic form. The change in performance characteristics is also visible in the mean, with the semi-systematic form taking about $30\%$ of the time on average as compared to the non-systematic form. In both cases, the \gls{avx2} implementation has the second largest standard deviation with $302.58$ and $6.91$ for the non-systematic form and the semi-systematic form, respectively. Despite being a \gls{simd} implementation, \gls{avx2} performs worse than the optimized reference implementation in both forms of the algorithm. The optimized \gls{avx2}, however, outperforms the optimized reference implementation with a 4-6 times the performance. The same results were found to generalize for several environments, as shown in Table \ref{table:results:sequential:mceliece-6960119-keypair} and \ref{table:results:sequential:mceliece-6960119f-keypair}.
 
 \input{chapters/results/sequential/Modern Workstation_deviation_mceliece}
 
-In all environments but one, we found a consistent performance throughout all sequential runs, non-deterministic behavior and outliers aside. The Cloud Provider 2 environment provided inconsistent results throughout the sequential performance benchmarks - across various algorithms and runs. As seen in figure \ref{figure:results:sequential:mceliece-decrpyt-cloud-provider-2}, there are several occasions where the performance shift over time. In the figure, the speedup relative to the reference GCC implementation is used as opposed to the absolute duration of each iteration. Depending on how deterministic the behavior of the algorithms are, as well as how stable the environment is, one could have expected more or less the same performance throughout the test. As the Cloud Provider 2 environment uses two virtual CPU cores, it is not entirely unexpected to find such inconsistent results. No evidence was found regarding the same behavior in the environments tested with dedicated hardware.
+In all environments but one, we found a consistent performance throughout all sequential runs, non-deterministic behavior and outliers aside. The Cloud Provider 2 environment provided inconsistent results throughout the sequential performance benchmarks - across various algorithms and runs. As seen in figure \ref{figure:results:sequential:mceliece-decrpyt-cloud-provider-2}, there are several occasions where the performance shift over time. In the figure, the speedup relative to the reference GCC implementation is used as opposed to the absolute duration of each iteration. Depending on how deterministic the behavior of the algorithms are, as well as how stable the environment is, one could have expected more or less the same performance throughout the test. As the Cloud Provider 2 environment uses two virtual CPU cores, it is not entirely unexpected to find such inconsistent results. The same behavior was not found in any of the environments tested with dedicated hardware, nor the Cloud Provider 1 environment.
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{chapters/results/sequential/mceliece_6960119_decrypt_Cloud Provider 2.pdf}
-    \caption{The Speedup of \gls{mceliece} 6960119 Using Various Performance Changes Over Time}
+    \caption{The Speedup of \gls{mceliece} 6960119 Over Time}
     \label{figure:results:sequential:mceliece-decrpyt-cloud-provider-2}
 \end{figure}
 
-% sequential runs table på någon eller några algoritmer? Jämför speedup - bör vara samma då den är procentuell. Man kan se om en miljö må bra av en viss ändring i jämförelse med andra.
-% TODO: få in data från keypair, encrypt och decrypt i samma graf!
-% Carl fixar
-\input{chapters/results/sequential/NTRU hrss701 encrypt}
+In Table \ref{figure:results:sequential:ntru-hrss701} all of the average durations and speedups for each optimization and environment are shown. In the table, one may see conclusive evidence that the optimized \gls{avx2} implementations perform the best in all environments with support for \gls{avx2}. It is not clear, however, what compiler produces the best performance. In the environments without support for \gls{avx2}, the optimized reference implementation performed the best. Just as with the \gls{avx2} implementations, it's unclear whether or not GCC or Clang produced the best results. It seems as if GCC produces more consistent results, with less variation in the averages. In the Old Low-Range Laptop environment, for example, one may see that Clang requires about two times the duration of the comparable subject compiled with GCC. In other cases, Clang seems to be on par with, or better than, GCC. As the speedup is percentual based on the environment, one may expect them to be similar across environments. That is, the speedup of using \gls{avx2} instead of the reference implementation, should in theory be similar on both the Modern Workstation and Modern Laptop, for example. In practice we found this to not be true. Although similar, the \gls{avx2} implementation compiled and optimized by Clang has an additional 78 times speedup when compared to the Modern Laptop. On the other hand, the Old Mid-Range Laptop and the Old Low-Range Laptop perform near identically in terms of speedup.
 
-% TODO: använd samma tabell för alla algoritmer i appendix och referera till dem:
-% sequential runs table  eller graf för att styrka upp och sammanfatta varför vi valde en algoritm / optimering för att köra parallelt.
+\input{chapters/results/sequential/ntru_hrss701}
+
+By studying the average duration taken by the various subjects in each environment, one may clearly see that \gls{avx2} performs the best when it's available. When \gls{avx2} is not available, the optimized reference implementation performs the best. The results are however indecisive in terms of what compiler performed the best in each environment.
 
 \subsection{Throughput Performance}
 
-% DH planar alltid ut exakt vid (fysisk|virtuell) core count
+As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing algorithm for each environment, as identified by the sequential benchmarks. The results from the sequential benchmark previously presented were not conclusive and we therefore ended up running the parallel benchmarks on both GCC and Clang builds of the best-performing variant.
+
+The throughput of the \gls{dhe} implementation was found to consistently slow down after the number of threads surpass the number of physical cores multiplied with the degree of \gls{smt}. In figure \ref{figure:results:throughput:dh-old-mid-range-laptop}, the throughput of the Old Mid-Range Laptop can be seen. Old Mid-Range Laptop, a dual core machine with four threads, levels off at the four threads mark. As mentioned previously in section \ref{table:method:experiment:phase1:implementation-configurations}, two variants of \gls{dhe} were tested - one compiled and optimized by GCC, the other by Clang - both of which are presented in the aforementioned figure. The performance difference between the two compilers seem to be negligible, which one may expect as the OpenSSL library used to provide the implementation with virtually all of its functionality is dynamically linked. That means that it is not recompiled nor optimized by the compiler used to compile the program. The same leveling found in Old Mid-Range Laptop was also identified in all of the other environments tested.
+
 \begin{figure}
     \centering
-    \includegraphics{chapters/results/throughput/Old Mid-Range Laptop_dh.pdf}
-    \caption{Caption}
+    \includegraphics[scale=0.75]{chapters/results/throughput/Old Mid-Range Laptop_dh.pdf}
+    \caption{Throughput of \gls{dhe} on Old Mid-Range Laptop for Various Thread Counts}
     \label{figure:results:throughput:dh-old-mid-range-laptop}
 \end{figure}
 
-% **IBM rejäl dipp 25% vid 2x smt för gcc 25519. IBM mycket snabbare än alla andra vid två kärnor - 339x för 25519 båda kompilatorerna. WTF?! 114-142x på ecdh exchange. p-256 dock snabbast. p-256 även den bra i keypair! Fortfarande riktigt bra i exchange. Dippen är konsekvent över två körningar! Så gott som exakt samma resultat för dippen på två helt olika körningar. Två trådar presterar i båda fallen hälften så bra som övriga två. Datan validerad. ** Motiverar i discussion och conclusion. Viktigt!
+The \gls{ecdhe} implementation was found to be drastically more performant than the \gls{dhe} implementation, with a speedup ranging between 5 to 350 times the throughput. The highest increase in performance was found in the IBM Community Cloud environment, seen in figure \ref{figure:results:throughput:ecdh-ibm-community-cloud}. The throughput, drastically dropped when tested on four or more threads. The peak at two threads coincides with the number of available threads\footnote{It is unknown whether or not the cores are physical cores, logical cores or virtual cores} of the environment. What's more is a 30\% drop in throughput in the exchange phase of the \gls{x25519} implementation compiled and optimized using GCC. The drop was consistent through both of the runs of the complete benchmark at two completely different occasions. It was found that during the \gls{x25519} run on four threads, two of the threads consistently performed half of the throughput of the other two.
+
 \begin{figure}
     \centering
-    \includegraphics{chapters/results/throughput/IBM Community Cloud_ecdh.pdf}
-    \caption{Caption}
+    \includegraphics[scale=0.75]{chapters/results/throughput/IBM Community Cloud_ecdh.pdf}
+    \caption{Throughput of \gls{ecdhe} on IBM Community Cloud for Various Thread Counts}
     \label{figure:results:throughput:ecdh-ibm-community-cloud}
 \end{figure}
 
-% **IBM decrypt oerhört mycket långsammare än encrypt, något vi inte sett på andra environments. Andra har typ 70% performance, IBM typ >1%.** Grafer?
-\begin{figure}
-    \centering
-    \includegraphics{chapters/results/throughput/IBM Community Cloud_mceliece.pdf}
-    \caption{Caption}
-    \label{figure:results:throughput:ibm-community-cloud}
-\end{figure}
+In Table \ref{table:results:throughput:ecdh-25519}, the throughput for each environment is shown for the \gls{x25519} keypair generation. As can be seen, the IBM Community Cloud environment outperforms all of the other environments when using one or two threads. The mainframe and cloud hardware tested saw a decrease in throughput at one point or another, whilst the consumer hardware continually performed better with more threads for all the thread counts tested\todo{explain table - what optimizations were used, what are the values?}.
 
-% Samma sak - antagligen avsaknad av AVX2 som gör det
+\input{chapters/results/throughput/ecdh_25519_keypair}
+
+When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant. There is also a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seems as if the throughput levels off after the number of used threads surpass the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
+
 \begin{figure}
     \centering
-    \includegraphics{chapters/results/throughput/Old Mid-Range Laptop_mceliece.pdf}
-    \caption{Caption}
+    \includegraphics[scale=0.75]{chapters/results/throughput/IBM Community Cloud_mceliece.pdf}
+    \caption{Throughput of \gls{mceliece} on IBM Community Cloud for Various Thread Counts}
+    \label{figure:results:throughput:mceliece-ibm-community-cloud}
+\end{figure} 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.75]{chapters/results/throughput/Old Mid-Range Laptop_mceliece.pdf}
+    \caption{Throughput of \gls{mceliece} on Old Mid-Range Laptop for Various Thread Counts}
     \label{figure:results:throughput:mceliece-old-mid-range-laptop}
 \end{figure}
 
-% Jämför värdena med dessa - som har AVX2?
+When \gls{mceliece} is run in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results tell a different story. Not only are the compilers much more consistent with one another, but the difference in throughput between the two variants seem to become smaller. It is still clear to see, however, that the smallest parameter size has an overall lower throughput for keypair generation and encryption than the largest parameter size tested. The decrypt results seem to show that the smallest parameter size perform the best.
+
 \begin{figure}
     \centering
-    \includegraphics{chapters/results/throughput/Modern Workstation_mceliece.pdf}
-    \caption{Caption}
+    \includegraphics[scale=0.75]{chapters/results/throughput/Modern Workstation_mceliece.pdf}
+    \caption{Throughput of \gls{mceliece} on Modern Workstation for Various Thread Counts}
     \label{figure:results:throughput:mceliece-modern-workstation}
 \end{figure}
 
-% **Modern Laptop, Modern Workstation - liknande, skalar bra per tråd, HRSS mycket snabbare än HPS4096821. Väldigt lika i decrypt, men inte encrypt eller keypair.** Grafer?
-\begin{figure}
-    \centering
-    \includegraphics{chapters/results/throughput/Modern Workstation_ntru.pdf}
-    \caption{Caption}
-    \label{figure:results:throughput:ntru-modern-workstation}
-\end{figure}
-
-% NTRU hrss701 decrypt tabell? Bra skalning för modern *
-\input{chapters/results/throughput/ntru_hrss701_decrypt}
-
-\subsection{Throughput Performance}
-
-As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing algorithm for each environment, as identified by the sequential benchmarks. Early results, however, were not conclusive and we therefore ended up running the parallel benchmarks on both GCC and Clang builds of the best-performing variant. The throughput of the algorithms differed depending on the environment and compiler used. The lowest throughput was found in Clang builds in the Old Low-Range Laptop, for which runs are presented in figure \ref{figure:results:throughput:mceliece:old-low-range-laptop} and figure \ref{figure:results:throughput:ntru:old-low-range-laptop}. As can be seen in figure \ref{figure:results:throughput:mceliece:old-low-range-laptop}, Clang yielded down to one fifth of the encryption throughput of the comparable GCC build, but also resulted in a roughly 5\% speedup over the comparable GCC implementation. In the \gls{ntru} tests, as presented in figure \ref{figure:results:throughput:ntru:old-low-range-laptop}, Clang produced a 50\% lower keypair throughput, 20\% lower encryption and decryption throughput than comparable versions compiled with GCC. A similar difference in throughput was also found in the Old Mid-Range Laptop and the IBM Community Cloud environments. All of these environments ran the optimized reference implementation due to lack of \gls{avx2} support.
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.75]{chapters/results/throughput/Old Low-Range Laptop_mceliece.pdf}
-    \caption{Throughput of \gls{mceliece} on Old Low-Range Laptop}
-    \label{figure:results:throughput:mceliece:old-low-range-laptop}
-\end{figure}
-
-In the other end of the spectrum, we found the highest throughput in the Modern Workstation. Unlike the Old Low-Range Laptop, the Old Mid-Range Laptop and the IBM Community Cloud environments, the Modern Workstation ran the optimized \gls{avx2} binaries. Unlike the data presented in previous figures, figure \ref{figure:results:throughput:mceliece:modern-workstation} and figure \ref{figure:results:throughput:ntru:modern-workstation} show more consistent measurements. There seems to be little to no difference in speed between the GCC and Clang builds. In all stages of the algorithms, there seems to be a regression in throughput when using either 16 or 32 threads. The HRSS 701 variant of \gls{ntru} seems to have near linear scaling for the number of threads used in our tests. The \gls{mceliece} variants, however, seem to reach peak performance when using between 8 to 16 threads, with performance staying roughly the same for higher thread counts. The same scaling was also seen in the Modern Laptop environment.
+When running \gls{ntru} in parallel to measure throughput, we found that the performance scale well in regards to the number of threads used. In figure \ref{figure:results:throughput:ntru-modern-workstation}, \gls{ntru} HRSS 701 running in the Modern Workstation environment seems to have near-linear scaling for the thread counts tested. The variant also performs considerably better than HPS 4096821 in both the keypair generation stage and the encryption stage. The decrypt stage, however, seems to provide near identical measurements. We found that the same scaling also occurs in the Modern Laptop environment.
 
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{chapters/results/throughput/Modern Workstation_ntru.pdf}
-    \caption{Throughput of \gls{ntru} on Modern Workstation}
-    \label{figure:results:throughput:ntru:modern-workstation}
+    \caption{Throughput of \gls{ntru} on Modern Workstation for Various Thread Counts}
+    \label{figure:results:throughput:ntru-modern-workstation}
 \end{figure}
 
-The most inconsistent behavior was found in the Cloud Provider 2 environment, as seen in figure \ref{figure:results:throughput:ntru:cloud-provider-2}. The environment also provided inconsistent throughput for \gls{mceliece} as presented in figure \ref{figure:results:throughput:mceliece:cloud-provider-2}. The dip in throughput previously discussed occuring at roughly 2 times the \gls{smt} number of threads seems to affect the Cloud Provider 2 more than other environments. The same inconsistency was not found in Cloud Provider 1.
+In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements for various compilers and thread counts are shown for all of the tested environments\todo{explain table}. The best scaling is found in the Modern Workstation environment, followed by the Modern Laptop. Although the tested cloud environments supported \gls{avx2}, they did not see the same performance increase when more threads were used. For all environments except IBM Community Cloud and Cloud Provider 2, GCC seems to produce the highest increase in throughput over the reference implementation compiled with GCC, without performance optimizations.
 
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.75]{chapters/results/throughput/Cloud Provider 2_ntru.pdf}
-    \caption{Throughput of \gls{ntru} on Cloud Provider 2}
-    \label{figure:results:throughput:ntru:cloud-provider-2}
-\end{figure}
-
-\input{chapters/results/throughput/dh__keypair}
-\input{chapters/results/throughput/ntru_hrss701_keypair}
-
-
-%          Modern Workstation &                  gcc &                  ref &  0.91ms &                  0.0\\
-%          Modern Workstation &                  gcc &        ref-optimized &  0.23ms &                  2.9\\
-%          Modern Workstation &                clang &        ref-optimized &  0.21ms &                  3.4\\
-%          Modern Workstation &                  gcc &                 avx2 &  0.03ms &                 30.8\\
-%          Modern Workstation &                  gcc &       avx2-optimized &  0.02ms &                 49.7\\
-%          Modern Workstation &                clang &       avx2-optimized &  0.02ms & 
-
-
-\section{Lek Stuga}
-\begin{table}[H]
-        \centering
-        \small
-        \caption{Parallel Throughput Runs for ntru hrss701}
-        \begin{tabularx}{\linewidth}{X c c c c c c c}
-            \toprule
-            \thead{Environment} & \thead{Compiler} & \multicolumn{3}{c}{\thead{Average Duration}} & \multicolumn{3}{c}{\thead{Speedup}}\\
-            & & keypair & encrypt & decrypt & keypair & encrypt & decrypt \\
-            \midrule
-\multirowcell{4}{Cloud\\ Provider\\ 1} & 
-\multirow{2}{*}{gcc} & 10021 & 15345 & 21810 & 22629 & 22963\\
- & & 1.0 & 1.53 & 2.18 & 2.26 & 2.29\\
-\cmidrule[0.05em](){3-8} & 
-\multirow{2}{*}{clang} & 9918 & 20027 & 22637 & 22997 & 23753\\
- & & 0.99 & 2.00 & 2.26 & 2.29 & 2.37\\
- 
-            \bottomrule
-        \end{tabularx}
-    \end{table}
+\input{chapters/results/throughput/ntru_hrss701_decrypt}

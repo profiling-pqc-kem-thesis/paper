@@ -1,0 +1,72 @@
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \caption{Sequential Duration and Speedup of \gls{mceliece} 8192128}
+    \begin{tabularx}{\linewidth}{l l c c c c c c}
+        \toprule
+        \thead{Environment} & \thead{Flags} & \multicolumn{3}{c}{\thead{Average Duration (ms)}} & \multicolumn{3}{c}{\thead{Speedup}}\\
+        & & keypair & encrypt & decrypt & keypair & encrypt & decrypt \\
+        \midrule
+        \multirowcell{8}{Modern\\ Workstation}
+          & \textbf{gcc} & & & & & \\
+          & ref & 26945.663 & 8.193 & 263.548 & 0.0 & 0.0 & 0.0\\
+          & ref-optimized & 442.630 & 0.099 & 72.095 & 59.9 & 81.7 & 2.7\\
+          & avx2 & 661.355 & 0.091 & 0.233 & 39.7 & 88.9 & 1131.8\\
+          & avx2-optimized & 88.744 & 0.042 & 0.066 & 302.6 & 196.2 & 4019.6\\
+          & \textbf{clang} & & & & & \\
+          & ref-optimized & 435.015 & 0.100 & 66.242 & 60.9 & 80.6 & 3.0\\
+          & avx2-optimized & 84.821 & 0.039 & 0.064 & 316.7 & 206.4 & 4139.6\\
+          \midrule
+          \multirowcell{8}{Modern\\ Laptop}
+          & \textbf{gcc} & & & & & \\
+          & ref & 33307.574 & 10.037 & 319.317 & 0.0 & 0.0 & 0.0\\
+          & ref-optimized & 560.099 & 0.109 & 87.097 & 58.5 & 90.8 & 2.7\\
+          & avx2 & 862.787 & 0.106 & 0.282 & 37.6 & 94.0 & 1130.3\\
+          & avx2-optimized & 113.521 & 0.048 & 0.078 & 292.4 & 208.8 & 4087.6\\
+          & \textbf{clang} & & & & & \\
+          & ref-optimized & 513.795 & 0.118 & 80.537 & 63.8 & 84.1 & 3.0\\
+          & avx2-optimized & 113.543 & 0.047 & 0.075 & 292.3 & 214.6 & 4239.6\\
+          \midrule
+          \multirowcell{5}{Old\\ Mid-Range\\ Laptop}
+          & \textbf{gcc} & & & & & \\
+          & ref & 51647.180 & 13.356 & 508.533 & 0.0 & 0.0 & 0.0\\
+          & ref-optimized & 1096.384 & 0.264 & 141.813 & 46.1 & 49.7 & 2.6\\
+          & \textbf{clang} & & & & & \\
+          & ref-optimized & 1017.089 & 0.254 & 133.432 & 49.8 & 51.5 & 2.8\\
+          \midrule
+          \multirowcell{5}{Old\\ Low-Range\\ Laptop}
+          & \textbf{gcc} & & & & & \\
+          & ref & 56485.791 & 16.780 & 647.400 & 0.0 & 0.0 & 0.0\\
+          & ref-optimized & 1376.720 & 0.302 & 180.795 & 40.0 & 54.5 & 2.6\\
+          & \textbf{clang} & & & & & \\
+          & ref-optimized & 1304.079 & 0.305 & 169.034 & 42.3 & 54.1 & 2.8\\
+          \midrule
+          \multirowcell{8}{Cloud\\ Provider\\ 1}
+          & \textbf{gcc} & & & & & \\
+          & ref & 38080.543 & 12.056 & 386.312 & 0.0 & 0.0 & 0.0\\
+          & ref-optimized & 707.610 & 0.183 & 122.684 & 52.8 & 65.0 & 2.1\\
+          & avx2 & 1014.527 & 0.150 & 0.368 & 36.5 & 79.5 & 1049.5\\
+          & avx2-optimized & 113.585 & 0.084 & 0.108 & 334.3 & 143.2 & 3590.9\\
+          & \textbf{clang} & & & & & \\
+          & ref-optimized & 690.924 & 0.150 & 96.631 & 54.1 & 79.5 & 3.0\\
+          & avx2-optimized & 108.353 & 0.085 & 0.106 & 350.4 & 141.1 & 3640.0\\
+          \midrule
+          \multirowcell{8}{Cloud\\ Provider\\ 2}
+          & \textbf{gcc} & & & & & \\
+          & ref & 48685.711 & 14.024 & 456.320 & 0.0 & 0.0 & 0.0\\
+          & ref-optimized & 805.677 & 0.876 & 126.374 & 59.4 & 15.0 & 2.6\\
+          & avx2 & 1168.784 & 0.166 & 0.398 & 40.7 & 83.7 & 1144.8\\
+          & avx2-optimized & 134.115 & 0.089 & 0.129 & 362.0 & 156.8 & 3548.7\\
+          & \textbf{clang} & & & & & \\
+          & ref-optimized & 775.170 & 0.188 & 117.180 & 61.8 & 73.8 & 2.9\\
+          & avx2-optimized & 129.397 & 0.088 & 0.123 & 375.3 & 158.0 & 3699.9\\
+          \midrule
+          \multirowcell{5}{IBM\\ Community\\ Cloud}
+          & \textbf{gcc} & & & & & \\
+          & ref & 71890.504 & 16.228 & 988.576 & 0.0 & 0.0 & 0.0\\
+          & ref-optimized & 868.778 & 0.155 & 177.416 & 81.7 & 103.7 & 4.6\\
+          & \textbf{clang} & & & & & \\
+          & ref-optimized & 981.098 & 0.182 & 173.844 & 72.3 & 88.3 & 4.7\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
