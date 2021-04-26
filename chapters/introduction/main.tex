@@ -5,86 +5,38 @@
 % Snäll introduktion som ganska snabbt bygger upp till lite mer komplexa ämnen vi berör, presenterar problemet
 % Presenterar allmänintresset
 
-Public-key cryptography is a fundamental technology in today's world. We depend on it for digital signatures and encryption, with applications such as securely browsing the Internet and communicating without eavesdropping. Today, recommended public-key cryptography suites are based on one of the following problems being hard to solve; integer factorization and elliptic-curve discrete logarithm\cite{nsa2015, nist2019}.
 
-For a long time, it has been known that the cryptography in use today will eventually be rendered useless. One of the most prominent threats to the encryption algorithms is Shor's algorithm\cite{shor1997}. The algorithm has been found to be able to solve the previously mentioned problems. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. Today's quantum computers are not powerful enough to execute Shor's algorithm on the large numbers that are used in modern cryptography. As quantum computers get more powerful and available to more people, the threat increases. The transition to post-quantum cryptography algorithms is becoming increasingly important.
+% As Moore’s Law and Dennard Scaling ended, the emphasis for new mainframe generations shifted from providing generic performance improvements to providing new features and functions tailored to specific aspects of enter- prise computing. In some cases, these features
+% jacobi2020
 
-% här kan privat personer köra kvant dator https://quantum-computing.ibm.com/
+% General topic overview - simplified
+People worldwide use the Internet every day for a myriad of things. We shop for food, clothes and services, communicate with family and friends and entertain ourselves using streaming services, to name a few. Businesses and enterprises rely on the Internet not only to serve their ever-growing customer base, but also process confidential information, personal identifiable information, credit card transactions and more. That the Internet traffic is kept secure for people and businesses alike is imperative. Public-key cryptography is a fundamental technology in providing this security \cite{rfc8446}. Used heavily in the \glspl{tls} protocol, \glspl{vpn} and other applications, public-key cryptography serves the purpose of ensuring that a party is who they say they are and that encryption keys may be exchanged on insecure channels without ever jeopardizing the confidentiality of the traffic \cite{rfc8446}. For now, it is believed that the algorithms in use will continue to be secure from attacks by conventional computers for the foreseeable future. The rise of a new type of computer and set of algorithms, the quantum computer and quantum algorithms, have shown that the fundamental security of today's cryptography is threatened and is likely to be made obsolete in the near future.
 
-% Provide relevant background facts or information.
-% Define key terminology (if required).
-% Introducera McEliece med vänner
-As previously mentioned, the fact that today's cryptography will likely become obsolete has been known for a long time. There has therefore been ongoing research to find new candidates to replace these algorithms, called \textit{post-quantum} cryptography algorithms. For the past few years, \gls{nist} has held a competition of sorts where it seeks to find one or more candidates it can standardize for future use. Two of these candidates, \gls{mceliece} and \gls{ntru} have been prominent\cite{nist2020}.
+% General, more in-depth, introduce NIST
+Today, many protocols use public-key cryptography to exchange a key between two parties. The recommended public-key cryptography suites are based on one of the following problems being hard to solve; integer factorization and elliptic-curve discrete logarithm\cite{nsa2015, nist2019}. For a long time, it has been known that the cryptography in use today will eventually be rendered useless. One of the most prominent threats to the encryption algorithms is Shor's algorithm\cite{shor1997}. The algorithm has been found to be able to solve the previously mentioned problems. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. Today's quantum computers are not powerful enough to execute Shor's algorithm on the large numbers that are used in modern cryptography. As quantum computers get more powerful and available to more people, the threat increases. The transition to a new set of algorithms that are not built on the same underlying mathematics is becoming increasingly important. These algorithms, called \gls{post-quantum} algorithms, have not yet been standardized. The \acrfull{nist} has started their standardization process with an open call for submissions of \gls{post-quantum} \glspl{kem} and digital signature algorithms. The process has, at the time of writing, gone through three rounds of submissions - with algorithmic changes and performance optimizations made each iteration. During this standardization process, the security and performance of the submissions are researched for various use cases and in various environments. We have identified a gap in research when it comes to running these \gls{post-quantum} \glspl{kem} on mainframe hardware.
 
-% Provide relevant background facts or information.
-% Define key terminology (if required).
-% Behövs "binary Goppa codes" här? Eller hur djupt ska man gå?
-\gls{mceliece} is a so called \textit{code-based} cryptography algorithm that is based on binary Goppa codes. It exploits the problem of decoding random linear codes, which has been proven to be practically impossible for conventional computers and quantum computers\cite{mceliece1978}. Another post-quantum algorithm, \gls{ntru} is a ring-based cryptosystem which exploits the difficulty of finding the shortest vector in a lattice\cite{ntru1998}.
+% Introduce mainframes and connect to introduction of cryptography
+The mainframe computer is a uniquely engineered computer that is designed to handle a large amount of data and bulk transactions. Their availability, resilience, high throughput and security are core features. Although they might not be used directly by most people, mainframes are used all around the world to process millions of hotel bookings daily as well as 90\% of airline reservations and 90\% of credit card transactions made every day. The fact that personal information, trade secrets and more are kept secure when transferring them for processing and storage is critical. The use of these modern cryptography algorithms make mainframes susceptible to the issues imposed by the progress of quantum computing and the the use of Shor's algorithm. Due to the vast use of mainframes and their reliance on strong public-key cryptography, it is central to our society that the move to \gls{post-quantum} cryptography can be performed without sacrificing the availability, resilience, high throughput or security of the mainframes.
+\todo{cite? \url{https://www.ibm.com/support/knowledgecenter/zosbasics/com.ibm.zos.zmainframe/zconc_whousesmf.htm}}
 
-% Provide relevant background facts or information.
-% Introducera mainframe och koppla ihop med introduktionen till kryptering
-The mainframe computer is a uniquely engineered computer that is designed to handle a large amount of data and bulk transactions. Their availability, resilience, high throughput and security are core features. Although they might not be used directly by most people, mainframes are used all around the world to process transactions and more. The fact that personal information, trade secrets etc. is kept secure when transferring them for processing and storage is critical. The use of these modern cryptography algorithms make mainframes susceptible to the issues imposed by the progress of quantum computing and the the use of Shor's algorithm.
-\todo[inline]{cite? \url{https://www.ibm.com/support/knowledgecenter/zosbasics/com.ibm.zos.zmainframe/zconc_whousesmf.htm}}
+% Describe the specific problem you will address
+We have investigated if the transition to \gls{post-quantum} cryptography can be made in the near future, in terms of performance of \gls{post-quantum} \glspl{kem} on consumer, cloud and mainframe hardware. With a study of the performance of \gls{post-quantum} algorithms on various architectures we provide up-to-date data to shed light on the readiness of hardware for the \gls{post-quantum} transition. This data may be used by individuals and business alike to understand how the transition may impact them. We also identify what specialized features of a mainframe computer can be utilized to increase the performance of \gls{post-quantum} \glspl{kem}. Our research questions are the following.
 
-% Give a brief overview over existing research/~contributions in the specific area you are dealing with.
-The field of post-quantum cryptography has been heavily researched throughout the years. Given that the eventual obsoleteness of current-day cryptographics schemes is approaching, research on actual implementations of post-quantum cryptography has increased lately. Despite this, little research has been done on evaluating the performance of post-quantum public-key cryptography.\todo{Not Ture "Despite this, little research has been done on evaluating the performance of post-quantum public-key cryptography"}
+\noindent\textbf{RQ1} Does the performance of \gls{post-quantum} \glspl{kem} differ between architectures and if so, how?\label{rq1}\hfill\par
+\noindent\textbf{RQ2} What specialized instructions and features applicable for \gls{post-quantum} \glspl{kem} are available in \gls{z15} and how are they used in context?\label{rq2}\hfill\par
+\noindent\textbf{RQ3} What techniques may be used to increase the performance of \gls{post-quantum} \glspl{kem}?\label{rq3}\hfill\par
 
-One study focuses on the performance of post-quantum public-key cryptography on smart phones. It concludes that post-quantum cryptography is feasible on mobile devices, mentioning several of the same algorithms contesting in the \gls{nist} standardization process. Although they discuss the performance of the algorithms, their focus lies with memory consumption and power consumption. They do not cover potential performance gains from optimizing the algorithms for various architectures.%\cite{Chikouche2018}.
-\todo{rewrite}
-
-Another study focuses on an implementation of post-quantum cryptography on FPGAs. The work centers around public and private key generation using the Niederreiter algorithm. The work does not cover the performance of the encryption and decryption using the scheme. Niederreiter is also not considered to be one of the main contestans of the \gls{nist} standardization problem.%\cite{Wang2018}.
-\todo{rewrite}
-
-There's also a study covering a performant parallel implementation of the post-quantum algorithm FrodoKEM on a GPU. FrodoKEM is not part of the finalists in the third round of the \gls{nist} standardization and is therefore less likely to be standardized than \gls{mceliece} and \gls{ntru}\cite{nist2020}. As the study focuses on a GPU implementation, it is unknown if the results generalize to other architectures such as IBM Z or x86.%\cite{Seo2020}.
-\todo{rewrite}
-
-% Identify a gap in this work.
-We've identified a gap in research when it comes to the application of post-quantum cryptography on mainframes. We have not been able to find any work focusing on the performance of using \gls{mceliece} or \gls{ntru} - two prominent candidates in \gls{nist}'s standardization progress. We also failed to find any relevant work taking into account the differences in architecture between various platforms. For example, mainframes are by nature focused on specialized processing and IBM's z15 has dedicated instruction sets and features to handle common encryption procedures\cite{ibm2020:quantum-computer}. We therefore seek to evaluate the application of post-quantum cryptography on mainframes.
-
-% Describe the specific problem you will address (as a result from 6.).
-In short, we want to investigate if the transition to post-quantum cryptography can be made in the near future, with a focus on its applications on mainframe computers.
-
-% Explain in which ways the problem (as described in 7.) is relevant.
-Due to the vast use of mainframes and their reliance on strong public-key cryptography, it is central to our society that the move to post-quantum cryptography can be performed without sacrificing the availability, resilience, high throughput or security of the mainframes. With a study of the performance of post-quantum algorithms on various architectures we seek to provide up-to-date data to shed light on the readiness of hardware for the post-quantum transition. This data could be used by individuals and business alike to understand how the transition may impact them.
-
-\todo[inline]{
-Bakgrund i introduktion -> tratt för att fånga läsaren och närma sig ämnet.
-
-5-6 paragrafer. 1 fångar läsaren, 1 allmänt, 1 problemet o.s.v. Mer omfattande sammanfattning.
-
-Efter man har identifierat behovet av post-quantum, introducerat NIST o.s.v. går man över till vad vi har gjort - listar forskningsfrågorna. Vissa listar bara, andra motiverar, det beror på vad vi känner för.
-
-Bygg in scope i tratten.
-
-Outline i introduktion. Allra sist i introduktion. "I kapitel 2 går vi igenom bakgrund kring ..." o.s.v.
-
-   
-Det går att nämna lite om varje kapitel ibörjan. Generellt trevligt. Väldigt kort beskrivet vad det handlar om. Artikel gör man det inte - ont om plats. Thesis mycket plats.
-}
-
-\section{Research Questions}
-\label{section:introduction:research-questions}
-
-\noindent\textbf{RQ1} Does the performance of \gls{post-quantum} key encapsulation mechanisms differ between architectures and if so, how?\label{rq1}\hfill\par
-\noindent\textbf{RQ2} What specialized instructions and features applicable for \gls{post-quantum} key encapsulation mechanisms are available in \gls{z15} and how are they used in context?\label{rq2}\hfill\par
-\noindent\textbf{RQ3} What techniques may be used to increase the performance of \gls{post-quantum} key encapsulation mechanisms?\label{rq3}\hfill\par
-
-\subsection{Scope}
-
-Define the scope of the paper.
-
-\todo[inline]{motivate the chosen research questions}
 % Outline
 \input{chapters/introduction/outline}
 
-\noindent\textbf{Chapter \ref{chapter:background}} covers general topics in cryptography and computing related to this work. Not all related topics are described, as the reader is assumed to be accustomed to general terms of computing, such as compilers and how a computer work in broad terms.
+\noindent\textbf{Chapter \ref{chapter:background}} covers general topics in cryptography and computing related to this work. Not all related topics are described, as the reader is assumed to be accustomed to general terms of computing, such as compilers and how a computer work in broad terms. The chapter further provides an overview of the mathematics used in classical and \gls{post-quantum} \glspl{kex} and \glspl{kem}. Furthemore, the chapter describes various computer architectures and performance-related topics.
 
-\noindent\textbf{Chapter \ref{chapter:related-work}} outlines research that has been conducted before on topics relevant to this paper.
+\noindent\textbf{Chapter \ref{chapter:related-work}} discusses research that has been conducted prior to this thesis, on topics related to the performance of \gls{post-quantum} \glspl{kem}, classical \glspl{kex} and analysis of performance provided by various computer architectures.
 
-\noindent\textbf{Chapter \ref{chapter:method}} describes in detail the method used to answer our research questions.
+\noindent\textbf{Chapter \ref{chapter:method}} describes in detail the method used to provide data and information to help answer the stated research questions.
 
-\noindent\textbf{Chapter \ref{chapter:results}} presents the data collected.
+\noindent\textbf{Chapter \ref{chapter:results}} presents and analyzes the data and information collected as outlined in the method.
 
-\noindent\textbf{Chapter \ref{chapter:discussion}} discusses the results and the validity of the experiment.
+\noindent\textbf{Chapter \ref{chapter:discussion}} discusses the results and the validity of the method. Potential areas of improvement in terms of new features and instructions are discussed, based on the results previously gathered.
 
-\noindent\textbf{Chapter \ref{chapter:conclusion}} concludes the work.
+\noindent\textbf{Chapter \ref{chapter:conclusion}} concludes the work and discusses future work.

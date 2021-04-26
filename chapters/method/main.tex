@@ -135,8 +135,8 @@ Where possible and applicable, the environments run on the same version of Ubunt
         \toprule
         \thead{Label} & \thead{CPU} & \thead{RAM} & \thead{OS}\\
         \midrule
-        Cloud Provider 1\footnotemark & Intel Xeon Platinum 8168, 4 vCPU & 4GB & Ubuntu 18.04\footnotemark\\
-        Cloud Provider 2\footnotemark & Intel Xeon Gold 5118\footnotemark,  vCPU & 4GB & Ubuntu 20.04\\
+        Cloud Provider 1\footnotemark & Intel Xeon 8168, 4 \gls{vcpu} & 4GB & Ubuntu 18.04\footnotemark\\
+        Cloud Provider 2\footnotemark & Intel Xeon 5118\footnotemark, 2 \gls{vcpu} & 4GB & Ubuntu 20.04\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -159,7 +159,7 @@ Where possible and applicable, the environments run on the same version of Ubunt
         \toprule
         \thead{Label} & \thead{Model} & \thead{CPU} & \thead{RAM} & \thead{OS}\\
         \midrule
-        Mainframe\footnotemark & IBM T01 & IBM \gls{z15} 2 cores\footnotemark & 4GB & RHEL 8.3\footnotemark\\
+        IBM Community Cloud\footnotemark & IBM T01 & IBM \gls{z15} 2 cores\footnotemark & 4GB & RHEL 8.3\footnotemark\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -358,11 +358,9 @@ The configurations presented in table \ref{table:method:experiment:phase1:config
         Modern Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx2}, \gls{aes-instruction-set}) \\
         Old Mid-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx}, \gls{aes-instruction-set})\\
         Old Low-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx})\\
-        Cloud Provider 1 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
-        Cloud Provider 1 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
-        Cloud Provider 2 - Shared CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
-        Cloud Provider 2 - Dedicated CPU & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
-        Mainframe & GCC Minimal, GCC Optimized, IBM XL, IBM XL Optimized & All (\gls{cpacf})\\
+        Cloud Provider 1 & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
+        Cloud Provider 2 & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
+        IBM Community Cloud & GCC Minimal, GCC Optimized, IBM XL, IBM XL Optimized & All (\gls{cpacf})\\
         \bottomrule
     \end{tabularx}
 \end{table}

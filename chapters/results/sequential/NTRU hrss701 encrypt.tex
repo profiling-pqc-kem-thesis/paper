@@ -1,0 +1,43 @@
+\begin{table}
+    \centering
+    \caption{Sequential Runs for ntru hrss701 (encrypt)}
+    \begin{tabularx}{\linewidth}{X c c c c c}
+        \toprule
+        \thead{Environment} & \thead{Compiler} & \thead{Flags} & \thead{Average Duration} & \thead{Speedup}\\
+        \midrule
+          Modern Workstation &                  gcc &                  ref &  0.91ms &                  0.0\\
+          Modern Workstation &                  gcc &        ref-optimized &  0.23ms &                  2.9\\
+          Modern Workstation &                clang &        ref-optimized &  0.21ms &                  3.4\\
+          Modern Workstation &                  gcc &                 avx2 &  0.03ms &                 30.8\\
+          Modern Workstation &                  gcc &       avx2-optimized &  0.02ms &                 49.7\\
+          Modern Workstation &                clang &       avx2-optimized &  0.02ms &                 54.3\\
+               Modern Laptop &                  gcc &                  ref &  1.15ms &                  0.0\\
+               Modern Laptop &                clang &        ref-optimized &  0.26ms &                  3.4\\
+               Modern Laptop &                  gcc &        ref-optimized &  0.28ms &                  3.1\\
+               Modern Laptop &                  gcc &                 avx2 &  0.05ms &                 21.5\\
+               Modern Laptop &                  gcc &       avx2-optimized &  0.03ms &                 42.5\\
+               Modern Laptop &                clang &       avx2-optimized &  0.02ms &                 46.1\\
+        Old Mid-Range Laptop &                  gcc &                  ref &  1.58ms &                  0.0\\
+        Old Mid-Range Laptop &                clang &        ref-optimized &  0.48ms &                  2.3\\
+        Old Mid-Range Laptop &                  gcc &        ref-optimized &  0.42ms &                  2.8\\
+        Old Low-Range Laptop &                  gcc &                  ref &  1.95ms &                  0.0\\
+        Old Low-Range Laptop &                clang &        ref-optimized &  0.60ms &                  2.3\\
+        Old Low-Range Laptop &                  gcc &        ref-optimized &  0.50ms &                  2.9\\
+            Cloud Provider 1 &                  gcc &                  ref &  1.35ms &                  0.0\\
+            Cloud Provider 1 &                  gcc &        ref-optimized &  0.39ms &                  2.4\\
+            Cloud Provider 1 &                clang &        ref-optimized &  0.29ms &                  3.7\\
+            Cloud Provider 1 &                  gcc &                 avx2 &  0.06ms &                 23.3\\
+            Cloud Provider 1 &                clang &       avx2-optimized &  0.03ms &                 43.1\\
+            Cloud Provider 1 &                  gcc &       avx2-optimized &  0.03ms &                 49.8\\
+            Cloud Provider 2 &                  gcc &                  ref &  1.59ms &                  0.0\\
+            Cloud Provider 2 &                  gcc &        ref-optimized &  0.40ms &                  2.9\\
+            Cloud Provider 2 &                clang &        ref-optimized &  0.37ms &                  3.3\\
+            Cloud Provider 2 &                  gcc &       avx2-optimized &  0.06ms &                 26.9\\
+            Cloud Provider 2 &                  gcc &                 avx2 &  0.05ms &                 30.5\\
+            Cloud Provider 2 &                clang &       avx2-optimized &  0.04ms &                 42.3\\
+         IBM Community Cloud &                  gcc &                  ref &  2.11ms &                  0.0\\
+         IBM Community Cloud &                  gcc &        ref-optimized &  0.49ms &                  3.3\\
+         IBM Community Cloud &                clang &        ref-optimized &  0.39ms &                  4.4 \\
+        \bottomrule
+    \end{tabularx}
+\end{table}

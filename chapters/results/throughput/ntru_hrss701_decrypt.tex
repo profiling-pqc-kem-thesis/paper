@@ -1,0 +1,61 @@
+    \begin{table}[H]
+        \centering
+        \small
+        \caption{Parallel Throughput Runs for ntru hrss701 (decrypt)}
+        \begin{tabularx}{\linewidth}{X c c c c c c c c}
+            \toprule
+            \thead{Environment} & \thead{Compiler} & \multicolumn{7}{c}{\thead{Threads}}\\
+            & & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
+            \midrule
+\multirowcell{4}{Cloud\\ Provider\\ 1} & 
+\multirow{2}{*}{gcc} & 47064 & 94918 & 94690 & 101730 & 103827\\
+ & & 1.0 & 2.02 & 2.01 & 2.16 & 2.21\\
+\cmidrule[0.05em](){3-9} & 
+\multirow{2}{*}{clang} & 39753 & 71637 & 82847 & 85968 & 85693\\
+ & & 0.84 & 1.52 & 1.76 & 1.83 & 1.82\\
+            \midrule
+\multirowcell{4}{Cloud\\ Provider\\ 2} & 
+\multirow{2}{*}{gcc} & 33224 & 68890 & 74596 & 64194\\
+ & & 1.0 & 2.07 & 2.25 & 1.93\\
+\cmidrule[0.05em](){3-9} & 
+\multirow{2}{*}{clang} & 39840 & 69277 & 62418 & 75534\\
+ & & 1.20 & 2.09 & 1.88 & 2.27\\
+            \midrule
+\multirowcell{4}{IBM\\ Community\\ Cloud} & 
+\multirow{2}{*}{gcc} & 705 & 1056 & 1373 & 1401\\
+ & & 1.0 & 1.50 & 1.95 & 1.99\\
+\cmidrule[0.05em](){3-9} & 
+\multirow{2}{*}{clang} & 881 & 1772 & 1735 & 1745\\
+ & & 1.25 & 2.51 & 2.46 & 2.47\\
+            \midrule
+\multirowcell{4}{Modern\\ Laptop} & 
+\multirow{2}{*}{gcc} & 14694 & 26965 & 94495 & 147789 & 172734 & 176251\\
+ & & 1.0 & 1.84 & 6.43 & 10.06 & 11.75 & 11.99\\
+\cmidrule[0.05em](){3-9} & 
+\multirow{2}{*}{clang} & 13041 & 32001 & 87645 & 104470 & 148045 & 166157\\
+ & & 0.89 & 2.18 & 5.96 & 7.11 & 10.07 & 11.31\\
+            \midrule
+\multirowcell{4}{Modern\\ Workstation} & 
+\multirow{2}{*}{gcc} & 16668 & 33956 & 65296 & 237728 & 360264 & 380808 & 530159\\
+ & & 1.0 & 2.04 & 3.92 & 14.26 & 21.61 & 22.85 & 31.81\\
+\cmidrule[0.05em](){3-9} & 
+\multirow{2}{*}{clang} & 17454 & 33662 & 68787 & 222164 & 348442 & 473293 & 530368\\
+ & & 1.05 & 2.02 & 4.13 & 13.33 & 20.90 & 28.39 & 31.82\\
+            \midrule
+\multirowcell{4}{Old\\ Low-Range\\ Laptop} & 
+\multirow{2}{*}{gcc} & 688 & 1286 & 1492 & 1476 & 1489\\
+ & & 1.0 & 1.87 & 2.17 & 2.14 & 2.16\\
+\cmidrule[0.05em](){3-9} & 
+\multirow{2}{*}{clang} & 583 & 1102 & 1222 & 1219 & 1218\\
+ & & 0.85 & 1.60 & 1.77 & 1.77 & 1.77\\
+            \midrule
+\multirowcell{4}{Old\\ Mid-Range\\ Laptop} & 
+\multirow{2}{*}{gcc} & 873 & 941 & 1762 & 1748 & 1781\\
+ & & 1.0 & 1.08 & 2.02 & 2.00 & 2.04\\
+\cmidrule[0.05em](){3-9} & 
+\multirow{2}{*}{clang} & 767 & 1299 & 1512 & 1515 & 1518\\
+ & & 0.88 & 1.49 & 1.73 & 1.73 & 1.74 \\
+            \bottomrule
+        \end{tabularx}
+    \end{table}
+    
