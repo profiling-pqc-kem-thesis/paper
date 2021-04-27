@@ -71,14 +71,13 @@ This section will further describe cryptographic systems in use to keep data con
 \subsection{Applications}
 \label{section:background:classical-cryptography:applications}
 
+In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography \cite{bernstein2017}. \gls{tls} may use any of wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
 
-In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography\cite{bernstein2017}. \gls{tls} may use any of wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+\gls{x25519} (in some contexts known as \gls{curve25519} \cite{25519naming}), is used for key exchange in the \gls{vpn} Wireguard \cite{wireguard2020}.
 
-\gls{x25519} (in some contexts known as \gls{curve25519} \cite{25519naming}), is used for key exchange in the \gls{vpn} Wireguard\footnote{\href{https://www.wireguard.com/protocol/}{https://www.wireguard.com/protocol/}}.
+\gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\cite{rfc8446}, SSH\cite{williams2011}, \glspl{vpn} such as OpenVPN \cite{openvpn} and IPSec\cite{rfc2409}.
 
-\gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS\cite{rfc8446}, SSH\cite{williams2011}, \glspl{vpn} such as OpenVPN\footnote{\href{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}{https://openvpn.net/community-resources/openvpn-cryptographic-layer/}}, IPSec\cite{rfc2409} and Wireguard.
-
-Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol\cite{gordon2017}.
 
 \subsection{RSA}
 
@@ -257,7 +256,6 @@ CRYSTALS-KYBER is a lattice-based cryptosystem that relies on the learning-with-
 \subsection{SABER}
 SABER is a lattice-based cryptosystem that relies on the learning-with-rounding problem over module lattices being hard to solve. SABER has three different versions for different security levels. LightSABER at security levels 1, SABER at security levels 3, and FireSABER at security levels 5 \cite{saber}.
 
-\todo[inline]{todo}
 %\todo{include security category}
 
 \subsection{Code-Based Cryptography}
@@ -265,20 +263,11 @@ Code-based cryptosystems take advantage of error-correction code. Typically erro
 
 \subsection{Classic McEliece}
 \label{section:background:mceliece}
-The fist version of McEliece was proposed in 1979 
-The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of Classic McEliece, together with various improvements over the years. Classic McEliece is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. Decryption uses the private key to perform "error correction" to correct the errors added in the encryption step.
+The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of Classic McEliece, together with various improvements over the years  \cite{mceliece2020}. Classic McEliece is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. Decryption uses the private key to perform "error correction" to correct the errors added in the encryption step \cite{mceliece2020}.
  
-For each configuration of Classic McEliece, there are two versions, systematic form (non-f) and semi-systematic form (f) with are two ways to generate the keypair. The non-f variant is faster at generating the keypair but fails more often and needs to retry. The f variant has a very low probability of failing and is there for faster and more consistent in the average case. But it loses up to 2 bits of security, which the authors claim are no big problem.
+For each configuration of Classic McEliece, there are two versions, systematic form (non-f) and semi-systematic form (f) with are two ways to generate the keypair. The non-f variant is faster at generating the keypair but fails more often and needs to retry. The f variant has a very low probability of failing and is there for faster and more consistent in the average case. But it loses up to 2 bits of security, which the authors claim are no big problem \cite{mceliece2020}.
 
-Classic McEliece ofers configurations for security levels 1, 3, and 5. mceliece348864(f) has security level 1, mceliece460896(f) security level 3, and mceliece6688128(f), mceliece6960119(f), mceliece8192128(f) security level 5.
-
-\todo[inline]{
-% From nist 2020
-Classic McEliece is a code-based KEM based on the 1979 McEliece cryptosystem built from a hidden Goppa code. Classic McEliece includes some modern improvements for efficiency and to provide CCA security. The security of these improvements is reduced to the one-wayness against chosen-plaintext attack (OW-CPA) security of the original construction as proposed in 1979 [17]. The original construction is not based on a particularly natural computational assumption; however, Goppa code McEliece and related cryptosystems have a long history of study \cite{nist2020}.\\
-Combination av olika McEliece implementationer
-}
-
-\todo{include security category}
+Classic McEliece ofers configurations for security levels 1, 3, and 5. mceliece348864(f) has security level 1, mceliece460896(f) security level 3, and mceliece6688128(f), mceliece6960119(f), mceliece8192128(f) security level 5 \cite{mceliece2020}.
 
 \section{Architectures and Performance}
 
@@ -333,8 +322,6 @@ By using AVX, a developer may optimize a program and make use of the performance
 Mainframe hardware is designed to handle a large amount of data and bulk transactions. To achieve this, they are using custom-made CPUs and special coprocessors. Further features are availability, resilience, backward compatibility, and security core features.
 
 Many features seen in consumer platforms such as x86 was first seen in mainframe hardware, features such as virtualization, caches and cache hierarchies for reduced memory latency, as well as branch prediction, out-of-order execution, hardware-assisted encryption and more \cite{jacobi2020}.
-
-\todo[inline]{IBM Z, POWER. RISC. Co-processorer. Mycket ändras när man går från x86 till mainframe. Man kan inte mäta instruktioner etc. som vanligt. En instruktion kan göra mycket.}
 
 \subsection{IBM z15}
 

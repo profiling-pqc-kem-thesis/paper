@@ -1,8 +1,6 @@
 \chapter{Results and Analysis}
 \label{chapter:results}
 
-\todo[inline]{data on github}
-
 \section{Acceleration of Post-Quantum Key Encapsulation Mechanisms}
 
 \todo[inline]{
@@ -14,7 +12,7 @@ This section studies the \gls{nist} submissions' underlying mathematics, the aut
 \subsection{Identifying Hot Paths}
 \label{section:results:hot-paths}
 
-The following sections analyzes the \gls{ntru} and \gls{mceliece} submissions to the \gls{nist} standardization process, in terms of the reference implementations and what branches the code takes, how many times they are taken, as well as how many instructions are retired in each function. Unless otherwise stated, the measurements are the percentage of instructions performed in a function or in a line of code, relative to the parent.
+The following sections analyze the \gls{ntru} and \gls{mceliece} submissions to the \gls{nist} standardization process, in terms of the reference implementations and what branches the code takes, how many times they are taken, as well as how many instructions are retired in each function. Unless otherwise stated, the measurements are the percentage of instructions performed in a function or in a line of code, relative to the parent.
 
 All of the data as well as further visualizations not included in this work is published on GitHub\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
 
@@ -24,7 +22,7 @@ The \gls{ntru} reference implementations consists of three API methods - keypair
 
 The following graphs contain relative measurements denoting the percentage of instructions spent in each method. Both the HPS and HRSS variants of \gls{ntru} perform alike, hence only one set of graphs is shown for \gls{ntru} as a whole.
 
-Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $60\%$ of the time spent on generating a keypair.\todo{60 är väll lite lågt?}
+Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $85\%$ of the time spent on generating a keypair.
 
 \begin{figure}[H]
     \centering
@@ -75,7 +73,7 @@ void poly_Rq_mul(poly *r, const poly *a, const poly *b) {
 To summarize, it is shown that factors such as the speed of \gls{aes} has little to do with the overall performance of the algorithm. Furthermore, it seems as if the polynomial library functions account for the vast majority of instructions spent on key-pair generation, encryption and decryption. The function \textit{poly\_Rq\_mul}, which multiplies two polynomials in $\mathbb{R}^q$, accounts for most of the calculations performed.
 
 \subsubsection{Classic McEliece}
-The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants. On our GitHub\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}, all hot-paths can be found. 
+The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants.
 
 In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}, we can see the \textit{crypto\_kem\_keypair} function and its only significant internal function, the \textit{pk\_gen} function that takes up 98.57\% of the execution time. In figure \ref{figure:result:hot-paths:classic-mceliece:pk_gen}, we can see the deeper look into the \textit{pk\_gen} function there we can see that all its internal functions and that they do not make up much of the instructions. Most of the instructions are inside of the \textit{pk\_gen} function itself.\todo{explain better}
 
@@ -163,25 +161,7 @@ In section \ref{section:method:experiment:phase1:implementation-configurations} 
 \end{table}
 \todo{Update the table with descriptions for McEliece}
 
-\todo[inline]{
-Does the performance of post-quantum key encapsulation mechanisms differ between architectures and if so, how?
-What techniques may be used to increase the performance of post-quantum key encapsulation mechanisms?
-}
-
-\todo[inline]{
-Talk about all the sequential data here - sequential, heap, micro, stack. Use all data, no matter the underlying system, to get an average of the state of the machines? If we only use relative measurements, that will be fine even though the i3 may lower the throughput?
-}
-
 \subsection{Hardware Performance}
-
-\todo[inline]{
-Does the performance of post-quantum key encapsulation mechanisms differ between architectures and if so, how?
-What techniques may be used to increase the performance of post-quantum key encapsulation mechanisms?
-}
-
-\todo[inline]{
-Talk about the parallel benchmark here, hardware throughput, hardware differences.
-}
 
 \subsection{Heap Usage}
 
@@ -203,17 +183,17 @@ The operation of dividing an integer was found to correlate to an additional $53
         \thead{Environment} & \thead{OpenSSL Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
         & & \thead{Keypair} & \thead{Exchange} \\
         \midrule
-        IBM Community Cloud & 1.1.1g FIPS & 19772 & 19248 \\
-        Cloud Provider 1 & 1.1.1 & 12076 & 12080 \\
-        Cloud Provider 2 & 1.1.1f & 11852 & 11536\\
-        Modern Workstation & 1.1.1f & 11852 & 11536 \\
-        Modern Laptop & 1.1.1f & 11852 & 11536 \\
-        Old Mid-Range Laptop & 1.1.1f & 11852 & 11536\\
-        Old Low-Range Laptop & 1.1.1f & 11852 & 11536\\
+        IBM Community Cloud & 1.1.1g FIPS & 42800 & 39908 \\
+        Cloud Provider 1 & 1.1.1 & 14156 & 11934 \\
+        Cloud Provider 2 & 1.1.1f & 14040 & 11762\\
+        Modern Workstation & 1.1.1f & 14040 & 11762 \\
+        Modern Laptop & 1.1.1f & 14040 & 11762 \\
+        Old Mid-Range Laptop & 1.1.1f & 14040 & 11762\\
+        Old Low-Range Laptop & 1.1.1f & 14040 & 11762\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{correct values in table}
+\todo{Does not correctly reflect the actual usage? Zero is most likely wrong as the exchange function creates a key. Furthermore, the values currently reflect crypto\_kem\_keypair and crypto\_kem\_exchange, not perform\_keypair and perform\_exchange}
 
 \begin{table}
     \centering
@@ -224,30 +204,30 @@ The operation of dividing an integer was found to correlate to an additional $53
         \thead{Environment} & \thead{Curve} & \thead{OpenSSL Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
         & & & \thead{Keypair} & \thead{Exchange} \\
         \midrule
-        IBM Community Cloud & P-256 & 1.1.1g FIPS & 4920 & 1520 \\
-        IBM Community Cloud & 25519 & 1.1.1g FIPS & 4524 & 1520 \\
+        IBM Community Cloud & P-256 & 1.1.1g FIPS & 12184 & 0 \\
+        IBM Community Cloud & 25519 & 1.1.1g FIPS & 4524 & 1024 \\
 
-        Cloud Provider 1 & P-256 & 1.1.1 & - & - \\
-        Cloud Provider 1 & 25519 & 1.1.1 & - & - \\
+        Cloud Provider 1 & P-256 & 1.1.1 & 9220 & 0 \\
+        Cloud Provider 1 & 25519 & 1.1.1 & 8380 & 0 \\
 
-        Cloud Provider 2 & P-256 & 1.1.1f & 2584 & 2136 \\
-        Cloud Provider 2 & 25519 & 1.1.1f & 1192 & 2005\\
+        Cloud Provider 2 & P-256 & 1.1.1f & 4884 & 1872 \\
+        Cloud Provider 2 & 25519 & 1.1.1f & 2556 & 512\\
 
-        Modern Workstation & P-256 & 1.1.1f & 2584 & 2136 \\
-        Modern Workstation & 25519 & 1.1.1f & 1192 & 2005 \\
+        Modern Workstation & P-256 & 1.1.1f & 4884 & 1872 \\
+        Modern Workstation & 25519 & 1.1.1f & 2556 & 512 \\
         
-        Modern Laptop & P-256 & 1.1.1f & 2584 & 2136 \\
-        Modern Laptop & 25519 & 1.1.1f & 1192 & 2005 \\
+        Modern Laptop & P-256 & 1.1.1f & 4884 & 1872 \\
+        Modern Laptop & 25519 & 1.1.1f & 2556 & 512 \\
         
-        Old Mid-Range Laptop & P-256 & 1.1.1f & 2584 & 2136\\
-        Old Mid-Range Laptop & 25519 & 1.1.1f & 1192 & 2005\\
+        Old Mid-Range Laptop & P-256 & 1.1.1f & 4884 & 1872\\
+        Old Mid-Range Laptop & 25519 & 1.1.1f & 2556 & 512\\
         
-        Old Low-Range Laptop & P-256 & 1.1.1f & 2584 & 2136\\
-        Old Low-Range Laptop & 25519 & 1.1.1f & 1192 & 2005\\
+        Old Low-Range Laptop & P-256 & 1.1.1f & 4884 & 1872\\
+        Old Low-Range Laptop & 25519 & 1.1.1f & 2556 & 512\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{correct values in table}
+\todo{Does not correctly reflect the actual usage? Zero is most likely wrong as the exchange function creates a key. Furthermore, the values currently reflect crypto\_kem\_keypair and crypto\_kem\_exchange, not perform\_keypair and perform\_exchange}
 
 \subsection{Stack Usage}
 
@@ -266,7 +246,6 @@ In terms of stack usage, the results vary between the implementations, compilers
         Cloud Provider 2 & clang & 10.0.0 & 380 & N/A \\
         Modern Laptop & clang & 10.0.0 & 380 & N/A \\
         Modern Workstation & clang & 10.0.0 & 380 & N/A \\
-        Cloud Provider 2 & clang & 10.0.0 & 380 & N/A \\
         Modern Laptop & clang & 10.0.0 & 380 & N/A \\
         Old Low-Range Laptop & clang & 10.0.0 & 300 & N/A \\
         Old Mid-Range Laptop & clang & 10.0.0 & 300 & N/A \\
@@ -280,7 +259,7 @@ In terms of stack usage, the results vary between the implementations, compilers
         Modern Workstation & gcc & 9.3.0 & 188 & 255\\
         \bottomrule
     \end{tabularx}
-\end{table}\todo{Fix table, Cloud Provider 2 & Cloud Provider 2 är med 3 ggr}
+\end{table}
 
 The same correlation between optimization flags and compiler versions could not be found in the case of \gls{mceliece} and pk\_gen. In that case, the largest recorded size was found in IBM Community Cloud's optimized reference implementation with $22858$ bytes. The optimized AVX2 implementation of the Modern Workstation and Modern Laptop came second with $22123$ bytes. Lastly, the smallest size recorded was found in the optimized reference implementation of Old Mid-Range Laptop and Old Low-Range Laptop at $2026$ bytes.
 
@@ -359,9 +338,9 @@ int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const un
 
 \subsection{Sequential Performance}
 
-The performance of the algorithms were analyzed by performing a thousand sequential runs in series, for each algorithm under test. The complete method is outlined in section \ref{section:method:experiment:phase1}.\todo{Two runs?}
+The performance of the algorithms were analyzed by performing a thousand sequential runs in series, for each algorithm under test at two different occasions. The complete method is outlined in section \ref{section:method:experiment:phase1}.
 
-As covered in section \ref{section:background:mceliece}, \gls{mceliece} supports two forms of keypair-generation algorithms - a non-systematic form and a semi-systematic form. The authors of the \gls{nist} submission state that these two forms may have different performance characteristics \cite{mceliece2020}. In Table \ref{table:results:sequential-mceliece-6960119-keypair-modern-workstation}, these two forms can be seen with every set of performance improvements tested in the experiment. As can be seen in the table, the reference implementation in its non-systematic\todo{tydliggör vilken som är systematic/semi-systematic, f eller non-f} form is remarkably inconsistent, with a standard deviation of $20580.20$ as compared to the $6.91$ of the semi-systematic form. The change in performance characteristics is also visible in the mean, with the semi-systematic form taking about $30\%$ of the time on average as compared to the non-systematic form. In both cases, the \gls{avx2} implementation has the second largest standard deviation with $302.58$ and $6.91$ for the non-systematic form and the semi-systematic form, respectively. Despite being a \gls{simd} implementation, \gls{avx2} performs worse than the optimized reference implementation in both forms of the algorithm. The optimized \gls{avx2}, however, outperforms the optimized reference implementation with a 4-6 times the performance. The same results were found to generalize for several environments, as shown in Table \ref{table:results:sequential:mceliece-6960119-keypair} and \ref{table:results:sequential:mceliece-6960119f-keypair}.
+As covered in section \ref{section:background:mceliece}, \gls{mceliece} supports two forms of keypair-generation algorithms - a systematic form and a semi-systematic form. The systematic forms, such as \gls{mceliece} 8192128 and the semi-systematic forms, such as \gls{mceliece} 8192128f, use different algorithms for generating the keypairs. The authors of the \gls{nist} submission state that these two forms may have different performance characteristics \cite{mceliece2020}. In Table \ref{table:results:sequential-mceliece-6960119-keypair-modern-workstation}, these two forms can be seen with every set of performance improvements tested in the experiment. As can be seen in the table, the reference implementation in its systematic form is remarkably inconsistent, with a standard deviation of $20580.20$ as compared to the $6.91$ of the semi-systematic form. The change in performance characteristics is also visible in the mean, with the semi-systematic form taking about $30\%$ of the time on average as compared to the systematic form. In both cases, the \gls{avx2} implementation has the second largest standard deviation with $302.58$ and $6.91$ for the systematic form and the semi-systematic form, respectively. Despite being a \gls{simd} implementation, \gls{avx2} performs worse than the optimized reference implementation in both forms of the algorithm. The optimized \gls{avx2}, however, outperforms the optimized reference implementation with a 4-6 times the performance. The same results were found to generalize for several environments, as shown in Table \ref{table:results:sequential:mceliece-6960119-keypair} and \ref{table:results:sequential:mceliece-6960119f-keypair}.
 
 \input{chapters/results/sequential/Modern Workstation_deviation_mceliece}
 
@@ -443,3 +422,17 @@ When running \gls{ntru} in parallel to measure throughput, we found that the per
 In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements for various compilers and thread counts are shown for all of the tested environments\todo{explain table}. The best scaling is found in the Modern Workstation environment, followed by the Modern Laptop. Although the tested cloud environments supported \gls{avx2}, they did not see the same performance increase when more threads were used. For all environments except IBM Community Cloud and Cloud Provider 2, GCC seems to produce the highest increase in throughput over the reference implementation compiled with GCC, without performance optimizations.
 
 \input{chapters/results/throughput/ntru_hrss701_decrypt}
+
+\subsection{Microbenchmarks}
+
+To evaluate what changes in the implementations contribute to a certain speedup, microbenchmarks were run as further described in section \ref{section:method:experiment:phase1}. One of the microbenchmarks performed were the counting of the number of cache misses occuring in an enviornment. The cache misses for various environments and performance optimizations for \gls{mceliece} 8192128f keypair generation is presented in Table \ref{table:results:micro:cache-misses-mceliece-8192128f-enc}. The same stage for the \gls{ntru} HRSS 701 implementations tested are presented in Table \ref{table:results:micro:cache-misses-ntru-hrss701-enc}. In both of the tables, the Old Low-Range Laptop is missing for some configurations, due to it failing to complete the micro benchmarks a multitude of times. Not all environments supported measuring the cache misses. Therefore the Cloud Provider 1 and IBM Community Cloud are not presented in the following tables.
+
+The number of cache misses in \gls{mceliece}, when compared to \gls{ntru}, is substantially higher with comparable means being up to 190 times as many. The standard deviation is also considerably higher than those found in \gls{ntru} benchmarks. Despite running several generations older hardware with less then half the cache of the Modern Laptop, the Old Low-Range Laptop seem to consistently have fewer cache misses. The only cloud hardware tested, Cloud Provider 2, has an unknown amount of cache available for use during the benchmark, it being a shared environment with virtual cores. The Cloud Provider 2 saw an increased number of cache misses when compared to dedicated consumer hardware such as the Old Mid-Range Laptop, the Old Low-Range Laptop and the Modern Workstation environments.
+
+\input{chapters/results/micro/mceliece_8192128f_crypto_kem_enc}
+
+With an average of 6911670 cache misses when the GCC reference implementation was run in the Cloud Provider 2 environment, keypair generation in \gls{mceliece} 8192128 had the largest number of cache misses recorded during our testing. For the same algorithm and compiler configuration, the Modern Workstation had an average of 20403 cache misses. In the other end of the spectrum, the Modern Workstation saw an average of a single cache miss for all configurations of \gls{ntru} HPS 4096821 keypair generation. Using the same configurations, the Cloud Provider 2 environment saw an average of between 1440 and 3468 cache misses. 
+
+That the \gls{mceliece} implementations had a drastically larger amount of cache misses than the \gls{ntru} implementations was found in all of the tests of the experiment.
+
+\input{chapters/results/micro/ntru_hrss701_crypto_kem_enc}

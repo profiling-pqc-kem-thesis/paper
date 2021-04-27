@@ -25,20 +25,6 @@ To identify relevant research papers, we will search for peer-reviewed papers by
 The selected papers, as well as the the papers submitted to \gls{nist}, will be included in a start set. The start set will then be used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
 \todo[inline]{Kommer ni att ha specificerade inclusion/exclusion criteria?}
 
-\todo[inline]{
-Vill svara på What specialized instructions and features applicable for post-quantum cryp-tography are available in z/15 and how are they used in context?
-
-1. Sätt scope för "vad är post-quantum cryptography?" NIST-finalister?
-2. Analysera litteratur för vad som är relevant att förbättra med dessa algoritmer (Applicable for post-quantum cryptography? - Studera implementationer i NIST-submissions? Studera rapporten / matten i NIST-submissions?, Lattice-based, (goppa) code-based, i sin tur SHA3 - sponge, bättre uniform random (AES)?) - Sätter scope för applicable for post-quantum
-3. Specialized instructions in z/15?
-4. Specialized features in z/15?
-5. How are they used in context? - Hur definierar vi det här? Bara teoretiskt "de används för matrismultiplikation", eller faktiska implementationer?
-
-"Identifiera att en algoritm är lattice-based, identifiera att lattice bygger på matriser, visa att matriser går att vektorisera enkelt med studier, identifiera att vektorisering är viktigt - z/15 har hårdvara för z/15"
-
-I discussion argumentera saker som borde finnas i framtiden.
-}
-
 \section{Experiment}
 \label{section:method:experiment}
 
@@ -102,11 +88,7 @@ As the control subjects are intended to represent the algorithms already in use,
 
 To fulfil the goal of the experiment, several hardware configurations will be tested. These configurations have been divided into three categories, namely consumer, cloud and mainframe hardware.
 
-The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes.
-
-The cloud hardware was chosen to represent various cloud providers' Virtual Private Server offerings - a common target for many applications\todo{cite}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment.
-
-The selected mainframe hardware is intended to represent the latest mainframes available from IBM at the time of writing.\todo{needs rewrite}
+The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' Virtual Private Server offerings - a common target for many applications \cite{eurostat2021}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment. The selected mainframe hardware is intended to represent the latest mainframes available from IBM at the time of writing.
 
 Where possible and applicable, the environments run on the same version of Ubuntu (20.04) and use the same versions of GCC (9.3.0) and Clang (10.0.0). The exact version of each tool in each environment is available in the data published alongside this work in a GitHub repository\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
 
@@ -125,7 +107,6 @@ Where possible and applicable, the environments run on the same version of Ubunt
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{The above table requires more up-to-date information.}
 
 \begin{table}[H]
     \centering
@@ -149,7 +130,6 @@ Where possible and applicable, the environments run on the same version of Ubunt
 \footnotetext{A DigitalOcean "Basic \$20 Droplet" in Amsterdam}
 \addtocounter{footnote}{1}
 \footnotetext{DigitalOcean does not disclose the exact CPU model used, but by using the available metrics we found one likely model}
-\todo{The above table requires more up-to-date information.}
 
 \begin{table}[H]
     \centering
@@ -170,7 +150,6 @@ Where possible and applicable, the environments run on the same version of Ubunt
 \footnotetext{It is unknown if they are dedicated or virtual}
 \addtocounter{footnote}{1}
 \footnotetext{The provider did not offer an Ubuntu distribution}
-\todo{The above table requires more up-to-date information.}
 
 \subsection{Phase One - Profiling}
 \label{section:method:experiment:phase1}
@@ -201,7 +180,6 @@ As the thesis is interested in the performance characteristics of consumer, clou
     \end{tabularx}
 \end{table}
 
-In table \ref{table:method:experiment:phase1:dependent-variables}, the dependant variables of interest are presented. These are the variables that relate to the goal as specified in section \ref{section:method:experiment:goal}. Note that, as \gls{ecdh} and \gls{dh} are not \glspl{kem}, but \gls{kex} algorithms, it has an exchange phase, not an encapsulation nor decapsulation phase. For implementation details, please refer to section \ref{section:method:experiment:phase1:measurements}\todo{points to the main section, not sub sub sub section}.
 
 \begin{table}[H]
     \centering
@@ -211,7 +189,7 @@ In table \ref{table:method:experiment:phase1:dependent-variables}, the dependant
         \toprule
         \thead{Group} & \thead{Stages} & \thead{Comments}\\
         \midrule
-        Throughput & \makecell{Key-pair generation,\\Encapsulation/Decapsulation,\\Exchange} & CPU cycles, instruction count, wall-clock time, branches, branch misses, page faults\\
+        Throughput & \makecell{Key-pair generation,\\Encapsulation/Decapsulation,\\Exchange} & CPU cycles, instruction count, wall-clock time, cache misses, page faults\\
         Hardware Utilization & \makecell{Key-pair generation,\\Encapsulation/Decapsulation,\\Exchange} & Memory usage (heap and stack allocation), logical core utilization\\
         \bottomrule
     \end{tabularx}
@@ -341,10 +319,6 @@ The implementation details presented in Table \ref{table:method:experiment:phase
 
 \subsubsection{Configuration Summary}
 \label{section:method:experiment:phase1:configuration-summary}
-
-The configurations presented in table \ref{table:method:experiment:phase1:configuration-summary} summarizes the configurations that are to be tested.
-
-\todo[inline]{Describe that there will be two different "experiments", one for single iteration and one for multi-core}
 
 \begin{table}[H]
     \centering

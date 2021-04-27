@@ -1,0 +1,37 @@
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Cache Misses in the Encryption Stage of \gls{mceliece} 8192128f}
+    \label{table:results:micro:cache-misses-mceliece-8192128f-enc}
+    \begin{tabularx}{\linewidth}{l c c c c c c}
+        \toprule
+        \thead{Environment} & \thead{Compiler} & \thead{Flags} & \thead{Mean} & \thead{Standard\\Deviation} & \multicolumn{2}{c}{\thead{95\% CI}}\\
+        & & & & & \thead{Lower} & \thead{Upper} \\
+        \midrule
+               Modern Laptop &                  gcc &                  ref &                32211 &                 8953 &                31819 &                32604\\
+               Modern Laptop &                  gcc &        ref-optimized &                 1849 &                 5766 &                 1596 &                 2102\\
+               Modern Laptop &                  gcc &                 avx2 &                 1225 &                 4118 &                 1044 &                 1406\\
+            Cloud Provider 2 &                  gcc &       avx2-optimized &                 1652 &                 3130 &                 1515 &                 1789\\
+               Modern Laptop &                  gcc &       avx2-optimized &                  816 &                 3069 &                  681 &                  950\\
+               Modern Laptop &                clang &        ref-optimized &                  716 &                 2326 &                  614 &                  818\\
+               Modern Laptop &                clang &       avx2-optimized &                  657 &                 2306 &                  556 &                  758\\
+            Cloud Provider 2 &                  gcc &        ref-optimized &                21023 &                 2147 &                20929 &                21117\\
+        Old Mid-Range Laptop &                  gcc &        ref-optimized &                 1545 &                 1359 &                 1485 &                 1604\\
+            Cloud Provider 2 &                  gcc &                 avx2 &                  602 &                 1335 &                  543 &                  661\\
+            Cloud Provider 2 &                clang &       avx2-optimized &                  345 &                 1260 &                  290 &                  400\\
+            Cloud Provider 2 &                  gcc &                  ref &                22037 &                  826 &                22001 &                22074\\
+        Old Low-Range Laptop &                  gcc &        ref-optimized &                 1185 &                  788 &                 1136 &                 1234\\
+        Old Mid-Range Laptop &                  gcc &                  ref &                 3092 &                  712 &                 3061 &                 3124\\
+            Cloud Provider 2 &                clang &        ref-optimized &                  108 &                  674 &                   78 &                  137\\
+        Old Mid-Range Laptop &                clang &        ref-optimized &                  685 &                  337 &                  670 &                  700\\
+        Old Low-Range Laptop &                  gcc &                  ref &                  771 &                  264 &                  759 &                  782\\
+        Old Low-Range Laptop &                clang &        ref-optimized &                  455 &                  147 &                  446 &                  464\\
+          Modern Workstation &                clang &        ref-optimized &                    3 &                   50 &                    1 &                    6\\
+          Modern Workstation &                  gcc &                  ref &                    4 &                   49 &                    1 &                    6\\
+          Modern Workstation &                  gcc &        ref-optimized &                    1 &                   12 &                    0 &                    1\\
+          Modern Workstation &                clang &       avx2-optimized &                    0 &                    2 &                    0 &                    0\\
+          Modern Workstation &                  gcc &                 avx2 &                    0 &                    2 &                    0 &                    0\\
+          Modern Workstation &                  gcc &       avx2-optimized &                    0 &                    1 &                    0 &                    0\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
