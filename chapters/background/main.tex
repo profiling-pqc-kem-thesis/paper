@@ -229,6 +229,12 @@ At the time of writing, the process has been ongoing for three years and it has 
     \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. AES 256)
 \end{enumerate}
 
+\todo[inline]{
+NIST2017:
+
+It is worth noting that the security categories based on these reference primitives provide substantially more quantum security than a naïve analysis might suggest. For example, categories 1, 3 and 5 are defined in terms of block ciphers, which can be broken using Grover’s algorithm, with a quadratic quantum speedup. But Grover’s algorithm requires a long-running serial computation, which is difficult to implement in practice. In a realistic attack, one has to run many smaller instances of the algorithm in parallel, which makes the quantum speedup less dramati.6
+}
+
 \subsection{Lattice-Based Cryptography}
 
 A lattice is the set of linear combinations of the basis vectors in a euclidean space. It is defined as follows, where $\mathbb{Z}$ refers to an integral coefficient and $\mathbf{x}_1,\mathbf{x}_2,...,\mathbf{x}_n$ a basis in the euclidean space $\mathbb{R}^n$\cite{bremner2012}.
@@ -244,9 +250,26 @@ $$
 The \gls{ntru} \gls{kem} is a unification of several lattice-based variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM.
 
 The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve \cite{sun2020, ntru1998}.
-
 \todo[inline]{more information on the KEM?}
-\todo{include security category}
+
+Chen et.al. \cite{ntru2020} present two different models for assessing the security level, a local and a stricter non-local model, presented in Table \ref{figure:background:ntru:security-level}.
+
+\begin{table}[]
+\centering
+\caption{NTRU Security Levels}
+\begin{tabularx}{0.5\textwidth}{X c c}
+\toprule
+\thead{NTRU Variants} & \multicolumn{2}{c}{\thead{Security Level}}\\
+& local & non-local \\
+\midrule
+ntruhps2048509  & 1 & -     \\
+ntruhrss701     & 3 & 1     \\
+ntruhps2048677  & 3 & 1     \\
+ntruhps4096821  & 5 & 3     \\
+\bottomrule
+\label{figure:background:ntru:security-level}
+\end{tabularx}
+\end{table}
 
 \subsection{CRYSTALS-KYBER}
 CRYSTALS-KYBER is a lattice-based cryptosystem that relies on the learning-with-errors problem over module lattices being hard to solve. KYBER has different configurations for different security levels KYBER-512,  KYBER-768, and KYBER-1024 aims at security level 1, 3, and 5 respectively \cite{kyber2021}.

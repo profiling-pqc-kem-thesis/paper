@@ -359,6 +359,47 @@ In Table \ref{figure:results:sequential:ntru-hrss701} all of the average duratio
 
 By studying the average duration taken by the various subjects in each environment, one may clearly see that \gls{avx2} performs the best when it's available. When \gls{avx2} is not available, the optimized reference implementation performs the best. The results are however indecisive in terms of what compiler performed the best in each environment.
 
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Comparison of CPU Cycles of Our and the Submission Authors' Measurements}
+    \begin{tabularx}{\linewidth}{X c r r r r}
+        \toprule
+        \thead{Algorithm} & \thead{Operation} & \multicolumn{2}{c}{Reference Cycles} & \multicolumn{2}{c}{AVX2 Cycles}\\
+        & & \thead{Ours} & \thead{Theirs} & \thead{Ours} & \thead{Theirs}\\
+        \midrule
+        \multicolumn{4}{l}{\gls{mceliece}}\\
+        mceliece6960119 & keypair & 2063786004 & \multicolumn{1}{c}{-} & 380284953 & 438217685\\
+        mceliece6960119f & keypair & 801046672 & \multicolumn{1}{c}{-} & 207228427 & 246508730\\
+        mceliece8192128 & keypair & 2227969526 & \multicolumn{1}{c}{-} & 453667430 & 514489441\\
+        mceliece8192128f & keypair & 835007190 & \multicolumn{1}{c}{-} & 275660079 & 316202817\\
+        
+        mceliece6960119(f) & encrypt & 41429828 & \multicolumn{1}{c}{-} & 205954 & 161224\\
+        mceliece8192128(f) & encrypt & 40992651 & \multicolumn{1}{c}{-} & 238652 & 178093\\
+        
+        mceliece6960119(f) & decrypt & 41429828 & \multicolumn{1}{c}{-} & 205954 & 301480\\
+        mceliece8192128(f) & decrypt & 40992651 & \multicolumn{1}{c}{-} & 238652 & 326531\\
+        \midrule
+        \multicolumn{4}{l}{\gls{ntru}}\\
+        ntruhps4096821 & keypair & 22392736 & 22511180 & 688900 & 431667\\
+        ntruhrss701 & keypair & 16893273 & 16487419 & 320425 & 340823\\
+        
+        ntruhps4096821 & encrypt & 6782969 & 1566922 & 297125 & 98809\\
+        ntruhrss701 & encrypt & 4552302 & 1069326 & 88768 & 50441\\
+        
+        ntruhps4096821 & decrypt & 18128147 & 4237744 & 104332 & 75384\\
+        ntruhrss701 & decrypt & 13511286 & 3113303 & 190756 & 62267\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+% mceliece Ours: ref-optimized modern workstation, theirs Intel  Xeon ref -O3 etc...
+% ntru: ours ref-optimized modern workstation, theirs intel i 3-6000? etc...
+% ntru ours: avx2-optimized modern ... theris i7-4770K (Haswell)
+% supercop 1% av ntruhps4096821, 60% av ntruhrss701 wtf?
+% amd64; CoffeeLake (906ea); 2017 Intel Core i7-8700; 6 x 3200MHz; bitvise, supercop-20190910
+% https://bench.cr.yp.to/results-kem.html
+% NTRU stated that their results were to be presented on the same page, but they were not
+
 \subsection{Throughput Performance}
 
 As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing algorithm for each environment, as identified by the sequential benchmarks. The results from the sequential benchmark previously presented were not conclusive and we therefore ended up running the parallel benchmarks on both GCC and Clang builds of the best-performing variant.

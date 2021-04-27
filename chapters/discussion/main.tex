@@ -1,22 +1,49 @@
 \chapter{Discussion}
 \label{chapter:discussion}
 
-\section{Post-Quantum Cryptography IBM z15}
+\section{Post-Quantum Cryptography on IBM z15}
 
 \todo[inline]{
-Enligt mallen ska vi svara på våra frågor här, med stöd från resultat etc. Hur blir det för z15-delen? Ska den inte vara med i resultat-delen alls?
+-- ECDHE - potentialen vi gärna hade sett generaliseras för mainframe. Argumentera specialserad workload - så som ECDHE
+
+-- Talk about possible future hardware support, the need for cross-platform vectorization etc?
+
+-- Lack of IBM XL (Auto SIMD) makes it hard to use the hardware - must be manually optimized for the target (not like AVX2)
+-- Discuss cross-platform SIMD importance, making hardware more developer-friendly
+}
+
+\section{Adoption of Post-Quantum Key Encapsulation Mechanisms}
+
+\todo[inline]{
+-- Påverkan i kontext (knyt an introduktion?) IBM pratade om 90\% av airline bookings, hotels etc. every day.
+
+-- Samhällsviktiga tjänster kanske går över till PQC tidigare än konsumentkrypto - måste vara förberedda, påverkar samhällsviktiga tjänster
+
+-- Talk about possible future hardware support, the need for cross-platform vectorization etc?
+
+-- Ersätt ECDHE i TLS etc. med KEM, jämför prestandan. Notera att fler saker kan komma att behöva ändras.
 }
 
 \section{The Performance of Post-Quantum Key Encapsulation Mechanisms}
 
 \todo[inline]{
-Svara på frågan "Does the performance of post-quantum key encapsulation mechanisms differbetween architectures and if so, how?"
-}
+-- Show how the results of your study and their conclusions are significant and how they impact our understanding of the problem(s) that your thesis examines. On a final note, discuss everything that is relevant \emph{but be brief, specific, and to the point}.
 
-\todo[inline]{
-What techniques may be used to increase the performance of post-quantum key encapsulation mechanisms?
+-- mceliece - teoretiskt (enligt författarna) sätt är icke-f snabbare än f - men i praktiken är det verkligen inte så. icke-f mycket icke-determinstiskt
 
-Talk about possible future hardware support, the need for cross-platform vectorization etc?
+-- diskutera skillnader i våra mätvärden och NIST submissions. SUPERCOP estimerar, beter sig icke-deterministiskt, vi räknar?. i3:a, i7:a på ntru-körningar, xeon på mceliece, svårt att jämföra?
+
+-- ntru mycket snabbare än mceliece, men säkerhetskategorin är lägre. HRSS 701 snabbare än HPS4096821, men säkerhetsnivån är lägre.
+
+-- Återkoppla till säkerhetskategorierna - kategori 1 är AES128.
+
+-- Koppla ihop med Grover - AES 256 blir teoretiskt AES 128, vilket gör säkerhetsnivån halveras. I praktiken påstår nist2017 att det inte är ett problem - då den är svår att köra. Teoreitskt kan det då vara ett måste med kategori 5.
+
+-- ntru skalar mycket bättre än mceliece sett till trådar
+
+-- ntru är otydliga kring säkerhetskategorin, problem med NIST-definitioner? Det krävs ett unisont sätt att mäta allt.
+
+-- Cloud hardware - dip in performance over time. Counter argument - cloud provider 1 not behaving the same?
 }
 
 % Threats to Validity
