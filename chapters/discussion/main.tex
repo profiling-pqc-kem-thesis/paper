@@ -12,10 +12,12 @@
 -- Discuss cross-platform SIMD importance, making hardware more developer-friendly
 }
 
-\section{Adoption of Post-Quantum Key Encapsulation Mechanisms}
+\section{Readiness of Hardware and Adoption of Post-Quantum Key Encapsulation Mechanisms}
+
+...
 
 \todo[inline]{
--- Påverkan i kontext (knyt an introduktion?) IBM pratade om 90\% av airline bookings, hotels etc. every day.
+-- Påverkan i kontext (knyt an introduktion?) Mainframe: IBM pratade om 90\% av airline bookings, hotels etc. every day.
 
 -- Samhällsviktiga tjänster kanske går över till PQC tidigare än konsumentkrypto - måste vara förberedda, påverkar samhällsviktiga tjänster
 
@@ -26,12 +28,15 @@
 
 \section{The Performance of Post-Quantum Key Encapsulation Mechanisms}
 
+% mceliece - teoretiskt (enligt författarna) sätt är icke-f snabbare än f - men i praktiken är det verkligen inte så. icke-f mycket icke-determinstiskt
+According to the \gls{nist} submission of Albrecht et. al. \cite{mceliece2020}, the systematic variant of \gls{mceliece} theoretically performs better during key generation than the non-systematic variant as it requires less computational work per key-generation attempt. They further state that this is true for as long as the systematic variant succeeds in finding a valid key with as few tries as possible. In reality, we found that the systematic variant consistently performs worse than the non-systematic variant. Although theoretically faster, it seems as if the key generation of the systematic variant requires more tries than the authors anticipated. We further found that the systematic variant performs considerably more non-deterministically with a larger standard deviation than that of the systematic variant. Although the implementation provided by in the \gls{nist} submission is not yet standardized, we believe that one should pursuit the semi-systematic variant of \gls{mceliece} if \gls{nist} decides on standardizing it - if solely taking performance into account. Albrecht et. al. further discuss that it is unknown if the performance gain of the semi-systematic variant warrants its more complicated implementation or if users will even benefit from the speedup. As we found that the semi-systematic \gls{mceliece} variant 8192128f performed more than three times as fast as the systematic reference implementation and almost two times as fast as the systematic AVX2 implementation, we believe that the more complex semi-systematic form is indeed warranted when only considering the performance of the \gls{kem}.
+
+% Cloud hardware - dip in performance over time. Counter argument - cloud provider 1 not behaving the same?
+When performing our tests on cloud hardware, we anticipated a less consistent result than on dedicated consumer hardware. We believed that, due the virtualized and shared nature of the resources, the cloud environments would yield varied results over time as other users of the system utilized the hardware. We found that the Cloud Provider 2 environment had several performance discrepancies over time when running \glspl{kem} in sequential iterations. We also found, however, that Cloud Provider 1 largely functioned as the dedicated consumer hardware we tested. Although it's difficult to conclude from the small sample of cloud providers in our tests, we argue that there is in fact a non-zero chance that virtualized cloud hardware performs less consistently than dedicated hardware, given that Cloud Provider 2 had performance discrepancies in all of our sequential benchmarks. 
+
 \todo[inline]{
+
 -- Show how the results of your study and their conclusions are significant and how they impact our understanding of the problem(s) that your thesis examines. On a final note, discuss everything that is relevant \emph{but be brief, specific, and to the point}.
-
--- mceliece - teoretiskt (enligt författarna) sätt är icke-f snabbare än f - men i praktiken är det verkligen inte så. icke-f mycket icke-determinstiskt
-
--- diskutera skillnader i våra mätvärden och NIST submissions. SUPERCOP estimerar, beter sig icke-deterministiskt, vi räknar?. i3:a, i7:a på ntru-körningar, xeon på mceliece, svårt att jämföra?
 
 -- ntru mycket snabbare än mceliece, men säkerhetskategorin är lägre. HRSS 701 snabbare än HPS4096821, men säkerhetsnivån är lägre.
 
@@ -43,8 +48,23 @@
 
 -- ntru är otydliga kring säkerhetskategorin, problem med NIST-definitioner? Det krävs ett unisont sätt att mäta allt.
 
--- Cloud hardware - dip in performance over time. Counter argument - cloud provider 1 not behaving the same?
+-- mceliece använder betydligt mycket mer minne än övriga algoritmer - inte lämpligt för IoT etc?
 }
+
+\section{On Performance Measurements}
+
+% -- diskutera skillnader i våra mätvärden och NIST submissions. SUPERCOP estimerar, beter sig icke-deterministiskt, vi räknar?. i3:a, i7:a på ntru-körningar, xeon på mceliece, svårt att jämföra?
+When studying previous work before outlining the method of this thesis, we identified that SUPERCOP seemed to be the de-facto tool to measure the performance of cryptographic algorithms. It was referenced and used in both the \gls{mceliece} \cite{mceliece2020} and the \gls{ntru} \cite{ntru2020} submissions to \gls{nist}. When studying the source code, we found several areas of concerns which led us to not use the software. One of the reasons was the use of older versions of the \gls{nist} submissions. We were interested in the third round of submissions, whilst SUPERCOP provided the implementations of the second round. Another reason which contributed to our disregard of SUPERCOP was the use of the estimated number of CPU cycles performed as the performance measurement. We identified that the code relied heavily on using the elapsed time and the base frequency of the CPU to calculate the number of required CPU cycles. As we were interested in high-quality measurements of not only CPU-cycles, but also instruction counts, cache misses etcetera, we found the Linux kernel API to be more apt for our use case. As it uses the hardware counters found in many CPUs, we argue that our measurements are accurate since they are counted and not calculated, as is the case in SUPERCOP. Not only did we find the use of perf leading to more deterministic results, but the number of CPU cycles we measured were overall higher than the values found in the \gls{nist} submissions, as presented in Table \ref{table:results:sequential:nist-vs-ours}. We argue that the use of estimated CPU cycles yields inaccurate results which may easily be affected by many variables of the environment, such as the base clock of the CPU. The SUPERCOP user guide recommends that one disable both hyper-threading and boosting so that it may more accurately calculate the number of CPU cycles \cite{supercop}. We believe that it is not a common practice in reality to turn off both hyper-threading and boosting, which led us to use both technologies in our measurements. To decrease the risk of environmental factors such as boosting to affect our measurements, we repeated all of the measurements up to a thousand times per benchmark. We also repeated the entire benchmark at two completely different occasions. We argue that a method of measuring the performance, such as the one used by us in this thesis, would provide the public with more accurate and real-world values regarding the performance of the cryptographic algorithms\todo{Is this a better fit for the validity section?}. Despite us using the Linux kernel perf API, we believe that there are valid reasons use SUPERCOP's method of measuring CPU cycles. The Linux kernel API requires hardware support in order to accurately measure CPU cycles, instruction counts etcetera. This led us to not be able to accurately benchmark all environments with regards to the CPU cycle count. SUPERCOP's solution, however, is less hardware-dependant and as such more suitable for cross-platform measurements on non-Intel hardware and non-Linux operating systems. To help researchers and users achieve more accurate performance measurements, we believe that the industry as a whole could benefit from the addition of hardware-based performance counters in more CPU types and models.
+
+Comparing the performance of the \gls{nist} submissions was further complicated by the wide variety of hardware used. The \gls{ntru} submission \cite{ntru2020} used a 3.2 GHz Intel Core i3-6100T for running the reference implementation. The same submission then used an Intel Core i7-4770k to run the AVX2 implementation. The \gls{mceliece} submission \cite{mceliece2020} used an Intel Xeon E3-1275 v3 for its performance measurements. Although we tested a wide range of hardware, we were unable to use the same hardware as the authors. We argue that the fact that a single system was not used for all of the performance benchmarks complicate the comparisons in performance. For example, the Intel Core i3-6100T has 3MB cache \cite{i36100t} and the Xeon E3-1275 v3 8MB \cite{xeon31275}. As we found that the number of cache misses were considerably reduced when the available cache was increased, we believe that it is entirely possible for the performance measurements presented in the \gls{ntru} submission to be considerably worse than if they would have used the same environment as the \gls{mceliece} submission. In part, one may argue that this issue is up to \gls{nist} to solve before considering the standardization of an algorithm, but we believe it makes for a more difficult comparison when such a variety of hardware is used to represent the algorithms' performance.
+
+% mceliece Ours: ref-optimized modern workstation, theirs Intel  Xeon ref -O3 etc...
+% ntru: ours ref-optimized modern workstation, theirs intel i 3-6000? etc...
+% ntru ours: avx2-optimized modern ... theris i7-4770K (Haswell)
+% supercop 1% av ntruhps4096821, 60% av ntruhrss701 wtf?
+% amd64; CoffeeLake (906ea); 2017 Intel Core i7-8700; 6 x 3200MHz; bitvise, supercop-20190910
+% https://bench.cr.yp.to/results-kem.html
+% NTRU stated that their results were to be presented on the same page, but they were not
 
 % Threats to Validity
 \input{chapters/discussion/validity}

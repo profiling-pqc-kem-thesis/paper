@@ -286,11 +286,13 @@ Code-based cryptosystems take advantage of error-correction code. Typically erro
 
 \subsection{Classic McEliece}
 \label{section:background:mceliece}
-The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of Classic McEliece, together with various improvements over the years  \cite{mceliece2020}. Classic McEliece is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. Decryption uses the private key to perform "error correction" to correct the errors added in the encryption step \cite{mceliece2020}.
+The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of Classic McEliece, together with various improvements made over the years  \cite{mceliece2020}. \gls{mceliece} is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. Decryption uses the private key to perform so called error correction to correct the errors added in the encryption step \cite{mceliece2020}.
  
-For each configuration of Classic McEliece, there are two versions, systematic form (non-f) and semi-systematic form (f) with are two ways to generate the keypair. The non-f variant is faster at generating the keypair but fails more often and needs to retry. The f variant has a very low probability of failing and is there for faster and more consistent in the average case. But it loses up to 2 bits of security, which the authors claim are no big problem \cite{mceliece2020}.
+For each configuration of Classic McEliece, there are two versions - systematic form (non-f) and semi-systematic form (f) which are two ways of generating the keypair. The non-f variant is faster at generating the keypair but fails more often and needs to retry. The f variant has a very low probability of failing, but is theoretically slower than the non-f variant. The semi-systematic form results in a loss of up to 2 bits of security, however, which the authors claim is not of concern \cite{mceliece2020}.
 
-Classic McEliece ofers configurations for security levels 1, 3, and 5. mceliece348864(f) has security level 1, mceliece460896(f) security level 3, and mceliece6688128(f), mceliece6960119(f), mceliece8192128(f) security level 5 \cite{mceliece2020}.
+Classic McEliece offers configurations for security levels 1, 3, and 5. mceliece348864(f) has security level 1, mceliece460896(f) security level 3, and mceliece6688128(f), mceliece6960119(f), mceliece8192128(f) security level 5 \cite{mceliece2020}.
+
+The $(\mu, \vu)$-semi-systematic form of \gls{mceliece} is designed to take both time and success probability into account \cite{mceliece2020}. The systematic form, where $(\mu, \vu)=(0, 0)$, yields a lower probability of correctly finding a key than when compared to the $(\mu, \vu)=(32,64)$ semi-systematic form \cite{mceliece2020}. The failure probability of the semi-systematic form is below $2^{-30}$, which in practice should correlate to only one key-generation attempt being required \cite{mceliece2020}. The semi-systematic form requires extra computational work per attempt in order to compute the key \cite{mceliece2020}.
 
 \section{Architectures and Performance}
 

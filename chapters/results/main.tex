@@ -363,6 +363,7 @@ By studying the average duration taken by the various subjects in each environme
     \centering
     \small
     \caption{Comparison of CPU Cycles of Our and the Submission Authors' Measurements}
+    \label{table:results:sequential:nist-vs-ours}
     \begin{tabularx}{\linewidth}{X c r r r r}
         \toprule
         \thead{Algorithm} & \thead{Operation} & \multicolumn{2}{c}{Reference Cycles} & \multicolumn{2}{c}{AVX2 Cycles}\\
@@ -392,6 +393,7 @@ By studying the average duration taken by the various subjects in each environme
         \bottomrule
     \end{tabularx}
 \end{table}
+\todo{Comment on table, mention that it's Modern Workstation}
 % mceliece Ours: ref-optimized modern workstation, theirs Intel  Xeon ref -O3 etc...
 % ntru: ours ref-optimized modern workstation, theirs intel i 3-6000? etc...
 % ntru ours: avx2-optimized modern ... theris i7-4770K (Haswell)
