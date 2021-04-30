@@ -5,7 +5,7 @@
 
 Delfs et.al. \cite{delfs2007} state that electronic communication has grown rapidly. They further discuss that this expansion has led to increased requirements on digital confidentiality - keeping data safe from manipulation and prying eyes. Although just a part of the vast field of cryptology, cryptography studies keeping information safe - encrypting it on one end and decrypting it on another \cite{delfs2007}. As outlined in \cite{bernstein2017}, cryptographic functions are sorted into two categories - \textit{symmetric-key} functions and \textit{public-key} functions, both of which refer to how the keys to the data are used.
 
-In this section, symmetric-key, public-key and related topics will be further discussed to provide an overview of cryptographic subjects.
+In this section, symmetric-key, public-key and related topics will be further discussed to provide an overview of cryptographic subjects.\todo{Remove - unnecesary?}
 
 \subsection{Symmetric-Key Cryptography}
 
@@ -34,7 +34,7 @@ In another class of protocols, the key agreement protocols, the parties jointly 
 
 \subsection{Key Encapsulation Mechanism}
 
-A \gls{kem} is a form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs\cite{boyd2020}.
+A \acrfull{kem} is a form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs\cite{boyd2020}.
 
 A \gls{kem} consists of four sets and three algorithms \cite{boyd2020}, outlined below.
 
@@ -66,7 +66,7 @@ Key agreement protocols may provide forward secrecy if the long-term keys are on
 
 Classical cryptography is cryptography in use on classical computers such as consumer PCs, smart phones and cloud servers. In classical cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange.
 
-This section will further describe cryptographic systems in use to keep data confidential from attacks run on classical hardware, as well as the threats they face.
+This section will further describe cryptographic systems in use to keep data confidential from attacks run on classical hardware, as well as the threats they face.\todo{Remove - unnecesary?}
 
 \subsection{Applications}
 \label{section:background:classical-cryptography:applications}
@@ -139,6 +139,7 @@ The \gls{x25519} \gls{kex} is a special case of \gls{ecdh} where \gls{curve25519
 In the case of both \gls{dh} and \gls{ecdh}, ephemeral keys may be used to provide forward secrecy. These ephemeral variants are referred to as \gls{dhe} and \gls{ecdhe}. As mentioned in section \ref{section:background:classical-cryptography:applications}, the use of ephemeral keys is recommended for all versions of \gls{dh}.
 
 \subsection{Threats to classical cryptography}
+\label{section:background:classical-cryptography-threats}
 
 Cryptography does not usually come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical\cite{nist2019}. As the performance of classical computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using classical algorithms\cite{thome2019}. As Moore's law is coming to a halt\cite{theis2017}, the threat of classical computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
 
@@ -185,7 +186,7 @@ The performance increase offered by quantum computers and the threats that Shor'
 
 Classical cryptosystems rely on mathematical problems shown to be easy for quantum computers to solve, resulting in their security being diminished or entirely broken\cite{shor1997, jordan2021}. With the dawn of practical quantum computers, a new set of mathematical problems needs to be used to protect from the attacks made feasible by the quantum computers. Cryptography built on such problems is referred to as post-quantum cryptography\cite{nist:round-three-submissions}. Note, however, that such cryptography may still be used by classical computers. 
 
-This section further describes post-quantum cryptography, the \gls{nist} standardization process and post-quantum cryptosystems.
+This section further describes post-quantum cryptography, the \gls{nist} standardization process and post-quantum cryptosystems.\todo{Remove - unnecesary?}
 
 \subsection{The NIST Post-Quantum Standardization Process}
 \acrfull{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\cite{nist:about}.
@@ -194,7 +195,7 @@ The organization is split into various divisions. One of these divisions, the Co
 
 The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for post-quantum cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions\cite{nist:call-for-proposals}.
 
-At the time of writing, the process has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\cite{nist:round-three-submissions}. The finalists are presented in Table \ref{table:background:nist:finalists}.
+At the time of writing, the process has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\cite{nist:round-three-submissions}. The finalists are presented in Table \ref{table:background:nist:finalists}. The algorithms rely on two types of cryptography, code-based and lattice-based.
 
 \begin{table}[H]
     \centering
@@ -217,6 +218,40 @@ At the time of writing, the process has been ongoing for three years and it has 
 
 \gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack. Resistence to such an attack is referred to as \gls{ind-cca2} security\cite{nist2017}. 
 
+\subsection{Lattice-Based Cryptography}
+
+A lattice is the set of linear combinations of the basis vectors in a euclidean space. It is defined as follows, where $\mathbb{Z}$ refers to an integral coefficient and $\mathbf{x}_1,\mathbf{x}_2,...,\mathbf{x}_n$ a basis in the euclidean space $\mathbb{R}^n$\cite{bremner2012}.
+
+$$
+L=\mathbb{Z}\mathbf{x}_1+\mathbb{Z}\mathbf{x}_2+...+\mathbb{Z}\mathbf{x}_n=\left\{\sum_{i=1}^n a_i\mathbf{x}_i|a_1,a_2,...,a_n\in\mathbb{Z}\right\}
+$$
+
+\noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices is taken advantage of\cite{bremner2012}. The most significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike\cite{sun2020}.
+
+One of the proposed lattice-based cryptosystems is CRYSTALS-KYBER, which relies on the learning-with-errors problem over module lattices being hard to solve \cite{kyber2021}. Another lattice-based submission is the SABER cryptosystem that relies on the learning-with-rounding problem over module lattices being hard to solve \cite{saber}.
+
+\subsection{NTRU}
+
+The \gls{ntru} \gls{kem} is a unification of several lattice-based variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM.
+
+The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve \cite{sun2020, ntru1998}.
+
+The third-round submission to \gls{nist} is a merger of several variants of \gls{ntru} \cite{ntru2020}. Two of the prominent ones are NTRUEncrypt and NTRU-HRSS-KEM. The NTRUEncrypt algorithm has its origin in the original paper published in 1998. The submission had several issues and lacked a correct recommended parameter set. The NTRU-HRSS-KEM submission brought performance improvements which enhanced the decapsulation routine without sacrificing security. The merged algorithm, \gls{ntru}, offer correct parameter sets with trade-offs for performance versus security.
+
+\subsection{Code-Based Cryptography}
+Code-based cryptosystems take advantage of error-correction code. Typically error-correction code is used to detect or correct a bit flip that occurred. But in cryptography, you can use it to encrypt by adding errors, which can be corrected when you decrypt \cite{bernstein2017}. There are different types of error-correction codes, for example, quasi-cyclic codes and Goppa codes  \cite{sendrier2011}.
+
+\subsection{Classic McEliece}
+\label{section:background:mceliece}
+The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of Classic McEliece, together with various improvements made over the years  \cite{mceliece2020}. \gls{mceliece} is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. Decryption uses the private key to perform so called error correction to correct the errors added in the encryption step \cite{mceliece2020}.
+ 
+For each configuration of Classic McEliece, there are two versions - systematic form (non-f) and semi-systematic form (f) which are two ways of generating the keypair \cite{mceliece2020}. The non-f variant is faster at generating the keypair but fails more often and needs to retry. The f variant has a very low probability of failing, but is theoretically slower than the non-f variant. The semi-systematic form results in a loss of up to 2 bits of security, however, which the authors claim is not of concern .
+
+The $(\mu, \nu)$-semi-systematic form of \gls{mceliece} is designed to take both time and success probability into account \cite{mceliece2020}. The systematic form, where $(\mu, \nu)=(0, 0)$, yields a lower probability of correctly finding a key than when compared to the $(\mu, \nu)=(32,64)$ semi-systematic form. The failure probability of the semi-systematic form is below $2^{-30}$, which in practice should correlate to only one key-generation attempt being required. The semi-systematic form requires extra computational work per attempt in order to compute the key.
+
+\subsection{Security Categories}
+\label{section:background:security-categories}
+
 \gls{nist} anticipated that submissions to the standardization effort would face uncertainties in terms of estimating the security strength of post-quantum algorithms. They state that the uncertainties are largely caused by two issues. The first issue is the possibility that new attacks will be discovered and the second that there is a limited ability to predict how a quantum computer will behave in terms of cost, speed and memory\cite{nist2017}.
 
 \gls{nist} therefore defined security categories that are not based on the traditional measure of bit security. The following categories were defined. The order denotes the strength of the attack\cite{nist2017}.
@@ -229,74 +264,44 @@ At the time of writing, the process has been ongoing for three years and it has 
     \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. AES 256)
 \end{enumerate}
 
-\todo[inline]{
-NIST2017:
+\gls{nist} \cite{nist2017} further discuss that it is worth mentioning that the security categories previously presented provide more quantum security that a naïve analysis might suggest. They further state that security category 1, 3, and 5 are defined in terms of block ciphers - which may be broken by Grover's algorithm, given a quadratic quantum speedup. The potential impact, presented in Table \ref{table:background:post-quantum:bit-security}, could be that the \gls{aes} bit security is halved. \gls{nist} \cite{nist2017} further claim that such an attack requires a long-running serial computation, which is difficult to implement in practice. For the attack to be practical, \gls{nist} believe that many smaller instances of the algorithm must be run in parallel, making the quantum speedup less dramatic.
 
-It is worth noting that the security categories based on these reference primitives provide substantially more quantum security than a naïve analysis might suggest. For example, categories 1, 3 and 5 are defined in terms of block ciphers, which can be broken using Grover’s algorithm, with a quadratic quantum speedup. But Grover’s algorithm requires a long-running serial computation, which is difficult to implement in practice. In a realistic attack, one has to run many smaller instances of the algorithm in parallel, which makes the quantum speedup less dramati.6
-}
+In Table \ref{table:background:submissions-security-level}, the security level of the \gls{nist} submissions are presented. Each parameter set of the algorithm is presented with its security level right below it. Chen et.al. \cite{ntru2020} present two different models for assessing the security level of \gls{ntru} - a local and a stricter non-local model. Both of these models are presented in the aforementioned table and labeled accordingly.
 
-\subsection{Lattice-Based Cryptography}
-
-A lattice is the set of linear combinations of the basis vectors in a euclidean space. It is defined as follows, where $\mathbb{Z}$ refers to an integral coefficient and $\mathbf{x}_1,\mathbf{x}_2,...,\mathbf{x}_n$ a basis in the euclidean space $\mathbb{R}^n$\cite{bremner2012}.
-
-$$
-L=\mathbb{Z}\mathbf{x}_1+\mathbb{Z}\mathbf{x}_2+...+\mathbb{Z}\mathbf{x}_n=\left\{\sum_{i=1}^n a_i\mathbf{x}_i|a_1,a_2,...,a_n\in\mathbb{Z}\right\}
-$$
-
-\noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices is taken advantage of\cite{bremner2012}. The most significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike\cite{sun2020}.
-
-\subsection{NTRU}
-
-The \gls{ntru} \gls{kem} is a unification of several lattice-based variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM.
-
-The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve \cite{sun2020, ntru1998}.
-\todo[inline]{more information on the KEM?}
-
-Chen et.al. \cite{ntru2020} present two different models for assessing the security level, a local and a stricter non-local model, presented in Table \ref{figure:background:ntru:security-level}.
-
-\begin{table}[]
-\centering
-\caption{NTRU Security Levels}
-\begin{tabularx}{0.5\textwidth}{X c c}
-\toprule
-\thead{NTRU Variants} & \multicolumn{2}{c}{\thead{Security Level}}\\
-& local & non-local \\
-\midrule
-ntruhps2048509  & 1 & -     \\
-ntruhrss701     & 3 & 1     \\
-ntruhps2048677  & 3 & 1     \\
-ntruhps4096821  & 5 & 3     \\
-\bottomrule
-\label{figure:background:ntru:security-level}
-\end{tabularx}
+\begin{table}
+    \centering
+    \small
+    \caption{Security Levels of various \gls{nist} Submissions \cite{ntru2020, mceliece2020, saber, kyber2021}}
+    \label{table:background:submissions-security-level}
+    \begin{tabularx}{\textwidth}{X c c c c c}
+        \toprule
+        \thead{Algorithm} & \multicolumn{5}{c}{\thead{Security Level}}\\
+        \midrule
+        \multirowcell{2}{\gls{ntru}} & & HPS 2048509 & HPS 2048677 & HPS 40968211 & HRSS 701\\
+        &  & 1\footref{footnote:security-level-local}, -\footref{footnote:security-level-non-local}
+        & 3\footref{footnote:security-level-local}, 1\footref{footnote:security-level-non-local}
+        & 5\footref{footnote:security-level-local}, 3\footref{footnote:security-level-non-local}
+        & 3\footref{footnote:security-level-local}, 1\footref{footnote:security-level-non-local} \\
+        \midrule
+        \multirowcell{2}{Classic\\ McEliece} & 348864(f) & 460896(f) & 6688128(f) & 6960119(f) & 8192128(f) \\
+        & 1 & 3 & 5 & 5 & 5 \\
+        \midrule
+        \multirowcell{2}{SABER} & & & LightSABER & SABER & FireSABER \\
+        & & & 1 & 3 & 5\\
+        \midrule
+        \multirowcell{2}{KYBER} & & & 512 & 768 & 1024 \\
+        & & & 1 & 3 & 5\\
+        \bottomrule
+    \end{tabularx}
 \end{table}
-
-\subsection{CRYSTALS-KYBER}
-CRYSTALS-KYBER is a lattice-based cryptosystem that relies on the learning-with-errors problem over module lattices being hard to solve. KYBER has different configurations for different security levels KYBER-512,  KYBER-768, and KYBER-1024 aims at security level 1, 3, and 5 respectively \cite{kyber2021}.
-
-%\todo{include security category}
-
-\subsection{SABER}
-SABER is a lattice-based cryptosystem that relies on the learning-with-rounding problem over module lattices being hard to solve. SABER has three different versions for different security levels. LightSABER at security levels 1, SABER at security levels 3, and FireSABER at security levels 5 \cite{saber}.
-
-%\todo{include security category}
-
-\subsection{Code-Based Cryptography}
-Code-based cryptosystems take advantage of error-correction code. Typically error-correction code is used to detect or correct a bit flip that occurred. But in cryptography, you can use it to encrypt by adding errors, which can be corrected when you decrypt \cite{bernstein2017}. There are different types of error-correction codes, for example, quasi-cyclic codes and Goppa codes  \cite{sendrier2011}.
-
-\subsection{Classic McEliece}
-\label{section:background:mceliece}
-The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of Classic McEliece, together with various improvements made over the years  \cite{mceliece2020}. \gls{mceliece} is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. Decryption uses the private key to perform so called error correction to correct the errors added in the encryption step \cite{mceliece2020}.
- 
-For each configuration of Classic McEliece, there are two versions - systematic form (non-f) and semi-systematic form (f) which are two ways of generating the keypair. The non-f variant is faster at generating the keypair but fails more often and needs to retry. The f variant has a very low probability of failing, but is theoretically slower than the non-f variant. The semi-systematic form results in a loss of up to 2 bits of security, however, which the authors claim is not of concern \cite{mceliece2020}.
-
-Classic McEliece offers configurations for security levels 1, 3, and 5. mceliece348864(f) has security level 1, mceliece460896(f) security level 3, and mceliece6688128(f), mceliece6960119(f), mceliece8192128(f) security level 5 \cite{mceliece2020}.
-
-The $(\mu, \vu)$-semi-systematic form of \gls{mceliece} is designed to take both time and success probability into account \cite{mceliece2020}. The systematic form, where $(\mu, \vu)=(0, 0)$, yields a lower probability of correctly finding a key than when compared to the $(\mu, \vu)=(32,64)$ semi-systematic form \cite{mceliece2020}. The failure probability of the semi-systematic form is below $2^{-30}$, which in practice should correlate to only one key-generation attempt being required \cite{mceliece2020}. The semi-systematic form requires extra computational work per attempt in order to compute the key \cite{mceliece2020}.
+\addtocounter{footnote}{1}
+\footnotetext{\label{footnote:security-level-local}local model}
+\addtocounter{footnote}{1}
+\footnotetext{\label{footnote:security-level-non-local}non-local model}
 
 \section{Architectures and Performance}
-
-\todo[inline]{Talk about architectures in general, why performance might differ}
+Computer architectures define the different characteristics of a system. An architecture can use different instruction sets, microarchitectures, and systems designs, that in one way or another, affect the performance of the system. 
+This section will discuss \gls{risc} and \gls{cisc} two CPU design methodology and two computer architectures, x86 and IBM Z, and their different design choices.
 
 \subsection{RISC and CISC}
 
@@ -327,30 +332,23 @@ Although usage of a CPU's vectorization capabilities may require explicit input 
 
 \subsection{x86}
 
-\todo[inline]{Clarify history, talk about intel x86 vs others amd64 instead?}.
-
-\todo[inline]{Utöka information kring 32, 64-bitars, förklara mer vad som är karakteristiskt för x86. Kanske lite historik. De är lite "cisc" allihop, men power är lite mer "risc". AMD64??}
-
-The \gls{x86} family of architectures are some of the most popular architectures for consumer and cloud hardware. The family contains architectures such as i386 and amd64 / x86-64. It is not uncommon for the architectures to be referred to as just \gls{x86}\cite{carter2002}.
+The \gls{x86} family of architectures are some of the most popular architectures for consumer and cloud hardware. The family has a long history and includes architectures such as the 64-bit amd64, also known as x86-64. It is not uncommon for the architectures to be collectively referred to as just \gls{x86}\cite{carter2002}.
 
 \gls{x86} is in theory a \gls{cisc}, but there has been a fair amount of convergence between \gls{risc} and \gls{cisc}, which makes them a hybrid of sorts\cite{carter2002}.
 
 In 1996 the x86 architecture saw the addition of the MMX instruction set. The instruction set used the 64-bit floating-point registers of the CPU to enable performing eight 8-bit operations, or four 16-bit operations simultaneously. The instruction set was superseeded by \gls{sse} in 1999, which added special registers of 128 bits. This enabled instructions to simultaneously perform sixteen 8-bit operations, eight 16-bit operations, or four 32-bit operations. \gls{sse} was in turn superseeded by SSE2 in 2001, SSE3 in 2004 and SSE4 in 2007. Each generation saw improvements in available instructions and floating-point performance\cite{hennessy2011:avx}.
 
-In 2010 \gls{avx} was introduced and doubled the width of the registers to 256 bits. This increase effectively doubled the number of simultaneous operations that could be performed. The 256-bit width supported 64-bit operands in parallel\cite{hennessy2011:avx}. \gls{avx} was superseeded by \gls{avx2} and \gls{avx512}, 256-bit\cite{intel:avx2} and 512-bit\cite{intel:avx512} wide respectively.\todo{both avx and avx2 is 256 bit, more differences?}
-
+In 2010 \gls{avx} was introduced and doubled the width of the registers to 256 bits. This increase effectively doubled the number of simultaneous operations that could be performed, and the 256-bit width supported 64-bit operands in parallel \cite{hennessy2011:avx, intel:avx}. \gls{avx2} and AVX512 superseded \gls{avx}, \gls{avx2} extended the number of 256-bit instructions \cite{intel:manual:2020}, and \gls{avx512} added support for 512-bit wide instructions \cite{intel:avx512}. \gls{avx2} and \gls{avx512} are power-hungry instructions that make the CPU run hot. To prevent the CPU from overheating the CPU downclock its cores \cite{hackenberg2015, intel:manual:2020}. This may have a negative performance impact on non-\gls{avx} code that runs directly after \gls{avx}-related code.
 
 By using AVX, a developer may optimize a program and make use of the performance properties offered by \gls{simd}\cite{hennessy2011:avx}.
 
-\subsection{Mainframe Hardware}
+\subsection{IBM Z}
 
-Mainframe hardware is designed to handle a large amount of data and bulk transactions. To achieve this, they are using custom-made CPUs and special coprocessors. Further features are availability, resilience, backward compatibility, and security core features.
+Mainframe hardware is designed to handle a large amount of data and bulk transactions \cite{mainframes}. To achieve this, they are using custom-made CPUs and special coprocessors \cite{mainframes}. Further features are availability, resilience, backward compatibility, and security core features\cite{mainframes}.
 
 Many features seen in consumer platforms such as x86 was first seen in mainframe hardware, features such as virtualization, caches and cache hierarchies for reduced memory latency, as well as branch prediction, out-of-order execution, hardware-assisted encryption and more \cite{jacobi2020}.
 
-\subsection{IBM z15}
-
-IBM Z is among the oldest computing platforms as it was launched as S/360 in 1964. Banks, airlines and enterpresies worldwide use a IBM Z mainframe as part of their IT infrastructure \cite{jacobi2020}. The Z platform brought the innovation of focusing on an \acrfull{isa} - which specifies a hardware behavior software could rely on irregardles of the underlying hardware.
+IBM Z is among the oldest of mainframes as it was launched as S/360 in 1964. Banks, airlines and enterpresies worldwide use a IBM Z mainframe as part of their IT infrastructure \cite{jacobi2020}. The Z platform brought the innovation of focusing on an \acrfull{isa} - which specifies a hardware behavior software could rely on irregardles of the underlying hardware.
 
 With the rise of high-performance workstations and the client-server computing model in the 1990s, IBM refocused the S/390 platform to handle commercial batch and transaction processing workloads \cite{jacobi2020}. 
 
@@ -368,7 +366,7 @@ In \gls{z15}, virtualization is a core feature. It is designed from the bottom u
 
 CryptoCards are IBM's cryptographic \glspl{hsm}. A \gls{hsm} is a physical device placed into a computer to deliver high throughput for cryptographic functions. The devices are designed to be physically secured from tampering and their firmware may be cryptographically verifiable\cite{ibm:hsms}.
 
-CryptoCards are available for \gls{ibmz}, \gls{power} and \gls{x86}, depending on the chosen \gls{hsm}.
+CryptoCards are available for the \gls{ibmz}, \gls{power} and \gls{x86} architectures, depending on the chosen \gls{hsm}.
 
 At the time of writing, the newest card for \gls{ibmz} and \gls{x86} is the CEX7S / 4769\cite{ibm:4769}. The newest card for the \gls{power} platform is the CEX5S / 4767\cite{ibm:4767}.
 

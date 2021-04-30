@@ -477,8 +477,8 @@ pages={96-97}
     key = {Intel}
 }
 
-% Information on AVX2 from Intel
-@online{intel:avx2,
+% Information on AVX from Intel
+@online{intel:avx,
     url={https://software.intel.com/content/www/us/en/develop/articles/introduction-to-intel-advanced-vector-extensions.html https://web.archive.org/web/20210323101106/https://software.intel.com/content/www/us/en/develop/articles/introduction-to-intel-advanced-vector-extensions.html},
     urldate = {2021-03-16},
     title = {Introduction to Intel® Advanced Vector Extensions},
@@ -543,7 +543,7 @@ pages={96-97}
 % NTRU round 3 submission
 @misc{ntru2020,
   year = {2020},
-  month = september,
+  month = {September},
   author = {Cong Chen and Oussama Danba and Jeffrey Hoffstein and Andreas Hulsing and Joost Rijneveld and John M. Schanck and Peter Schwabe and William Whyte and Zhenfei Zhang and Tsunekazu Saito and Takashi Yamakawa and Keita Xagawa},
   title = {Algorithm Specifications And Supporting Documentation},
   url = {https://ntru.org/f/ntru-20190330.pdf},
@@ -553,7 +553,7 @@ pages={96-97}
 % Classic McEliece round 3 submission
 @misc{mceliece2020,
   year = {2020},
-  month = october,
+  month = {October},
   author = {Martin R. Albrecht and Daniel J. Bernstein and Tung Chou and Carlos Cid and Jan Gilcher and Tanja Lange and Varun Maram and Ingo von Maurich and Rafael Misoczki and Ruben Niederhagen and Kenneth G. Paterson and Edoardo Persichetti and Christiane Peters and Peter Schwabe and Nicolas Sendrier and Jakub Szefer and Cen Jung Tjhai and Martin Tomlinson and Wen Wang},
   title = {Classic McEliece: conservative code-based cryptography},
   url = {https://ntru.org/f/ntru-20190330.pdf},
@@ -563,7 +563,7 @@ pages={96-97}
 % CRYSTALS-Kyber round 3 submission
 @misc{kyber2021,
   year = {2021},
-  month = january,
+  month = {January},
   author = {Roberto Avanzi and Joppe Bos and Léo Ducas and Eike Kiltz and Tancrède Lepoint and Vadim Lyubashevsky and John M. Schanck and Peter Schwabe and Gregor Seiler and Damien Stehlé},
   title = {CRYSTALS-Kyber Algorithm Specifications And Supporting Documentation},
   url = {https://pq-crystals.org/kyber/data/kyber-specification-round3-20210131.pdf},
@@ -686,4 +686,35 @@ pages={96-97}
     title={Intel® Xeon® Processor E3-1275 v3},
     url={https://ark.intel.com/content/www/us/en/ark/products/75464/intel-xeon-processor-e3-1275-v3-8m-cache-3-50-ghz.html https://web.archive.org/web/20210225082615/https://ark.intel.com/content/www/us/en/ark/products/75464/intel-xeon-processor-e3-1275-v3-8m-cache-3-50-ghz.html},
     urldate={2021-04-28}
+}
+
+% Survey of the Intel Haswell Processor, including AVX behavior 
+@INPROCEEDINGS{hackenberg2015,
+  author={Hackenberg, Daniel and Schöne, Robert and Ilsche, Thomas and Molka, Daniel and Schuchart, Joseph and Geyer, Robin},
+  booktitle={2015 IEEE International Parallel and Distributed Processing Symposium Workshop}, 
+  title={An Energy Efficiency Feature Survey of the Intel Haswell Processor}, 
+  year={2015},
+  pages={896-904},
+  doi={10.1109/IPDPSW.2015.70},
+  month={May}
+  }
+ 
+% Intel manual, used for ref to AVX
+% Pages: chapter 2, page 8
+@manual{intel:manual:2020,
+title = {Intel® 64 and IA-32 Architectures Optimization Reference Manual},
+year={2020},
+month={May},
+language = {English},
+organization = {Intel},
+pagetotal = {688},
+url={https://software.intel.com/content/www/us/en/develop/download/intel-64-and-ia-32-architectures-optimization-reference-manual.html https://web.archive.org/web/20210429085212/https://software.intel.com/content/www/us/en/develop/download/intel-64-and-ia-32-architectures-optimization-reference-manual.html}
+}
+
+% Mainframe concepts
+@misc{mainframes,
+key={ibm},
+title={Mainframe concepts},
+url={https://www.ibm.com/support/knowledgecenter/zosbasics/com.ibm.zos.zmainframe/zconc_whousesmf.htm https://web.archive.org/web/20210429085201/https://www.ibm.com/docs/en/zos-basic-skills?topic=vmt-who-uses-mainframes-why-do-they-do-it},
+urldate={2021-04-29}
 }
