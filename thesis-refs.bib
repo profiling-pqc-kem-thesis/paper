@@ -718,3 +718,168 @@ title={Mainframe concepts},
 url={https://www.ibm.com/support/knowledgecenter/zosbasics/com.ibm.zos.zmainframe/zconc_whousesmf.htm https://web.archive.org/web/20210429085201/https://www.ibm.com/docs/en/zos-basic-skills?topic=vmt-who-uses-mainframes-why-do-they-do-it},
 urldate={2021-04-29}
 }
+
+% Bernstein KEM definition
+% diskuterar definition av KEM. Det framgår att slumptal behövs för att generera nyckeln - kräver alltså bra slumphårvara? Constant time algorthms - no branching.
+@misc{bernstein2018,
+    author = {Daniel J. Bernstein and Edoardo Persichetti},
+    title = {Towards KEM Unification},
+    howpublished = {Cryptology ePrint Archive, Report 2018/526},
+    year = {2018},
+    note = {\url{https://eprint.iacr.org/2018/526}},
+}
+
+% Implementation of saber close to the hardware, mentioning of AVX etc.
+@INPROCEEDINGS{sinha2019,
+  author={Sinha Roy, Sujoy},
+  booktitle={2019 IEEE 37th International Conference on Computer Design (ICCD)}, 
+  title={SaberX4: High-Throughput Software Implementation of Saber Key Encapsulation Mechanism}, 
+  year={2019},
+  volume={},
+  number={},
+  pages={321-324},
+  doi={10.1109/ICCD46524.2019.00050}
+}
+
+% Post-quantum key exchange – a new hope∗
+% Performance of LWE etc.
+@inproceedings{alkim2016,
+  title={Post-quantum key exchange—a new hope},
+  author={Alkim, Erdem and Ducas, L{\'e}o and P{\"o}ppelmann, Thomas and Schwabe, Peter},
+  booktitle={25Th $\{$USENIX$\}$ security symposium ($\{$USENIX$\}$ security 16)},
+  pages={327--343},
+  year={2016}
+}
+
+% Speed of lattice-based cryptos
+@InProceedings{guneysu2013,
+author="G{\"u}neysu, Tim
+and Oder, Tobias
+and P{\"o}ppelmann, Thomas
+and Schwabe, Peter",
+editor="Gaborit, Philippe",
+title="Software Speed Records for Lattice-Based Signatures",
+booktitle="Post-Quantum Cryptography",
+year="2013",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="67--82",
+}
+
+
+% Hardware implementation of learning with rounding
+@article{zhu2021,
+  title={LWRpro: An Energy-Efficient Configurable Crypto-Processor for Module-LWR},
+  author={Zhu, Yihong and Zhu, Min and Yang, Bohan and Zhu, Wenping and Deng, Chenchen and Chen, Chen and Wei, Shaojun and Liu, Leibo},
+  journal={IEEE Transactions on Circuits and Systems I: Regular Papers},
+  volume={68},
+  number={3},
+  pages={1146--1159},
+  year={2021},
+  publisher={IEEE}
+}
+
+% ISA for lattice-based KEMs
+@article{roy2020,
+  title={High-speed Instruction-set Coprocessor for Lattice-based Key Encapsulation Mechanism: Saber in Hardware},
+  author={Roy, Sujoy Sinha and Basso, Andrea},
+  journal={IACR Transactions on Cryptographic Hardware and Embedded Systems},
+  pages={443--466},
+  year={2020}
+}
+
+
+@misc{bernstein2014,
+    author={D. J. Bernstein},
+    title={2014.05.17: Some small suggestions for the Intel instruction set},
+    year={2014},
+    url={https://blog.cr.yp.to/20140517-insns.html},
+    urldate={2021-05-01}
+}
+
+% Some detailed info on SIMD in z15
+@inproceedings{payer2020,
+  title={SIMD Multi Format Floating-Point Unit on the IBM z15 (TM)},
+  author={Payer, Stefan and Lichtenau, Cedric and Klein, Michael and Schelm, Kerstin and Leber, Petra and Hofmann, Nicol and Babinsky, Tina},
+  booktitle={2020 IEEE 27th Symposium on Computer Arithmetic (ARITH)},
+  pages={125--128},
+  year={2020},
+  organization={IEEE}
+}
+
+% Detailed info on z15 - cache sizes etc.
+@article{wolpert2020,
+  title={Cores, Cache, Content, and Characterization: IBM’s Second Generation 14-nm Product, z15},
+  author={Wolpert, David and Berry, Christopher and Bell, Brian and Jatkowski, Adam and Surprise, Jesse and Isakson, John and Geva, Ofer and Deskin, Brian and Cichanowski, Mark and Hamid, Dina and others},
+  journal={IEEE Journal of Solid-State Circuits},
+  volume={56},
+  number={1},
+  pages={98--111},
+  year={2020},
+  publisher={IEEE}
+}
+
+% info in z15 Microprocessor
+@INPROCEEDINGS{berry2020,
+  author={Berry, Christopher and Bell, Brian and Jatkowski, Adam and Surprise, Jesse and Isakson, John and Geva, Ofer and Deskin, Brian and Cichanowski, Mark and Hamid, Dina and Cavitt, Chris and Fredeman, Gregory and Saporito, Anthony and Mishra, Ashutosh and Buyuktosunoglu, Alper and Webel, Tobias and Lobo, Preetham and Parashurama, Pradeep and Bertran, Ramon and Chidambarrao, Dureseti and Wolpert, David and Bruen, Brandon},
+  booktitle={2020 IEEE International Solid- State Circuits Conference - (ISSCC)}, 
+  title={2.7 IBM z15: A 12-Core 5.2GHz Microprocessor}, 
+  year={2020},
+  pages={54-56},
+  doi={10.1109/ISSCC19947.2020.9063030}
+}
+
+% IBM cryptocards
+@ARTICLE{busby2020,
+  author={Busby, J. A. and Cohen, E. N. and Dames, E. A. and Doherty, J. and Dragone, S. and Evans, D. and Fisher, M. J. and Hadzic, N. and Hagleitner, C. and Higby, A. J. and Hocker, M. D. and Jagich, L. S. and Jordan, M. J. and Kisley, R. and Lamb, K. D. and Marik, M. D. and Mayfield, J. and Morris, T. E. and Needham, T. D. and Santiago-Fernandez, W. and Urban, V. and Visegrady, T. and Werner, K.},
+  journal={IBM Journal of Research and Development}, 
+  title={The IBM 4769 Cryptographic Coprocessor}, 
+  year={2020},
+  volume={64},
+  number={5/6},
+  pages={3:1-3:11},
+  doi={10.1147/JRD.2020.3008145}}
+
+% https://ecstech.com/wp-content/uploads/2020/08/2020_ISO_BLaMacchia_Final.pdf
+@misc{microsoft2020,
+  author={Brian A. LaMacchia, Ph.D.},
+  title = {Getting Ready for the Post-Quantum Transition},
+  url={https://ecstech.com/wp-content/uploads/2020/08/2020_ISO_BLaMacchia_Final.pdf},
+  year = {2020},
+  urldate = {2021-05-02}
+}
+
+% https://zexpertenforum.ch/images/91/GSE_z15_Hdw_Innovation_Deep.pdf
+@misc{ibm:z15:2019,
+  author={Franco Pinto},
+  title = {Let’s take a dive into the IBM z15},
+  url={https://zexpertenforum.ch/images/91/GSE_z15_Hdw_Innovation_Deep.pdf},
+  year = {2019},
+  urldate = {2021-05-02}
+}
+
+% IBM's page on CEX7S / 4769 crypto
+@online{ibm:4769:ep11,
+    url={https://www.ibm.com/security/cryptocards/pciecc4/ep11 https://web.archive.org/web/20210502124532/https://www.ibm.com/security/cryptocards/pciecc4/ep11},
+    urldate = {2021-05-02},
+    title = {CEX7S / 4769 - EP11},
+    key = {IBM}
+}
+
+% IBM's page on AutoSIMD with IBM XL
+@online{ibm:xl-autosimd,
+    url={https://community.ibm.com/community/user/ibmz-and-linuxone/blogs/fang-lu2/2020/03/24/autosimd-compiler-optimization-for-zos-xl-cc-programs https://web.archive.org/web/20210502181752/https://community.ibm.com/community/user/ibmz-and-linuxone/blogs/fang-lu2/2020/03/24/autosimd-compiler-optimization-for-zos-xl-cc-programs},
+    urldate = {2021-05-02},
+    title = {AutoSIMD compiler optimization for z/OS XL C/C++ programs},
+    key = {IBM}
+}
+
+% FPGA niedreiter (mceliece)
+@inproceedings{wang2018,
+  title={FPGA-based Niederreiter cryptosystem using binary Goppa codes},
+  author={Wang, Wen and Szefer, Jakub and Niederhagen, Ruben},
+  booktitle={International Conference on Post-Quantum Cryptography},
+  pages={77--98},
+  year={2018},
+  organization={Springer}
+}

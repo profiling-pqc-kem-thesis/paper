@@ -20,7 +20,7 @@ By studying the algorithms' underlying mathematics, the authors' own optimizatio
 
 When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
 
-To identify relevant research papers, we will search for peer-reviewed papers by using databases such as Scopus and Web of Science\todo{update databases used}. By searching for relevant keywords such as \textit{post-quantum cryptography}, \textit{cpacf performance}, \textit{opencryptoki hsm}\todo{update keywords}, we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
+To identify relevant research papers, we will search for peer-reviewed papers by using databases such as Scopus and Web of Science. By searching for relevant keywords such as \textit{mainframe cryptography}, \texit{z15 cryptography}, \textit{cpacf performance}, \textit{mainframe cpu cache}, \textit{cryptocards}, \textit{z15 simd}, \texit{z15 memory security} and \textit{z15 alu} we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
 
 The selected papers, as well as the the papers submitted to \gls{nist}, will be included in a start set. The start set will then be used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
 \todo[inline]{Kommer ni att ha specificerade inclusion/exclusion criteria?}
@@ -170,7 +170,7 @@ As the thesis is interested in the performance characteristics of consumer, clou
         \toprule
         \thead{Group} & \thead{Label} & \thead{Potential Values} & \thead{Comment} \\
         \midrule
-        Compiler & Compilers & GCC, Clang, Intel C++ Compiler (ICC) & \\
+        Compiler & Compilers & GCC, Clang, Intel C++ Compiler (ICC), IBM XL & \\
         Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments & There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications) \\
         Implementation & Libraries & \gls{sha3} / \gls{shake} / \gls{keccak}, \gls{aes-instruction-set}, \gls{cpacf} & \\
         Implementation & Optimizations & \gls{avx}, \gls{avx2}, \gls{avx512}, \gls{simd} (GPU), \gls{simd} on \gls{ibmz}, \gls{hsm} & These are the optimizations available in the selected implementations \\
@@ -272,9 +272,9 @@ For the exact instrumentation used in each subject, please refer to the source c
 \subsubsection{Compiler Configurations}
 \label{section:method:experiment:phase1:compiler-configurations}
 
-The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. With IBM XL on Power, for example, -O5 implies automatic \gls{simd} via -qsimd=auto and improved data locality via -qhot \cite{ibmxl2018}. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
-\todo[inline]{remove IBM XL}
+% The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. With IBM XL on Power, for example, -O5 implies automatic \gls{simd} via -qsimd=auto and improved data locality via -qhot \cite{ibmxl2018}. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
 
+The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
 \begin{table}[H]
     \centering
     \caption{Compiler Configurations}
@@ -321,25 +321,7 @@ The implementation details presented in Table \ref{table:method:experiment:phase
 \subsubsection{Configuration Summary}
 \label{section:method:experiment:phase1:configuration-summary}
 
-\begin{table}[H]
-    \centering
-    \caption{Configuration Summary}
-    \label{table:method:experiment:phase1:configuration-summary}
-    \begin{tabularx}{\linewidth}{l X X}
-        \toprule
-        \thead{Hardware} & \thead{Compiler Configurations} & \thead{Implementation Configurations}\\
-        \midrule
-        Modern Workstation & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx2}, \gls{aes-instruction-set})\\
-        Modern Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx2}, \gls{aes-instruction-set}) \\
-        Old Mid-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx}, \gls{aes-instruction-set})\\
-        Old Low-Range Laptop & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx})\\
-        Cloud Provider 1 & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
-        Cloud Provider 2 & GCC Minimal, GCC Optimized, Clang Minimal, Clang Optimized & All (\gls{avx512}, \gls{aes-ni})\\
-        IBM Community Cloud & GCC Minimal, GCC Optimized, IBM XL, IBM XL Optimized & All (\gls{cpacf})\\
-        \bottomrule
-    \end{tabularx}
-\end{table}
-\todo{Update with accurate information}
+All of the aforementioned compiler configurations will be tested in all of the environments previously listed. On all environments, the reference implementations of all the algorithms under test will be evaluated. If an environment supports \gls{avx2}, an \gls{avx2} implementation will be tested as well.
 
 \subsection{Phase Two - Throughput and Scalability}
 \label{section:method:experiment:phase2}

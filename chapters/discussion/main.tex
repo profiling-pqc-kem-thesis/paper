@@ -3,20 +3,40 @@
 
 \section{Post-Quantum Cryptography on IBM z15}
 
+As mentioned in \cite{microsoft2020, ibm:z15:2019}, the fact that current hardware provides cryptographic agility is important as the \gls{post-quantum} standard evolves. By providing users with the ability to update the firmware of \glspl{hsm} as well as adding user defined extensions, we believe it is likely that the \gls{nist} submissions may be implemented efficiently as they mature. 
+
+The IBM 4769 \gls{hsm} supports CRYSTSALS Dilithium, a lattice-based signature algorithm. The implementation is not entirely clear, but it is assumed to be implemented in the \gls{asic}. It is unclear whether or not the functions of the CRYSTALS implementation is split, allowing other lattice-based cryptosystems to be implemented using the acceleration offered by the \gls{asic}. If such an implementation was possible via an extension, we assume that the performance increase would be considerate when compared to software-based implementations, given the nature of the \gls{asic} implementations. Even if other lattice-based cryptosystems could not make use of the \gls{asic}, the \gls{fpga} integrated in the \gls{hsm} should in theory offer a significant speedup for \gls{post-quantum} \glspl{kem} \cite{zhu2021, roy2020}. We believe that, due to the seemingly lack of low-level primitives on IBM's \glspl{hsm}, it is unlikely that we would be able to see an increase in performance of the \gls{post-quantum} \glspl{kem}. Given a study of \gls{fpga} implementations, however, one could expect to see a considerable increase in throughput.
+
+Though we were unable to utilize IBM's \gls{hsm} offerings, we believe that they would significantly increase the speed of the classical algorithms \gls{ecdhe} and \gls{dhe} as the \glspl{hsm} support these algorithms. Even without using the \glspl{hsm}, we did see a significant increase in performance for the \gls{ecdhe} due to its support for \gls{ecc} in \gls{cpacf}. In our parallel benchmarks for measuring the throughput of the classical algorithms, we saw a peak throughput of 100000 keypairs and 20000 \gls{ecdhe} exchanges when using the 25519 curve. We believe that these results give a glimpse of what's possible when successfully targeting the \gls{z15} platform. 
+
+As seen in section \ref{section:results:z15}, the 4769 \gls{hsm} supports \gls{aes}, \gls{sha3} and random number generation. These algorithms were identified to be of importance when it comes to performance tuning of \gls{post-quantum} \glspl{kem}. In the case of some lattice-based \glspl{kem} it was found that a majority of the computation time was spent using \gls{sha3} functions. We therefore believe that by utilizing these primitives as drop-in replacements in the studied implementations, one could expect a significant performance increase. We were not able to put this theory to the test as we were unable to get access to IBM's \gls{hsm} offerings.
+
+IBM \gls{z15} features \gls{simd} operations at 5.2GHz. Based on the literature we have studied, it seems unlikely that the \gls{z15} suffers from the same downclocking when performing \gls{simd} operations as \gls{avx2} on Intel processors. As such, we believe that \gls{simd} implementations on \gls{z15} would result in a higher throughput than a comparable implementation run on consumer or cloud hardware. We found that the \gls{avx2} implementations studied provided inconsistent throughputs. We believe that this, in part, has to do with the aforementioned downlocking of the CPU core when performing \gls{avx} operations on Intel hardware as previously described in section \ref{section:background:simd-avx}. If the stability of \gls{simd} operations on \gls{z15} performs at sustained 5.2GHz, the performance would most likely outperform that of comparable Intel machines.
+
+The use of \gls{simd} instructions on \gls{z15} is a topic we had to omit in this paper due to time constraints. As all of the vectorized \gls{nist} submissions used \gls{avx2} in several thousands of lines of assembly, we found it difficult to efficiently study their implementations and translate them for use on \gls{z15}. Though vector intrinsics would provide us with a more efficient way of translating the implementations for use on \gls{z15}, none of the implementations studied had provided such an implementation in their submission or elsewhere. A more automatic approach would be to use IBM XL which features an automatic conversion of code to \gls{simd} instructions, where applicable \cite{ibm:xl-autosimd}. We were however unable to access IBM XL due to its licensing cost and as such our results largely rely on non-vectorized code when running on \gls{z15}.
+
+IBM have invested in making Z a quantum safe platform \cite{ibm:z15:2019} and as such we believe they will continue focus on improving the performance and security of the \gls{post-quantum} \glspl{kem} implementations they offer today and in the future. Based on literature, we've identified that a high-performance \gls{post-quantum} \gls{kem} implementation relies on high-performance \gls{sha3} implementations, random number generation and polynomial arithmetic. By offering hardware-based support for these features, as well as by introducing hardware-accelerated polynomial primitives such as polynomial multiplication, we believe that IBM would further assert the potentials the performance of \gls{post-quantum} \glspl{kem} on Z. In terms of polynomial multiplication, the use of \glspl{ntt} or Karatsuba algorithms was found to be dominant in the algorithms submitted to \gls{nist}.
+
 \todo[inline]{
--- ECDHE - potentialen vi gärna hade sett generaliseras för mainframe. Argumentera specialserad workload - så som ECDHE
+% Minnessäkerhet
+Yada yada... we have not focused on memory security in this blabbasd.... IBM memory security...
+}
 
--- Talk about possible future hardware support, the need for cross-platform vectorization etc?
+\todo[inline]{
+Cache-storlekar. L3 på Z är gigantisk, våra egna resultat verkar tyda på att cache kan vara viktigt.
 
--- Lack of IBM XL (Auto SIMD) makes it hard to use the hardware - must be manually optimized for the target (not like AVX2)
--- Discuss cross-platform SIMD importance, making hardware more developer-friendly
-
--- CryptoCards?
+Svårt att mäta på IBM? Mer validitet kanske...
 }
 
 \section{Readiness of Hardware and Adoption of Post-Quantum Key Encapsulation Mechanisms}
 
-Jacobi and Webb \cite{jacobi2020} claim that mainframes process 90\% of the world's credit card transactions. This sensitive information must be kept secure. Therefore you may argue that the transition to post-quantum cryptography needs to happen earlier in the banking sector than in other sectors. How would the transition to post-quantum cryptography affect mainframe users? Our data suggest that the performance hit would be severe, especially on mainframe hardware. Mainframes have an outstanding \gls{ecdh} performance because it takes advantage of \gls{cpacf} sub-processor to accelerate the calculations. But \gls{cpacf} does not support any of the post-quantum cryptographic algorithms. After \gls{nist}'s standardization process is finished, IBM needs to add support for the standardized algorithms to alleviate the performance impact of the transition. 
+Jacobi and Webb \cite{jacobi2020} claim that mainframes process 90\% of the world's credit card transactions. This sensitive information must be kept secure. Therefore you may argue that the transition to post-quantum cryptography needs to happen earlier in the banking sector than in other sectors. How would the transition to post-quantum cryptography affect mainframe users? Our data suggest that the performance hit would be severe, especially on mainframe hardware. Mainframes have an outstanding \gls{ecdh} performance because it takes advantage of \gls{cpacf} sub-processor to accelerate the calculations. But \gls{cpacf} does not support any of the post-quantum cryptographic algorithms. After \gls{nist}'s standardization process is finished, IBM should consider adding support for the standardized algorithms to alleviate the performance impact of the transition.
+
+\todo[inline]{
+Från wang2018: https://eprint.iacr.org/2017/1180.pdf:
+
+The large public keys of the Niederreiter cryptosystem using binary Goppa codes make it particularly troublesome for use in embedded systems (due to strong restrictions on resource usage) and in server scenarios (given a large num- ber of simultaneous connections). In both cases, hardware acceleration can help to improve the performance — either by providing a low-area, power efficient crypto core in the embedded scenario or by providing a large, latency or through- put optimized crypto accelerator for the server scenario.
+}
 
 \todo[inline]{
 -- Påverkan i kontext (knyt an introduktion?) Mainframe: IBM pratade om 90\% av airline bookings, hotels etc. every day.
