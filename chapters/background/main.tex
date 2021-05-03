@@ -3,13 +3,13 @@
 
 \section{Cryptography}
 
-Delfs et.al. \cite{delfs2007} state that electronic communication has grown rapidly. They further discuss that this expansion has led to increased requirements on digital confidentiality - keeping data safe from manipulation and prying eyes. Although just a part of the vast field of cryptology, cryptography studies keeping information safe - encrypting it on one end and decrypting it on another \cite{delfs2007}. As outlined in \cite{bernstein2017}, cryptographic functions are sorted into two categories - \textit{symmetric-key} functions and \textit{public-key} functions, both of which refer to how the keys to the data are used.
+Delfs et.al. \cite{delfs2007} state that electronic communication has grown rapidly. They further discuss that this expansion has led to increased requirements on digital confidentiality - keeping data safe from manipulation and prying eyes. Although just a part of the vast field of cryptology, cryptography studies the act of keeping information safe - encrypting it on one end and decrypting it on another \cite{delfs2007}. As outlined in \cite{bernstein2017}, cryptographic functions are sorted into two categories - \textit{symmetric-key} functions and \textit{public-key} functions, both of which refer to how the keys to the data are used.
 
-In this section, symmetric-key, public-key and related topics will be further discussed to provide an overview of cryptographic subjects.\todo{Remove - unnecesary?}
+In this section, symmetric-key, public-key and related topics will be further discussed to provide an overview of cryptographic subjects.
 
 \subsection{Symmetric-Key Cryptography}
 
-Symmetric-key cryptography is where the same key is shared between both parties and used for both encryption and decryption \cite{bernstein2017}. Symmetric functions can, besides providing confidentiality, also be used to provide authenticity - if only the two parties know of the secret key, one of them may request the other to prove possession of the key \cite{bernstein2017}.
+Symmetric-key cryptography is where the same key is shared between both parties and used for both encryption and decryption \cite{bernstein2017}. Symmetric functions can, besides providing confidentiality, also be used to provide authenticity. If only the two parties know of the secret key, one of them may request the other to prove possession of the key \cite{bernstein2017}.
 
 A potential problem when using a symmetric key is the fact that the two parties have to somehow securely exchanged a secret key \cite{delfs2007}. It is not a trivial task to exchange the keys securely, as anyone may intercept their communication channel \cite{delfs2007}. There are many ways of securely exchanging a symmetric key by relying on public-key cryptography \cite{delfs2007}.
 
@@ -26,7 +26,7 @@ In practice, each party is in possession of two keys - a public key and a privat
 
 \subsection{Key Establishment}
 
-A key establishment protocol, sometimes referred to as a \gls{kex}, is a process in which two or more parties securely exchange a shared symmetric key known only to them \cite{boyd2020}. Such a protocol should be able to be performed securely over an untrusted communication channel \cite{boyd2020}.
+A key establishment protocol, sometimes referred to as a \acrfull{kex}, is a process in which two or more parties securely exchange a shared symmetric key known only to them \cite{boyd2020}. Such a protocol should be able to be performed securely over an untrusted communication channel \cite{boyd2020}.
 
 One class of key establishments protocols is the key transport protocols. A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties\cite{boyd2020}.
 
@@ -36,11 +36,11 @@ In another class of protocols, the key agreement protocols, the parties jointly 
 
 A \acrfull{kem} is a form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs\cite{boyd2020}.
 
-A \gls{kem} consists of four sets and three algorithms \cite{boyd2020}, outlined below.
+A \gls{kem} consists of four sets and three algorithms \cite{boyd2020}, listed below.
 
 \begin{itemize}
-    \item $K_E$ - a set of public keys.
-    \item $K_D$ - a set of private keys.
+    \item $K_E$ - a set of public keys for encryption.
+    \item $K_D$ - a set of private keys for decryption.
     \item $R$ - a randomness set.
     \item $C$ - a ciphertext set.
 \end{itemize}
@@ -53,7 +53,7 @@ A \gls{kem} consists of four sets and three algorithms \cite{boyd2020}, outlined
 
 To further restrict the definition, we require that if $(c,k)$ is output by the encapsulation function $\text{Encapsulate}_K()$, then $k$ must be output by the corresponding decapsulation function $\text{Decapsulate}_{K^{-1}}(c)$ \cite{boyd2020}.
 
-Although the notation used in the listing above does not respect randomness, \glspl{kem} in practice often rely on the use of randomness so that a different $(c,k)$ is returned for each invocation of $\text{Encapsulate}_K()$ \cite{boyd2020}. 
+Although the notation used in the listing above does not respect the chosen randomness set, \glspl{kem} in practice often rely on the use of randomness so that a different $(c,k)$ is returned for each invocation of $\text{Encapsulate}_K()$ \cite{boyd2020}. 
 
 \subsection{Forward Secrecy}
 
@@ -66,12 +66,12 @@ Key agreement protocols may provide forward secrecy if the long-term keys are on
 
 Classical cryptography is cryptography in use on classical computers such as consumer PCs, smart phones and cloud servers. In classical cryptography, several algorithms based on \gls{rsa} and \gls{ecc} are used for key exchange.
 
-This section will further describe cryptographic systems in use to keep data confidential from attacks run on classical hardware, as well as the threats they face.\todo{Remove - unnecesary?}
+This section will further describe cryptographic systems in use to keep data confidential from attacks run on classical hardware, as well as the threats they face.
 
 \subsection{Applications}
 \label{section:background:classical-cryptography:applications}
 
-In \gls{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography \cite{bernstein2017}. \gls{tls} may use any of wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
+In \acrfull{tls}, key establishment is used to let to parties establish a shared symmetric key. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography \cite{bernstein2017}. \gls{tls} may use any of a wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}\cite{rfc7748}, \gls{ecdhe}\cite{nist2019} and \gls{dhe}\cite{nist2019}.
 
 \gls{x25519} (in some contexts known as \gls{curve25519} \cite{25519naming}), is used for key exchange in the \gls{vpn} Wireguard \cite{wireguard2020}.
 
@@ -81,11 +81,11 @@ Variants of the mentioned key exchange algorithms are also used in messaging app
 
 \subsection{RSA}
 
-In 1977, Ronald L. Rivest, Adi Shamir and Len Adleman wrote a paper on digital signatures and public-key cryptosystems \cite{rsa1977}. In the paper they introduced a public-key cryptosystem based on powers and modulo operations \cite{rsa1977}.
+In 1977, L. Rivest et. al. \cite{rsa1977} wrote a paper on digital signatures and public-key cryptosystems. In the paper they introduced a public-key cryptosystem based on powers and modulo operations.
 
-In the system, Alice first decides on two different primes $p$ and $q$ as well as an integer $s$ which is relatively prime to $(p-1)(q-1)$. Alice makes $r=p*q$ and $s$ public, but keeps $r$ and $q$ secret \cite{rsa1977}.
+In the system, \gls{alice} first decides on two different primes $p$ and $q$ as well as an integer $s$ which is relatively prime to $(p-1)(q-1)$. \gls{alice} makes $r=p*q$ and $s$ public, but keeps $r$ and $q$ secret.
 
-As seen in section \ref{section:background:public-key-cryptography}, the encryption function in a public-key cryptosystem is defined as $E_A(M)$. In \gls{rsa}, the function $E_A$ is defined as $E_A(M)=M^s\;(mod r)$, for any message $M$ \cite{rsa1977}.
+As seen in section \ref{section:background:public-key-cryptography}, the encryption function in a public-key cryptosystem is defined as $E_A(M)$. In \gls{rsa}, the function $E_A$ is defined as $E_A(M)=M^s\;(mod\;r)$, for any message $M$ \cite{rsa1977}.
 
 The decryption function, previously defined as $D_A$, is defined as $D_A(C)=C^t\;(mod\;r)$ where $t$ is solved from $s*t=1\;(mod\;\phi(r))$. The value $\phi(r)$ is the so called Euler totient function, which produces the number of positive integers less than $r$ which are relatively prime to $r$ \cite{rsa1977}.
 
@@ -100,10 +100,10 @@ Elliptic curves generally yield much more dense ciphertexts and requires smaller
 To use an elliptic curve for cryptography, one must establish the following domain parameters\cite{delfs2007}.
 
 \begin{itemize}
-    \item $\mathbb{F_q}$ - the finite base field
+    \item $\mathbb{F}_q$ - the finite base field
     \item $a,b\in\mathbb{F}_q$ - the parameters of the curve $E$
     \item $Q,n$ - the base point $Q\in E(\mathbb{F}_q)$, whose order is a large prime number $n$
-    \item $h$ - the cofactor defined by $hn=|E(\mathbb{F_q})|$
+    \item $h$ - the cofactor defined by $hn=|E(\mathbb{F}_q)|$
 \end{itemize}
 
 The domain parameters $a,b\in\mathbb{F}_q$ describe the curve $E$ as $y^2=x^3+ax+b$. Illustrations of these curves may be seen in figure \ref{figure:background:elliptic-curves}. Not all curves are suitable for elliptic-curve cryptography, which has led to some being standardized for mass usage\cite{nist2018}.
@@ -122,15 +122,15 @@ Elliptic curves are used to replace the multiplicative subgroup $\mathbb{Z}_p^*$
 
 The \gls{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978\cite{merkle1978}. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible\cite{merkle1978}.
 
-In the \gls{dh} protocol, two parties (\gls{alice} and \gls{bob}) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. \gls{alice} calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not necessarily secure. \gls{alice} and \gls{bob} may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020}.
+In the \gls{dh} protocol, two parties (\gls{alice} and \gls{bob}) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. \gls{alice} calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not required to be secure. \gls{alice} and \gls{bob} may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$\cite{merkle1978, boyd2020}.
 
-The security of the key exchange comes from the assumption that it is computationally difficult for a malicious party to recover $g^{r_A r_B}$ from the public channel. The problem is that of a discrete logarithm which was deemed unfeasible in the pre-quantum era, given a sufficient key size\cite{boyd2020}. In the post-quantum era, \gls{dh} is considered to be broken\cite{bernstein2017}.
+The security of the key exchange comes from the assumption that it is computationally difficult for a malicious party to recover $g^{r_A r_B}$ from the public channel. The problem is that of a discrete logarithm which was deemed unfeasible in the pre-quantum era, given a sufficient key size\cite{boyd2020}.
 
 \subsection{Elliptic-Curve Diffie-Hellman}
 
 The \gls{ecdh} \gls{kex} is an adaption of \gls{dh} over elliptic curves. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.)\cite{nist2018}.
 
-Alice computes the point $P=hd_aQ_b$, where $d_A$ is Alice's private key, $Q_B$ Bob's public key and $h$ a \gls{ecc} domain parameter. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
+\gls{alice} computes the point $P=hd_aQ_b$, where $d_A$ is \gls{alice}'s private key, $Q_B$ Bob's public key and $h$ a \gls{ecc} domain parameter. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
 
 The \gls{x25519} \gls{kex} is a special case of \gls{ecdh} where \gls{curve25519} is used\cite{rfc7748}. 
 
@@ -143,11 +143,11 @@ In the case of both \gls{dh} and \gls{ecdh}, ephemeral keys may be used to provi
 
 Cryptography does not usually come with any guarantee of being secure forever. Algorithms and parameters are updated continuously to mitigate attacks as they are found and as already known attacks become more practical\cite{nist2019}. As the performance of classical computers have increased throughout the years, this has meant that some known attacks such as prime factorization and discrete logarithms have become more computationally feasible. The increase in performance has not yet lead to any major breakage as the algorithms in use are projected to withstand thousands of years of attacks using classical algorithms\cite{thome2019}. As Moore's law is coming to a halt\cite{theis2017}, the threat of classical computers becoming powerful enough to break the cryptographic algorithms they use has become less severe.
 
-Since the 1980s, research has been made to utilize quantum mechanics for computation, thus introducing the quantum computer\cite{benioff1980}. By utilizing quantum bits or \glspl{qubit} instead of the bits used in classical computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a classical computer\cite{jordan2021}. Recent progress in the field has shown that, as progress have halted in the area of classical computers, progress made on quantum computers has been increasing exponentially\cite{ibm2020:quantum-computer}.
+Since the 1980s, research has been made to utilize quantum mechanics for computation, thus introducing the quantum computer\cite{benioff1980}. By utilizing quantum bits or \textit{\glspl{qubit}} instead of the bits used in classical computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a classical computer\cite{jordan2021}. Recent progress in the field has shown that, as progress have halted in the area of classical computers, progress made on quantum computers has been increasing exponentially\cite{ibm2020:quantum-computer}.
 
 Parallel to the development of the theoretical quantum computer, algorithms have been developed to make use of the mechanics. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical or impossible to implement or use on a classical system, but feasible to use on a quantum computer\cite{shor1997, jordan2021}. Demonstrating that a quantum computer is able to feasibly perform an algorithm that a classical computer cannot is referred to as Quantum Supremacy\cite{farhi2019}.
 
-Shor's algorithm can solve the problems posed by many of the traditional cryptosystems - integer factorization and discrete logarithms, rendering the cryptosystems useless\cite{shor1997}. However, it is known to be difficult or impractical to run on a traditional computer, but easy to run efficiently for a quantum computer. Today's quantum computers are however not powerful enough to use Shor's algorithm to break the security offered by classical cryptography \cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million so called noisy \glspl{qubit} to break 2048 bits \gls{rsa}. Among today's most powerful quantum computers are Google's 53-\glspl{qubit} system\cite{google2019:quantum-computer} and IBM's 65-\glspl{qubit} system\cite{ibm2020:quantum-computer}. IBM has a 1000-\glspl{qubit} system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
+Shor's algorithm can solve the problems posed by many of the traditional cryptosystems - integer factorization and discrete logarithms, rendering the cryptosystems useless\cite{shor1997}. Today's quantum computers are however not powerful enough to use Shor's algorithm to break the security offered by classical cryptography \cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million so called noisy \glspl{qubit} to break 2048 bits \gls{rsa}. Among today's most powerful quantum computers are Google's 53-\glspl{qubit} system\cite{google2019:quantum-computer} and IBM's 65-\glspl{qubit} system\cite{ibm2020:quantum-computer}. IBM has a 1000-\glspl{qubit} system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
 
 Another algorithm threatening classical cryptography is Grover's algorithm. The algorithm was first proposed as a way to search in databases in $O(\sqrt N)$ quantum operations where $N$ is the number of available items\cite{grover1996}. However, a more practical application for the algorithm is to find the root of a function\cite{bernstein2017}. This enables an attack on some cryptosystem such as \gls{aes}, leading to the bit security of the cryptosystems to be cut in half. The bit security corresponds to the best security a key of $n$ bits can provide under the best known attack. Values for some widely deployed cryptographic systems are presented in Table \ref{table:background:post-quantum:bit-security}. Pre-quantum and post-quantum refers to the bit security of the algorithm for the corresponding epoch. To mitigate Grover's and Shor's algorithms, one may double the size of the \gls{aes} key. However, some cryptosystems are completely broken.
 
@@ -186,7 +186,7 @@ The performance increase offered by quantum computers and the threats that Shor'
 
 Classical cryptosystems rely on mathematical problems shown to be easy for quantum computers to solve, resulting in their security being diminished or entirely broken\cite{shor1997, jordan2021}. With the dawn of practical quantum computers, a new set of mathematical problems needs to be used to protect from the attacks made feasible by the quantum computers. Cryptography built on such problems is referred to as post-quantum cryptography\cite{nist:round-three-submissions}. Note, however, that such cryptography may still be used by classical computers. 
 
-This section further describes post-quantum cryptography, the \gls{nist} standardization process and post-quantum cryptosystems.\todo{Remove - unnecesary?}
+This section further describes post-quantum cryptography, the \gls{nist} standardization process and post-quantum cryptosystems.
 
 \subsection{The NIST Post-Quantum Standardization Process}
 \acrfull{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness\cite{nist:about}.
@@ -195,7 +195,7 @@ The organization is split into various divisions. One of these divisions, the Co
 
 The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for post-quantum cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions\cite{nist:call-for-proposals}.
 
-At the time of writing, the process has been ongoing for three years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\cite{nist:round-three-submissions}. The finalists are presented in Table \ref{table:background:nist:finalists}. The algorithms rely on two types of cryptography, code-based and lattice-based.
+At the time of writing, the process has been ongoing for four years and it has reached a third round of submissions. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms\cite{nist:round-three-submissions}. The finalists are presented in Table \ref{table:background:nist:finalists}. The algorithms rely on two types of cryptography - code-based and lattice-based.
 
 \begin{table}[H]
     \centering
@@ -205,10 +205,10 @@ At the time of writing, the process has been ongoing for three years and it has 
         \toprule
         \thead{Name} & \thead{Use} & \thead{Type} \\
         \midrule
-        Classic McEliece & \acrlong{kem} & Code-based \\
-        CRYSTALS-KYBER & \acrlong{kem} & Lattice-based \\
-        NTRU & \acrlong{kem} & Lattice-based \\
-        SABER & \acrlong{kem} & Lattice-based \\
+        \gls{mceliece} & \acrlong{kem} & Code-based \\
+        \gls{kyber} & \acrlong{kem} & Lattice-based \\
+        \gls{ntru} & \acrlong{kem} & Lattice-based \\
+        \gls{saber} & \acrlong{kem} & Lattice-based \\
         CRYSTALS-DILITHIUM & Digital Signature & Lattice-based \\
         FALCON & Digital Signature & Lattice-based \\
         Rainbow & Digital Signature & Lattice-based \\
@@ -216,7 +216,7 @@ At the time of writing, the process has been ongoing for three years and it has 
     \end{tabularx}
 \end{table}
 
-\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack. Resistence to such an attack is referred to as \gls{ind-cca2} security\cite{nist2017}. 
+\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack. Resistence to such an attack is referred to as \gls{ind-cca2} security\cite{nist2017}\todo{This seems to be a bit out of context}. 
 
 \subsection{Lattice-Based Cryptography}
 
@@ -228,13 +228,11 @@ $$
 
 \noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices is taken advantage of\cite{bremner2012}. The most significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike\cite{sun2020}.
 
-One of the proposed lattice-based cryptosystems is CRYSTALS-KYBER, which relies on the learning-with-errors problem over module lattices being hard to solve \cite{kyber2021}. Another lattice-based submission is the SABER cryptosystem that relies on the learning-with-rounding problem over module lattices being hard to solve \cite{saber}.
+One of the proposed lattice-based cryptosystems is \gls{kyber}, which relies on the learning-with-errors problem over module lattices being hard to solve \cite{kyber2021}. Another lattice-based submission is the \gls{saber} cryptosystem that relies on the learning-with-rounding problem over module lattices being hard to solve \cite{saber}.
 
 \subsection{NTRU}
 
-The \gls{ntru} \gls{kem} is a unification of several lattice-based variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM.
-
-The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve \cite{sun2020, ntru1998}.
+The \gls{ntru} \gls{kem} is a unification of several lattice-based variants. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM \cite{ntru2020}. The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve \cite{sun2020, ntru1998}.
 
 The third-round submission to \gls{nist} is a merger of several variants of \gls{ntru} \cite{ntru2020}. Two of the prominent ones are NTRUEncrypt and NTRU-HRSS-KEM. The NTRUEncrypt algorithm has its origin in the original paper published in 1998. The submission had several issues and lacked a correct recommended parameter set. The NTRU-HRSS-KEM submission brought performance improvements which enhanced the decapsulation routine without sacrificing security. The merged algorithm, \gls{ntru}, offer correct parameter sets with trade-offs for performance versus security.
 
@@ -243,9 +241,9 @@ Code-based cryptosystems take advantage of error-correction code. Typically erro
 
 \subsection{Classic McEliece}
 \label{section:background:mceliece}
-The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of Classic McEliece, together with various improvements made over the years \cite{mceliece2020}. \gls{mceliece} is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. Decryption uses the private key to perform so called error correction to correct the errors added in the encryption step \cite{mceliece2020}.
+\gls{mceliece} is a code-based cryptosystem that uses random binary Goppa codes as the public key. It adds a specific number of errors to the plaintext to encrypt it. The original McEliece cryptosystem was first proposed in 1979 by McEliece \cite{mceliece1978} and is the basis of \gls{mceliece}, together with various improvements made over the years \cite{mceliece2020}. Decryption uses the private key to perform so called error correction to correct the errors added in the encryption step \cite{mceliece2020}.
  
-For each configuration of Classic McEliece, there are two versions - systematic form (non-f) and semi-systematic form (f) which are two ways of generating the keypair \cite{mceliece2020}. The non-f variant is faster at generating the keypair but fails more often and needs to retry. The f variant has a very low probability of failing, but is theoretically slower than the non-f variant. The semi-systematic form results in a loss of up to 2 bits of security, however, which the authors claim is not of concern .
+For each configuration of \gls{mceliece}, there are two versions - systematic form (non-f) and semi-systematic form (f) which are two ways of generating the keypair \cite{mceliece2020}. The non-f variant is faster at generating the keypair but fails more often and may need several retries. The f variant has a very low probability of failing, but is theoretically slower than the non-f variant. The semi-systematic form results in a loss of up to 2 bits of security, however, which the authors claim is not of concern.
 
 The $(\mu, \nu)$-semi-systematic form of \gls{mceliece} is designed to take both time and success probability into account \cite{mceliece2020}. The systematic form, where $(\mu, \nu)=(0, 0)$, yields a lower probability of correctly finding a key than when compared to the $(\mu, \nu)=(32,64)$ semi-systematic form. The failure probability of the semi-systematic form is below $2^{-30}$, which in practice should correlate to only one key-generation attempt being required. The semi-systematic form requires extra computational work per attempt in order to compute the key.
 
@@ -286,10 +284,10 @@ In Table \ref{table:background:submissions-security-level}, the security level o
         \multirowcell{2}{Classic\\ McEliece} & 348864(f) & 460896(f) & 6688128(f) & 6960119(f) & 8192128(f) \\
         & 1 & 3 & 5 & 5 & 5 \\
         \midrule
-        \multirowcell{2}{SABER} & & & LightSABER & SABER & FireSABER \\
+        \multirowcell{2}{\gls{saber}} & & & LightSABER & SABER & FireSABER \\
         & & & 1 & 3 & 5\\
         \midrule
-        \multirowcell{2}{KYBER} & & & 512 & 768 & 1024 \\
+        \multirowcell{2}{\gls{kyber}} & & & 512 & 768 & 1024 \\
         & & & 1 & 3 & 5\\
         \bottomrule
     \end{tabularx}
@@ -300,8 +298,9 @@ In Table \ref{table:background:submissions-security-level}, the security level o
 \footnotetext{\label{footnote:security-level-non-local}non-local model}
 
 \section{Architectures and Performance}
-Computer architectures define the different characteristics of a system. An architecture can use different instruction sets, microarchitectures, and systems designs, that in one way or another, affect the performance of the system. 
-This section will discuss \gls{risc} and \gls{cisc} two CPU design methodology and two computer architectures, x86 and IBM Z, and their different design choices.
+Computer architectures define the different characteristics of a system. An architecture can use different instruction sets, micro-architectures, and systems designs. These will in one way or another, affect the performance of the system. 
+
+This section will describe \gls{risc} and \gls{cisc}, x86 and IBM Z, and their respective design decisions.
 
 \subsection{RISC and CISC}
 
@@ -316,11 +315,11 @@ An example of an architecture using \gls{cisc} is \gls{x86}. Examples of archite
 \subsection{Single Input Multiple Data (SIMD)}
 \label{section:background:simd-avx}
 
-The classification of computer architectures proposed by Flynn, later named to Flynn's taxonomy, describes the four classifications presented below. \cite{flynn1972}.
+The classification of computer architectures proposed by Flynn, later named to Flynn's taxonomy\todo{Cite that it's now called Flynn's taxonomy}, describes the four classifications presented below. \cite{flynn1972}.
 
 \begin{itemize}
     \item The \gls{sisd} organization represents the most conventional type of computer. Such an organization is limited by data dependencies. Branching is particularily limiting.
-    \item The \gls{simd} organization represents array processes. The performance of such a process increases as $\mathcal{O}(\log_2 N)$ with respect to then number of data stream processors. 
+    \item The \gls{simd} organization represents array processes. The performance of such a process increases as $\mathcal{O}(\log_2 N)$ with respect to the number of data stream processors. 
     \item The \gls{misd} organization was typically represented by the plug-board type machines no longer in use.
     \item The \gls{mimd} organization is typically referred to as multi-processors. The organization may be subject to saturation.
 \end{itemize}
@@ -331,33 +330,33 @@ In order to use the properties of \gls{simd}, the target architecture has to be 
 
 Although usage of a CPU's vectorization capabilities may require explicit input from a programmer, advanced compilers may in some cases be able to automatically vectorize code in order to make it run more efficiently\cite{dickson2011}.
 
-\subsection{x86}
+\subsection{The x86 Architecture and AVX}
 
 The \gls{x86} family of architectures are some of the most popular architectures for consumer and cloud hardware. The family has a long history and includes architectures such as the 64-bit amd64, also known as x86-64. It is not uncommon for the architectures to be collectively referred to as just \gls{x86}\cite{carter2002}.
 
-\gls{x86} is in theory a \gls{cisc}, but there has been a fair amount of convergence between \gls{risc} and \gls{cisc}, which makes them a hybrid of sorts\cite{carter2002}.
+\gls{x86} is in theory a \gls{cisc}, but there has been a fair amount of convergence between \gls{risc} and \gls{cisc}, which makes \gls{x86} a hybrid of sorts\cite{carter2002}.
 
-In 1996 the x86 architecture saw the addition of the MMX instruction set. The instruction set used the 64-bit floating-point registers of the CPU to enable performing eight 8-bit operations, or four 16-bit operations simultaneously. The instruction set was superseeded by \gls{sse} in 1999, which added special registers of 128 bits. This enabled instructions to simultaneously perform sixteen 8-bit operations, eight 16-bit operations, or four 32-bit operations. \gls{sse} was in turn superseeded by SSE2 in 2001, SSE3 in 2004 and SSE4 in 2007. Each generation saw improvements in available instructions and floating-point performance\cite{hennessy2011:avx}.
+In 1996 the \gls{x86} architecture saw the addition of the MMX instruction set. The instruction set used the 64-bit floating-point registers of the CPU to enable either eight 8-bit vector operations or four 16-bit operations simultaneously. The instruction set was superseeded by \gls{sse} in 1999, which added special 128 bit wide registers. This enabled instructions to simultaneously perform sixteen 8-bit operations, eight 16-bit operations, or four 32-bit operations. \gls{sse} was in turn superseeded by \gls{sse}2 in 2001, \gls{sse}3 in 2004 and \gls{sse}4 in 2007. Each generation saw improvements in available instructions and floating-point performance\cite{hennessy2011:avx}.
 
-In 2010 \gls{avx} was introduced and doubled the width of the registers to 256 bits. This increase effectively doubled the number of simultaneous operations that could be performed, and the 256-bit width supported 64-bit operands in parallel \cite{hennessy2011:avx, intel:avx}. \gls{avx2} and AVX512 superseded \gls{avx}, \gls{avx2} extended the number of 256-bit instructions \cite{intel:manual:2020}, and \gls{avx512} added support for 512-bit wide instructions \cite{intel:avx512}. \gls{avx2} and \gls{avx512} are power-hungry instructions that make the CPU run hot. To prevent the CPU from overheating the CPU downclock its cores \cite{hackenberg2015, intel:manual:2020}. This may have a negative performance impact on non-\gls{avx} code that runs directly after \gls{avx}-related code.
+In 2010 \gls{avx} was introduced and doubled the width of the registers to 256 bits. This increase effectively doubled the number of simultaneous operations that could be performed. The 256-bit width supported 64-bit operands in parallel \cite{hennessy2011:avx, intel:avx}. \gls{avx2} and AVX512 superseded \gls{avx}. \gls{avx2} extended the number of 256-bit instructions \cite{intel:manual:2020}, and \gls{avx512} added support for 512-bit wide instructions \cite{intel:avx512}. \gls{avx2} and \gls{avx512} are power-hungry instructions that make the CPU run hot. To prevent the CPU from overheating, the CPU downclock its cores during \gls{avx} operations \cite{hackenberg2015, intel:manual:2020}. This might have a negative performance impact on non-\gls{avx} code that runs directly after \gls{avx}-related code.
 
 By using AVX, a developer may optimize a program and make use of the performance properties offered by \gls{simd}\cite{hennessy2011:avx}.
 
-\subsection{IBM Z}
+\subsection{Mainframe Hardware - IBM Z}
 
 Mainframe hardware is designed to handle a large amount of data and bulk transactions \cite{mainframes}. To achieve this, they are using custom-made CPUs and special coprocessors \cite{mainframes}. Further features are availability, resilience, backward compatibility, and security core features\cite{mainframes}.
 
-Many features seen in consumer platforms such as x86 was first seen in mainframe hardware, features such as virtualization, caches and cache hierarchies for reduced memory latency, as well as branch prediction, out-of-order execution, hardware-assisted encryption and more \cite{jacobi2020}.
+Many features seen in consumer platforms such as x86 was first seen in mainframe hardware. Features such as virtualization, caches and cache hierarchies for reduced memory latency, as well as branch prediction, out-of-order execution, hardware-assisted encryption and more \cite{jacobi2020}\todo{rewrite this paragraph?}.
 
-IBM Z is among the oldest of mainframes as it was launched as S/360 in 1964. Banks, airlines and enterpresies worldwide use a IBM Z mainframe as part of their IT infrastructure \cite{jacobi2020}. The Z platform brought the innovation of focusing on an \acrfull{isa} - which specifies a hardware behavior software could rely on irregardles of the underlying hardware.
+IBM Z is among the oldest of mainframes as it was launched as S/360 in 1964. Banks, airlines and enterpresies worldwide use a IBM Z mainframe as part of their IT infrastructure \cite{jacobi2020}. The Z platform brought the innovation of focusing on an \acrfull{isa} - which specifies a hardware behavior software could rely on regardless of the underlying hardware.
 
 With the rise of high-performance workstations and the client-server computing model in the 1990s, IBM refocused the S/390 platform to handle commercial batch and transaction processing workloads \cite{jacobi2020}. 
 
-Since its original launch in 1964, the platform has developed to become one of the most modern large-scale computing platforms \cite{jacobi2020}. The workloads for which the Z platform is optimized has continued to be characterized by large instruction and data footprints, with a high level of input/output activity \cite{jacobi2020}.
+Since its original launch in 1964, the platform has been developed to become one of the most modern large-scale computing platforms \cite{jacobi2020}. The workloads for which the Z platform is optimized has continued to be characterized by large instruction and data footprints, with a high level of input/output activity \cite{jacobi2020}.
 
 In 2019, IBM released the \gls{z15} \cite{jacobi2020} - a 64-bit \gls{cisc} architecture. As Moore's law has come to an end, focus has shifted to provide functions tailored for specific aspects of enterprise computing, such as on-chip acceleration of compression and encryption \cite{jacobi2020}.
 
-In \gls{z15}, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into \glspl{lpar} that runs its own virtual system. Each CPU has 12 custom cores with \gls{smt} 2 which means that each core has two logical cores. A mainframe contains multiple of these CPUs. Special co-processors are built into the CPU. One example is \gls{nxu} to accelerate compression and the \gls{cpacf} to deliver high-speed, low-latency cryptographic functions. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations  \cite{redbook:z15}.
+In \gls{z15}, virtualization is a core feature. It is designed from the bottom up with virtualization in mind with specially engineered hardware to handle it. In the first layer of virtualization, the hardware is divided into \glspl{lpar} that runs their own virtual systems. Each CPU has 12 custom cores with a \gls{smt} grade of 2 which means that each core has two logical cores. A mainframe contains multiple of these CPUs. Special co-processors are built into the CPU. One example is \gls{nxu} to accelerate compression and the \gls{cpacf} to deliver high-speed, low-latency cryptographic functions. It supports multiple variants of \gls{des}, \gls{aes}, \gls{sha}, and \gls{shake}. Further, it has support for \gls{simd}, which enables vectorization and other performance optimizations  \cite{redbook:z15}.
 
 The \gls{z15} mainframe has support for CryptoCards. CryptoCards are IBM's cryptographic \glspl{hsm}. A \gls{hsm} is a physical device placed into a computer to deliver high throughput for cryptographic functions. The devices are designed to be physically secured from tampering and their firmware may be cryptographically verifiable\cite{ibm:hsms}. CryptoCards are available for the \gls{ibmz}, \gls{power} and \gls{x86} architectures, depending on the chosen \gls{hsm}.
 

@@ -1,56 +1,56 @@
-    \begin{table}[H]
+\begin{table}[H]
         \centering
         \small
-        \caption{Parallel Throughput Runs for X25519 Keypair Generation}
-        \label{table:results:throughput:ecdh-25519}
+\caption{Parallel Throughput Runs for X25519 Keypair Generation}
+\label{table:results:throughput:ecdh-25519}
         \begin{tabularx}{\linewidth}{X c c c c c c c c}
             \toprule
             \thead{Environment} & \thead{Compiler} & \multicolumn{7}{c}{\thead{Threads}}\\
             & & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
             \midrule
-\multirowcell{4}{Cloud\\ Provider\\ 1} & 
+\multirowcell{4}{Cloud\\ Provider\\ 1 \footref{plain-optimized}} & 
 \multirow{2}{*}{gcc} & 20066 & 28639 & 41075 & 39385 & 43578\\
  & & 1.0 & 1.43 & 2.05 & 1.96 & 2.17\\
 \cmidrule[0.05em](){3-9} & 
 \multirow{2}{*}{clang} & 22183 & 28580 & 45468 & 42508 & 45103\\
  & & 1.11 & 1.42 & 2.27 & 2.12 & 2.25\\
             \midrule
-\multirowcell{4}{Cloud\\ Provider\\ 2} & 
+\multirowcell{4}{Cloud\\ Provider\\ 2 \footref{plain-optimized}} & 
 \multirow{2}{*}{gcc} & 18784 & 35641 & 34956 & 35292\\
  & & 1.0 & 1.90 & 1.86 & 1.88\\
 \cmidrule[0.05em](){3-9} & 
 \multirow{2}{*}{clang} & 15818 & 35574 & 31504 & 36365\\
  & & 0.84 & 1.89 & 1.68 & 1.94\\
             \midrule
-\multirowcell{4}{IBM\\ Community\\ Cloud} & 
+\multirowcell{4}{IBM\\ Community\\ Cloud \footref{plain-optimized}} & 
 \multirow{2}{*}{gcc} & 48666 & 95482 & 81536 & 70727\\
  & & 1.0 & 1.96 & 1.68 & 1.45\\
 \cmidrule[0.05em](){3-9} & 
 \multirow{2}{*}{clang} & 48960 & 98079 & 79706 & 76773\\
  & & 1.01 & 2.02 & 1.64 & 1.58\\
             \midrule
-\multirowcell{4}{Modern\\ Laptop} & 
+\multirowcell{4}{Modern\\ Laptop \footref{plain-optimized}} & 
 \multirow{2}{*}{gcc} & 10654 & 22234 & 42188 & 65254 & 68590 & 76830\\
  & & 1.0 & 2.09 & 3.96 & 6.12 & 6.44 & 7.21\\
 \cmidrule[0.05em](){3-9} & 
 \multirow{2}{*}{clang} & 10605 & 20794 & 41605 & 63372 & 68244 & 77024\\
  & & 1.00 & 1.95 & 3.91 & 5.95 & 6.41 & 7.23\\
             \midrule
-\multirowcell{4}{Modern\\ Workstation} & 
+\multirowcell{4}{Modern\\ Workstation \footref{plain-optimized}} & 
 \multirow{2}{*}{gcc} & 13458 & 26474 & 51051 & 140658 & 186775 & 204705 & 235189\\
  & & 1.0 & 1.97 & 3.79 & 10.45 & 13.88 & 15.21 & 17.48\\
 \cmidrule[0.05em](){3-9} & 
 \multirow{2}{*}{clang} & 12728 & 26607 & 51969 & 143312 & 191370 & 205084 & 233812\\
  & & 0.95 & 1.98 & 3.86 & 10.65 & 14.22 & 15.24 & 17.37\\
             \midrule
-\multirowcell{4}{Old\\ Low-Range\\ Laptop} & 
+\multirowcell{4}{Old\\ Low-Range\\ Laptop \footref{plain-optimized}} & 
 \multirow{2}{*}{gcc} & 8880 & 17512 & 24091 & 24448 & 26801\\
  & & 1.0 & 1.97 & 2.71 & 2.75 & 3.02\\
 \cmidrule[0.05em](){3-9} & 
 \multirow{2}{*}{clang} & 7758 & 19524 & 23932 & 26041 & 26870\\
  & & 0.87 & 2.20 & 2.70 & 2.93 & 3.03\\
             \midrule
-\multirowcell{4}{Old\\ Mid-Range\\ Laptop} & 
+\multirowcell{4}{Old\\ Mid-Range\\ Laptop \footref{plain-optimized}} & 
 \multirow{2}{*}{gcc} & 11238 & 20977 & 28151 & 30188 & 31114\\
  & & 1.0 & 1.87 & 2.50 & 2.69 & 2.77\\
 \cmidrule[0.05em](){3-9} & 
@@ -59,4 +59,5 @@
             \bottomrule
         \end{tabularx}
     \end{table}
-    
+    \addtocounter{footnote}{1}
+    \footnotetext{\label{plain-optimized}ref-optimized}

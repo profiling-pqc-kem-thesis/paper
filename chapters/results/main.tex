@@ -1,117 +1,6 @@
 \chapter{Results and Analysis}
 \label{chapter:results}
 
-\section{Acceleration of Post-Quantum Key Encapsulation Mechanisms}
-
-\todo[inline]{
-What specialized instructions and features applicable for post-quantum keyencapsulationmechanisms are available in z15 and how are they used in context?
-}
-
-This section studies the \gls{nist} submissions' underlying mathematics, the authors' own optimizations as well as relevant literature on cryptography optimization.
-
-\subsection{Identifying Hot Paths}
-\label{section:results:hot-paths}
-
-The following sections analyze the \gls{ntru} and \gls{mceliece} submissions to the \gls{nist} standardization process, in terms of the reference implementations and what branches the code takes, how many times they are taken, as well as how many instructions are retired in each function. Unless otherwise stated, the measurements are the percentage of instructions performed in a function or in a line of code, relative to the parent.\todo{clarify what algorithms were run, what settings, test - not bechmark binary}.
-
-All of the data as well as further visualizations not included in this work is published on GitHub\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
-
-\subsubsection{NTRU}
-
-The \gls{ntru} reference implementations consists of three API methods - keypair generation via \textit{crypto\_kem\_keypair}, encryption (encapsulation) via \textit{crypto\_kem\_enc} and decryption (decapsulation) via \textit{crypto\_kem\_dec}  decryption (decapsulation). These API functions may in turn call several internal functions, such as the polynomial math library which functions are prefixed \textit{poly\_}.
-
-The following graphs contain relative measurements denoting the percentage of instructions spent in each method. Both the HPS and HRSS variants of \gls{ntru} perform alike, hence only one set of graphs is shown for \gls{ntru} as a whole.
-
-Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $85\%$ of the time spent on generating a keypair.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{chapters/results/hot-paths/ntru/crypto_kem_keypair.pdf}
-    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_keypair}}
-    \label{figure:result:hot-paths:ntru:crypto_kem_keypair}
-\end{figure}
-
-Figure \ref{figure:result:hot-paths:ntru:crypto_kem_enc} describes the encapsulation API function. The key is generated using random bytes which are fed through 256-bit \gls{aes} in its Electronic Code Book (ECB) configuration to produce uniformly random bytes. Again, we see a significant percentage of the instructions spent in the polynomial library - in \textit{poly\_Rq\_mul}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{chapters/results/hot-paths/ntru/crypto_kem_enc.pdf}
-    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_keypair}}
-    \label{figure:result:hot-paths:ntru:crypto_kem_enc}
-\end{figure}
-
-The decryption function of \gls{ntru} is presented in figure \ref{figure:result:hot-paths:ntru:crypto_kem_dec}. Virtually all of the instructions spent decrypting (decapsulating) a key is spent in the \textit{poly\_Rq\_mul} function.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{chapters/results/hot-paths/ntru/crypto_kem_dec.pdf}
-    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_dec}}
-    \label{figure:result:hot-paths:ntru:crypto_kem_dec}
-\end{figure}
-
-Looking at the code of \textit{poly\_Rq\_mul} as shown in figure \ref{figure:result:hot-paths:ntru:poly_Rq_mul}, it is evident that the vast majority of instructions are spent on multiplying and adding numbers in loops. The value of \textit{NTRU\_N} corresponds to the parameter set. For \gls{ntru} HRSS 701, the value is 701 and for \gls{ntru} HPS 4096821 the value is 821.
-
-\begin{figure}[H]
-    \centering
-    \begin{lstlisting}[language=C]
-void poly_Rq_mul(poly *r, const poly *a, const poly *b) {
-  int k, i;
-
-  for (k = 0; k < NTRU_N; k++) {
-    r->coeffs[k] = 0;
-    for (i = 1; i < NTRU_N - k; i++) // 10.21%
-      r->coeffs[k] += a->coeffs[k + i] * b->coeffs[NTRU_N - i]; // 42.75%
-    for (i = 0; i < k + 1; i++) // 8.20%
-      r->coeffs[k] += a->coeffs[k - i] * b->coeffs[i]; // 38.79%
-  }
-}
-    \end{lstlisting}
-    \caption{Annotated source code of \gls{ntru}'s \textit{poly\_Rq\_mul}}
-    \label{figure:result:hot-paths:ntru:poly_Rq_mul}
-\end{figure}
-
-To summarize, it is shown that factors such as the speed of \gls{aes} has little to do with the overall performance of the algorithm. Furthermore, it seems as if the polynomial library functions account for the vast majority of instructions spent on key-pair generation, encryption and decryption. The function \textit{poly\_Rq\_mul}, which multiplies two polynomials in $\mathbb{R}^q$, accounts for most of the calculations performed.
-
-\subsubsection{Classic McEliece}
-The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants.
-
-In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}, we can see the \textit{crypto\_kem\_keypair} function and its only significant internal function, the \textit{pk\_gen} function that takes up 98.57\% of the execution time. In figure \ref{figure:result:hot-paths:classic-mceliece:pk_gen}, we can see the deeper look into the \textit{pk\_gen} function there we can see that all its internal functions and that they do not make up much of the instructions. Most of the instructions are inside of the \textit{pk\_gen} function itself.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_keypair.pdf}
-    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_keypair}}
-    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/pk_gen.pdf}
-    \caption{Relative instruction count of \gls{mceliece}'s \textit{pk\_gen}}
-    \label{figure:result:hot-paths:classic-mceliece:pk_gen}
-\end{figure}
-
-The encryption function of \gls{mceliece} is presented in figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_enc}. Most time is spent in the syndrome function. Further, in in figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_enc} is the decryption function presented. The majority of the time is spent in the synd function.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_enc.pdf}
-    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_enc}}
-    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_enc}
-\end{figure}
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_dec.pdf}
-    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_dec}}
-    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_dec}
-\end{figure}
-
-\todo[inline]{Var tydliga med hot paths och tid. Exempelvis så lär diagrammet för pk\_gen visa 0\% för vissa funktioner så som root, men om vi ser till hot paths så lär vi se att de kallas flera miljoner gånger. Kanske ha en graf som visar antalet invocations?}
-
-\todo[inline]{Ingen microbenchmark för eval, gf\_mul och gf\_add - de körs så många gånger att overheaden för profiling blev 1000x. McEliece kallar på många många tusen funktioner (hundra tusen, uppemot miljoner?) - det i sig bör ge mer overhead. }
-
 \section{Post-Quantum Cryptography on z15}
 \label{section:results:z15}
 
@@ -122,9 +11,9 @@ Introductory paragraph here?
 \subsection{Post-Quantum Cryptography Characteristics} 
 
 % Constant-time KEMs
-In \cite{bernstein2018}, Bernstein describes the fundamentals of a \gls{kem} in that a correct public-key encryption is applied to a random input to obtain a ciphertext. Bernstein further describes that it is a standard discipline to avoid data flow from secrets to to array indices and branch conditions. Although it is simple to construct the key generation and encapsulation, it may be difficult to provide constant-time decapsulation\todo{bernstein2018 continues with a more formal explanation using an algorithm explanation / notation}.
-
-Some \gls{x86} processors support the \gls{aes-instruction-set} instruction set. This instruction set speeds up \gls{aes}-related operations and may provide cryptosystems with a high-performance choice for noise sampling \cite{alkim2016}. As previously explained in section \ref{section:background:simd-avx}, \gls{x86} also supports the \gls{simd} instruction set \gls{avx}. Sinha Roy \cite{sinha2019} notes that on high-end platforms, \gls{simd} instructions such as those found in \gls{avx2} only provide a limited speedup. On Intel hardware, Sinha Roy measured a 1.5 times higher throughput of an optimized Saber variant, even though the algorithm was expected to achieve nearly four times higher throughput. One reason behind the identified performance bottleneck is the overhead of vector processing. With improved computer architectures, this overhead can be expected to become lower. Bernstein \cite{bernstein2014} further highlights four problems with Intel's \gls{x86} instruction set that make it hard to implement cryptographic algorithms securely. The first problem is that they are not committed to that an instruction does not change in a way that can break cryptographic functions, for example, committing to hiding the condition bit or keeping an instruction constant-time. This is even more important in vector operations. The second problem is that integer vector multiplication is limited to 25-bit. He wants to be able to use the 53-bit multiplier. The third is that the instruction set no not support a vector version of the CARRY instruction. The last problem he highlights with Intel is that they do not supply any documentation on pipelines.
+In \cite{bernstein2018}, Bernstein describes the fundamentals of a \gls{kem} in that a correct public-key encryption is applied to a random input to obtain a ciphertext. Bernstein further describes that it is a standard discipline to avoid data flow from secrets to array indices and branch conditions. Although it is simple to construct a valid key generation and encapsulation for a \gls{kem}, it may be difficult to provide constant-time decapsulation\todo{bernstein2018 continues with a more formal explanation using an algorithm explanation / notation}.
+%%% === THERE IS A LARGE CHANGE IN TOPICS HERE === %%%
+Some \gls{x86} processors support the \gls{aes-instruction-set} instruction set. This instruction set speeds up \gls{aes}-related operations and may provide cryptosystems with a high-performance choice for noise sampling \cite{alkim2016}. As previously explained in section \ref{section:background:simd-avx}, \gls{x86} also supports the \gls{simd} instruction set \gls{avx}. Sinha Roy \cite{sinha2019} notes that on high-end platforms, \gls{simd} instructions such as those found in \gls{avx2} only provide a limited speedup. On Intel hardware, Sinha Roy measured a 1.5 times higher throughput of an optimized \gls{saber} variant, even though the algorithm was expected to achieve nearly four times higher throughput. One reason behind the identified performance bottleneck is the overhead of vector processing. With improved computer architectures, this overhead can be expected to become lower. Bernstein \cite{bernstein2014} further highlights four problems with Intel's \gls{x86} instruction set that make it hard to implement cryptographic algorithms securely. The first problem is that they are not committed to provide an instruction set that does not change in a way that can break cryptographic functions. For example, committing to hiding the condition bit\todo{What is a condition bit?} or keeping an instruction constant-time. This is even more important in vector operations. The second problem is that integer vector multiplication is limited to 25 bits. He wants to be able to use the 53-bit multiplier. The third is that the instruction set does not support a vector version of the CARRY instruction. The last problem he highlights with Intel is that they do not supply any documentation on pipelines.
 
 % SHA-3 i ARMv8 - få ihop med arkitekturer på något vis?
 %The reliance on fast \gls{sha3} operations has been answered in the form of added hardware support of \gls{sha3} in ARMv8 \cite{kyber2021}.
@@ -141,10 +30,10 @@ In \cite{wang2018}, \gls{mceliece} is described to make use of matrix multiplica
 % lattice-based???
 
 % Gaussian, binomial samplig. AVX2 körs med uint16_t
-In \cite{alkim2016}, it is said that one of the inefficiencies of lattice-based cryptosystems stems from the misconception that high-quality Gaussian noise is crucial for encryption based on learning with errors. Using this Gaussian noise was found to make implementations slower and more complex than they would have to be. The Gaussian sampler is also hard to protect against timing attacks. Therefore one may use a centered binomial distribution instead. This distribution may be further optimized by applying vector instructions such as those found in \gls{avx2}. In the case of the New Hope cryptosystem and \gls{avx2}, the operations are carried out on unsigned 16-bit integers.
+In \cite{alkim2016}, it is said that one of the inefficiencies of lattice-based cryptosystems stems from the misconception that high-quality Gaussian noise is crucial for encryption based on learning with errors. Using this Gaussian noise was found to make implementations slower and more complex than they have to be. The Gaussian sampler is also hard to protect against timing attacks. Therefore one may use a centered binomial distribution instead. This distribution may be further optimized by applying vector instructions such as those found in \gls{avx2}. In the case of the New Hope cryptosystem and \gls{avx2}, the operations are carried out on unsigned 16-bit integers.
 
 %% NTT is common in lattice-based crypto. Encoding is important.
-To increase the performance of polynomial operations and, therefore, the performance of lattice-based cryptosystems, one may turn to \gls{ntt} \cite{alkim2016}. \gls{ntt} provides an efficient way of multiplying polynomials. The \gls{ntt}, which is a generalization of \gls{fft}, has an asymptotically-fastest time-complexity of $\mathcal{O}(n\log{}n)$ \cite{roy2020}. In \cite{alkim2016} the bottleneck of the \gls{ntt}-operations was found to be the butterfly operations - each consisting of one addition, one subtraction, and one multiplication by a pre-computed constant. Another performance-sensitive topic is the use of encodings of polynomials in byte arrays \cite{alkim2016}. There has been research on exchanging this encoding with another encoding that is particularly well-suited for NTT-based polynomial multiplication.
+To increase the performance of polynomial operations and the performance of lattice-based cryptosystems as whole, one may turn to \glspl{ntt} \cite{alkim2016}. \gls{ntt} provides an efficient way of multiplying polynomials. The \gls{ntt}, which is a generalization of \gls{fft}, has an asymptotically-fastest time-complexity of $\mathcal{O}(n\log{}n)$ \cite{roy2020}. In \cite{alkim2016} the bottleneck of the \gls{ntt}-operations was found to be the butterfly operations - each consisting of one addition, one subtraction, and one multiplication by a pre-computed constant. Another performance-sensitive topic is the use of encodings of polynomials in byte arrays \cite{alkim2016}. There has been research on exchanging this encoding with another encoding that is particularly well-suited for \gls{ntt}-based polynomial multiplication.
 
 % NTTs state-of-the-art performance using AVX2. ARMv8 has hardware support for SHA3
 Roberto et. al. \cite{kyber2021} argue that \glspl{ntt} are extremely efficiently vectorizable on large processors. State-of-the-art performance may be achieved by carefully optimizing \glspl{ntt} using \gls{avx2} integer instructions.
@@ -156,31 +45,32 @@ The importance of \gls{simd} instructions such as \gls{avx} is further establish
 % SABER 
 % SABER 
 % SABER 
+%%% === THERE IS A LARGE CHANGE IN TOPICS HERE === %%%
+The \gls{post-quantum} \gls{kem} \gls{saber} is designed to be serial by nature \cite{sinha2019}. The design was chosen to attain simplicity and efficiency on constrained devices. The \gls{saber} algorithm relies heavily on the pseduo-random number generation implemented using SHAKE-128, which also occupies a significant portion of \gls{saber}'s execution time \cite{sinha2019}. Some measurements suggest that around 50-70\% of the overall computation time is spent in the pseduo-random number generation \cite{saber}.
 
-The \gls{post-quantum} \gls{kem} Saber is designed to be serial by nature \cite{sinha2019}. The design was chosen to attain simplicity and efficiency on constrained devices. The Saber algorithm relies heavily on the pseduo-random number generation implemented using SHAKE-128, which also occupies a significant portion of Saber's execution time \cite{sinha2019}. Some measurements suggest that around 50-70\% of the overall computation time is spent in the pseduo-random number generation \cite{saber}.
-
-In \cite{zhu2021}, Zhu et. al. discuss the performance of cryptosystems based on learning with rounding, such as Saber. In Saber, the main computational bottleneck is the polynomial multiplication, which can not be accelerated by using the \gls{ntt} fast multiplication algorithm. This is due to Saber using a power-of-two modulo and \glspl{ntt} requiring a prime modulo for ciphertexts. When it comes to hardware implementations, it is therefore important to discuss how one may efficiently implement polynomial multiplication without using \gls{ntt}. One may exchange \gls{ntt} with Toom-Cook and Karatsuba algorithms. However, high-speed implementations of Toom-Cook multiplication have been found to add additional overhead. For implementations in hardware, a Karatsuba algorithm may be adopted for accelerating learning with rounding, as found in Saber. In one implementation, it was found that a 100Mhz hardware implementation required roughly $5.2\mu s$ for encapsulating a key, which was found to be 14 times faster than implementations on a more conventional Intel Core i7 processor. Further efforts have been made to implement Saber in hardware \cite{roy2020}. In \cite{roy2020}, a high-speed instruction-set coprocessor for lattice-based \glspl{kem} is presented. The authors also identified that polynomial multiplications plays a performance-critical role in lattice-based public-key cryptography.
+In \cite{zhu2021}, Zhu et. al. discuss the performance of cryptosystems based on learning with rounding, such as \gls{saber}. In \gls{saber}, one of the main computational bottlenecks is the polynomial multiplication, which can not be accelerated by using the \gls{ntt} fast multiplication algorithm. This is due to \gls{saber} using a power-of-two modulo and \glspl{ntt} requiring a prime modulo for ciphertexts. When it comes to hardware implementations, it is therefore important to discuss how one may efficiently implement polynomial multiplication without using \gls{ntt}. One may exchange \gls{ntt} with Toom-Cook and Karatsuba algorithms. However, high-speed implementations of Toom-Cook multiplication have been found to add additional overhead. For implementations in hardware, a Karatsuba algorithm may be adopted for accelerating learning with rounding, as found in \gls{saber}. In one implementation, it was found that a 100Mhz hardware implementation required roughly $5.2\mu s$ for encapsulating a key, which was found to be 14 times faster than implementations on a more conventional Intel Core i7 processor. Further efforts have been made to implement \gls{saber} in hardware \cite{roy2020}. In \cite{roy2020}, a high-speed instruction-set coprocessor for lattice-based \glspl{kem} is presented. Just like Zhu et. al. \cite{zhu2021}, Sinha Roy et. al. \cite{roy2020} also identified that polynomial multiplications plays a performance-critical role in lattice-based public-key cryptography.
 
 % KYBER
 % KYBER
 % KYBER
 
 % Mjukvara kan NTTs vara bättre än Toom och Karatsuba. Prestandan bygger mer eller mindre på SHA-3. Hashing halva tiden i Kyber
-The \gls{post-quantum} \gls{kem} Kyber uses \glspl{ntt} as an efficient way of performing multiplications of polynomials in $\mathbb{R}_q$ \cite{kyber2021}. In order to increase the performance of the factors when performing calculations using \gls{avx} \gls{simd} instructions, one may apply bit-reversed order. Kyber further uses SHA3-256, SHA3-512, SHAKE-128 and SHAKE-256. The use of \glspl{ntt} have some advantages over Karatsuba and Toom multiplication algorithms. \glspl{ntt} are extremely fast and do not require additional memory. \glspl{ntt} may also be implemented in very little code. The performance of Kyber is largely bound to the performance of the symmetric primitives of the \gls{sha3} family of algorithms. The hash computations are considerably less performant than the polynomial arithmetic found in Kyber on recent Intel processors. In an \gls{avx2}-optimized Kyber implementation, the hashes constitute almost half of the encapsulation cycles.
+The \gls{post-quantum} \gls{kem} \gls{kyber} uses \glspl{ntt} as an efficient way of performing multiplications of polynomials in $\mathbb{R}_q$ \cite{kyber2021}. In order to increase the performance of the factors when performing calculations using \gls{avx} \gls{simd} instructions, one may apply bit-reversed order. \gls{kyber} further uses SHA3-256, SHA3-512, SHAKE-128 and SHAKE-256. The use of \glspl{ntt} have some advantages over Karatsuba and Toom multiplication algorithms. \glspl{ntt} are extremely fast and do not require additional memory. \glspl{ntt} may also be implemented in very little code. The performance of \gls{kyber} is largely bound to the performance of the symmetric primitives of the \gls{sha3} family of algorithms. The hash computations are considerably less performant than the polynomial arithmetic found in \gls{kyber} when run on recent Intel processors. In an \gls{avx2}-optimized \gls{kyber} implementation, the hashes constitute almost half of the encapsulation cycles.
 
 % One may use AES och KECCAK for random number generation, depending on hardware support
-In Kyber, the choice of random number generation during key generation is considered a local decision that any user may make independently of one another \cite{kyber2021}. On platforms where there is hardware support for \gls{aes}, one may adapt \gls{aes}-based generators. On platforms with support for KECCAK-based algorithms, one may instead rely on them for pseudo-random numbers.
+In \gls{kyber}, the choice of random number generation during key generation is considered a local decision that any user may make independently of one another \cite{kyber2021}. On platforms where there is hardware support for \gls{aes}, one may adapt \gls{aes}-based generators. On platforms with support for KECCAK-based algorithms, one may instead rely on them for pseudo-random numbers.
 
 % Hardware
 % Hardware
 % Hardware
 
+%%% === THERE IS A LARGE CHANGE IN TOPICS HERE === %%%
 %% Hårdvara good, software bad. Coprocessor should work. 
-In \cite{roy2020} it is said that there are two general methodologies to implement computationally intensive cryptographic algorithms in hardware. A hardware/software codesign offers a shorter design cycle and higher flexibility, but it may not result in the best performance. The best performance is found in a full-hardware design. By using a instruction-set coprocessor architecture for Saber, the authors achieved programmability and flexibility, which allowed them to easily extend the instruction set and adapt the architecture for other algorithms and tasks. The architecture followed best practices by making the implementation constant-time. Many lattice-based \glspl{kem} have reported that 50-70\% of the overall computation time is spent on executing the KECCAK function - making it the most performance-critical component. On platforms with support for \gls{simd} instructions such as \gls{avx2}, the cost of pseudo-random number generation is reduced by vectorizing the implementation by a factor of four. As KECCAK is very efficient on hardware platforms, one may run the algorithm in parallel.
+In \cite{roy2020} it is said that there are two general methodologies to implement computationally intensive cryptographic algorithms in hardware. A hardware/software codesign offers a shorter design cycle and higher flexibility, but it may not result in the best performance. The best performance is found in a full-hardware design. By using a instruction-set coprocessor architecture for \gls{saber}, the authors achieved programmability and flexibility, which allowed them to easily extend the instruction set and adapt the architecture for other algorithms and tasks. The architecture followed best practices by making the implementation constant-time. On platforms with support for \gls{simd} instructions such as those found in \gls{avx2}, the cost of pseudo-random number generation is reduced by vectorizing the implementation by a factor of four. As \gls{keccak} is very efficient on hardware platforms, one may run the algorithm in parallel.
 
 \subsection{IBM Z Features and Opportunities} 
 
-Wolpert et. al. \cite{wolpert2020} introduces the IBM \gls{z15} as a chip built on GlobalFoundries 14nm node. A key innovation that enabled a scaled design without targeting a new die size was the development of the 2MB eDRAM. This memory is used to achieve 256MB of L3 cache and 960MB L4 eDRAM cache. The chip targets a lifetime of 100 000 power-on hours and a 99.99999\% uptime guarantee which is about 3.2 seconds of allowed downtime in a year. In a lab environment based on real-world customer environments, the clock frequency reached sustained 6GHz. IBM has control over the entire hardware stack and the software that runs on it, making it possible for every part in the system to work extremely efficiently with one another \cite{wolpert2020}. Further, IBM added support for \gls{ecc} to the \gls{cpacf} \cite{berry2020}.
+Wolpert et. al. \cite{wolpert2020} introduces the IBM \gls{z15} as a chip built on GlobalFoundries' 14nm node. A key innovation that enabled a scaled design without targeting a new die size was the development of the 2MB eDRAM. This memory is used to achieve 256MB of L3 cache and 960MB L4 eDRAM cache. The chip targets a lifetime of 100 000 power-on hours and a 99.99999\% uptime guarantee which is about 3.2 seconds of allowed downtime in a year. In a lab environment based on real-world customer environments, the clock frequency reached sustained 6GHz. IBM has control over the entire hardware stack and the software that runs on it, making it possible for every part in the system to work extremely efficiently with one another \cite{wolpert2020}. Further, IBM added support for \gls{ecc} to the \gls{cpacf} \cite{berry2020}.
 
 In \cite{payer2020}, Payer et. al. outlines a completely redesigned binary and hexadecimal floating-point unit in \gls{z15}. The unit allows for an efficient implementation of \gls{simd} operations at 5.2GHz, without sacrificing reliability. Initially designed for accelerating common machine learning operations, the 32-bit floating-point operations have seen a doubling in throughput. The latency of all operations on the binary floating-point unit have also been reduced. The \gls{z15} has 32 128-bit wide vector registers per processor \cite{redbook:z15}.
 
@@ -263,48 +153,112 @@ Quantum-safe platforms demand increased cryptographic performances, agility and 
 % -- Cores, Cache, Content, and Characterization: IBM's Second Generation 14-nm Product, z15
 %    -- None
 
+\section{Identifying Hot Paths}
+\label{section:results:hot-paths}
+
+The following sections analyze the \gls{ntru} and \gls{mceliece} submissions to the \gls{nist} standardization process, in terms of the reference implementations and what branches the code takes, how many times they are taken, as well as how many instructions are retired in each function. Unless otherwise stated, the measurements are the percentage of instructions performed in a function or in a line of code, relative to the parent.\todo{clarify what algorithms were run, what settings, test - not bechmark binary}.
+
+All of the data as well as further visualizations not included in this work is published on GitHub\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
+
+\subsection{NTRU}
+
+The \gls{ntru} reference implementations consists of three API methods - keypair generation via \textit{crypto\_kem\_keypair}, encryption (encapsulation) via \textit{crypto\_kem\_enc} and decryption (decapsulation) via \textit{crypto\_kem\_dec}  decryption (decapsulation). These API functions may in turn call several internal functions, such as the polynomial math library which functions are prefixed \textit{poly\_}.
+
+The following graphs contain relative measurements denoting the percentage of instructions spent in each method. Both the HPS and HRSS variants of \gls{ntru} perform alike, hence only one set of graphs is shown for \gls{ntru} as a whole.
+
+Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $85\%$ of the time spent on generating a keypair.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{chapters/results/hot-paths/ntru/crypto_kem_keypair.pdf}
+    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_keypair}}
+    \label{figure:result:hot-paths:ntru:crypto_kem_keypair}
+\end{figure}
+
+Figure \ref{figure:result:hot-paths:ntru:crypto_kem_enc} describes the encapsulation API function. The key is generated using random bytes which are fed through 256-bit \gls{aes} in its Electronic Code Book (ECB) configuration to produce uniformly random bytes. Again, we see a significant percentage of the instructions spent in the polynomial library - in \textit{poly\_Rq\_mul}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{chapters/results/hot-paths/ntru/crypto_kem_enc.pdf}
+    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_keypair}}
+    \label{figure:result:hot-paths:ntru:crypto_kem_enc}
+\end{figure}
+
+The decryption function of \gls{ntru} is presented in figure \ref{figure:result:hot-paths:ntru:crypto_kem_dec}. Virtually all of the instructions spent decrypting (decapsulating) a key is spent in the \textit{poly\_Rq\_mul} function.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{chapters/results/hot-paths/ntru/crypto_kem_dec.pdf}
+    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_dec}}
+    \label{figure:result:hot-paths:ntru:crypto_kem_dec}
+\end{figure}
+
+Looking at the code of \textit{poly\_Rq\_mul} as shown in figure \ref{figure:result:hot-paths:ntru:poly_Rq_mul}, it is evident that the vast majority of instructions are spent on multiplying and adding numbers in loops. The value of \textit{NTRU\_N} corresponds to the parameter set. For \gls{ntru} HRSS 701, the value is 701 and for \gls{ntru} HPS 4096821 the value is 821.
+
+\begin{figure}[H]
+    \centering
+    \begin{lstlisting}[language=C]
+void poly_Rq_mul(poly *r, const poly *a, const poly *b) {
+  int k, i;
+
+  for (k = 0; k < NTRU_N; k++) {
+    r->coeffs[k] = 0;
+    for (i = 1; i < NTRU_N - k; i++) // 10.21%
+      r->coeffs[k] += a->coeffs[k + i] * b->coeffs[NTRU_N - i]; // 42.75%
+    for (i = 0; i < k + 1; i++) // 8.20%
+      r->coeffs[k] += a->coeffs[k - i] * b->coeffs[i]; // 38.79%
+  }
+}
+    \end{lstlisting}
+    \caption{Annotated source code of \gls{ntru}'s \textit{poly\_Rq\_mul}}
+    \label{figure:result:hot-paths:ntru:poly_Rq_mul}
+\end{figure}
+
+To summarize, it is shown that factors such as the speed of \gls{aes} has little to do with the overall performance of the algorithm. Furthermore, it seems as if the polynomial library functions account for the vast majority of instructions spent on key-pair generation, encryption and decryption. The function \textit{poly\_Rq\_mul}, which multiplies two polynomials in $\mathbb{R}^q$, accounts for most of the calculations performed.
+
+\subsection{Classic McEliece}
+The \gls{mceliece} reference implementation consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively\todo{A bit CTRL+C CTRL+V from previous, rewrite?}. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants.
+
+In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}, we can see the \textit{crypto\_kem\_keypair} function and its only significant internal function, the \textit{pk\_gen} function that takes up 98.57\% of the execution time. In figure \ref{figure:result:hot-paths:classic-mceliece:pk_gen}, a more in-depth representation of the \textit{pk\_gen} function is presented. In that figure, all of its internal functions are shown. As can be seen, they do not make up much of the accumulated instruction counts. Most of the instructions are inside of the \textit{pk\_gen} function itself.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_keypair.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_keypair}}
+    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/pk_gen.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{pk\_gen}}
+    \label{figure:result:hot-paths:classic-mceliece:pk_gen}
+\end{figure}
+
+The encryption function of \gls{mceliece} is presented in figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_enc}. Most time is spent in the syndrome function. In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_enc} the decryption function is presented. The majority of the time is spent in the \textit{synd} function.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_enc.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_enc}}
+    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_enc}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{chapters/results/hot-paths/classic-mceliece/8192128/crypto_kem_dec.pdf}
+    \caption{Relative instruction count of \gls{mceliece}'s \textit{crypto\_kem\_dec}}
+    \label{figure:result:hot-paths:classic-mceliece:crypto_kem_dec}
+\end{figure}
+
+\todo[inline]{Var tydliga med hot paths och tid. Exempelvis så lär diagrammet för pk\_gen visa 0\% för vissa funktioner så som root, men om vi ser till hot paths så lär vi se att de kallas flera miljoner gånger. Kanske ha en graf som visar antalet invocations?}
+
+\todo[inline]{Ingen microbenchmark för eval, gf\_mul och gf\_add - de körs så många gånger att overheaden för profiling blev 1000x. McEliece kallar på många många tusen funktioner (hundra tusen, uppemot miljoner?) - det i sig bör ge mer overhead. }
+
 \section{The Performance of Post-Quantum Key Exchange Mechanisms}
 
 This section presents the results of the experiment as outlined in section \ref{section:method:experiment}. It further discusses the performance of \gls{post-quantum} \glspl{kem} and how they may differ on various architectures and hardware.
-
-\subsection{Algorithm Performance}
-\todo[inline]{Add footnote to throughput table}
-
-In section \ref{section:method:experiment:phase1:implementation-configurations} it was written that the monitored functions for the micro benchmark would be based off of data found in the hot paths analysis. In the end, the functions presented in Table \ref{table:results:performance:micro-functions} were monitored during the micro benchmark. Note that although the randombytes function is available in both \gls{ntru} and \gls{mceliece}, it was found in section \ref{section:results:hot-paths} to not be significant enough to warrant further analysis.
-
-\begin{table}[H]
-    \centering
-    \caption{Monitored Functions}
-    \label{table:results:performance:micro-functions}
-    \begin{tabularx}{\linewidth}{l X}
-        \toprule
-        \thead{Name} & \thead{Description} \\
-        \midrule
-        \multicolumn{3}{c}{\thead[l]{\gls{mceliece} and \gls{ntru}}} \\
-        %\midrule
-        crypto\_kem\_keypair & Generate a keypair \\
-        crypto\_kem\_enc & Generate and encapsulate a key \\
-        crypto\_kem\_dec & Decapsulate an encapsulated key \\
-        \midrule
-        \multicolumn{3}{c}{\thead[l]{\gls{mceliece}}} \\
-        pk\_gen & Generate the public-key\\
-        gen\_e & Generate an error vector of a specific weight (encryption)\\
-        syndrome & Create the syndrome using the public key and an error vector (encryption)\\
-        % syndrome\_asm & The same as syndrome, but implemented in assembly targeting AVX2\\
-        root & A polynomial at one or more field elements are evaluated (decryption)\\
-        synd & Syndrome computation (decryption)\\
-        \midrule
-        \multicolumn{3}{c}{\thead[l]{\gls{ntru}}} \\
-        poly\_Rq\_mul & Multiply a polynomial with another in $\mathbb{R}_q$\\
-        poly\_S3\_inv & Invert a polynomial in $\mathbb{S}_3$\\
-        randombytes & Retrieve uniformly random bytes \\
-        poly\_Rq\_inv & Invert a polynomial in $\mathbb{R}_2$\\
-        poly\_R2\_inv & Invert a polynomial in $\mathbb{R}_2$\\
-        poly\_R2\_inv\_to\_Rq\_inv & Lift an inverted polynomial from $\mathbb{R}_2$ to $\mathbb{R}_q$ \\
-        poly\_Sq\_mul & Multiply a polynomial in $\mathbb{S}_q$ with another\\
-        \bottomrule
-    \end{tabularx}
-\end{table}
 
 \subsection{Heap Usage}
 
@@ -319,6 +273,7 @@ The operation of dividing an integer was found to correlate to an additional $53
 
 \begin{table}
     \centering
+    \small
     \caption{Heap Allocation in Bytes for \gls{dhe}}
     \label{table:results:memory:dhe-heap}
     \begin{tabularx}{\linewidth}{X c c c}
@@ -340,6 +295,7 @@ The operation of dividing an integer was found to correlate to an additional $53
 
 \begin{table}
     \centering
+    \small
     \caption{Heap Allocation in Bytes for \gls{ecdhe}}
     \label{table:results:memory:ecdhe-heap}
     \begin{tabularx}{\linewidth}{X c c c c}
@@ -370,28 +326,32 @@ The operation of dividing an integer was found to correlate to an additional $53
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{Does not correctly reflect the actual usage? Zero is most likely wrong as the exchange function creates a key. Furthermore, the values currently reflect crypto\_kem\_keypair and crypto\_kem\_exchange, not perform\_keypair and perform\_exchange}
+\todo[inline]{Does not correctly reflect the actual usage? Zero is most likely wrong as the exchange function creates a key. Furthermore, the values currently reflect crypto\_kem\_keypair and crypto\_kem\_exchange, not perform\_keypair and perform\_exchange
+
+Is this all due to OpenSSL allocating and handling its own memory? Easy to blame them...
+}
 
 \subsection{Stack Usage}
 
-In terms of stack usage, the results vary between the implementations, compilers and features. For instance, the polynomial math function poly\_Rq\_mul in \gls{ntru}, which was identified as constituting most of the time spent in the algorithm, varies between taking up $70499$ and $188$ bytes. In all environments, the HPS 4096821 AVX2 variant takes up $70499$ bytes. This does not change between compilers or optimization flags, which could be due to the fact that the implementation is written in assembly - leaving little room for the compiler to alter the behavior. The same goes for the HRSS 701 variant of \gls{ntru} - the size is consistently $55317$ across environments and optimization flags. The lowest sizes are found when the reference implementation is compiled with optimization. The sizes are presented in Table \ref{table:results:memory:ntru-stack}. Although the optimization flags used were not chosen for improving the size of the binary, the size of the function has been lowered in all cases. Although the same version of GCC was used for several environments, the results differed between $188$ and $192$ bytes. Clang continually produced larger regions than GCC. Furthermore, more recent versions of the compilers seem to have produced smaller sizes.
+In terms of stack usage, the results vary between the implementations, compilers and features. For instance, the polynomial math function poly\_Rq\_mul in \gls{ntru}, which was identified as constituting most of the time spent in the algorithm, varies between taking up $70499$ and $188$ bytes. In all environments, the HPS 4096821 AVX2 variant takes up $70499$ bytes. This does not change between compilers or optimization flags, which could be due to the fact that the implementation is written in assembly - leaving little room for the compiler to alter the behavior. The same goes for the HRSS 701 variant of \gls{ntru} - the size is consistently 55317 bytes across environments and optimization flags. The lowest sizes are found when the reference implementation is compiled with optimization. The sizes are presented in Table \ref{table:results:memory:ntru-stack}. Although the optimization flags used were not chosen for improving the size of the binary, the size of the function has been lowered in all cases. Although the same version of GCC was used for several environments, the results differed between $188$ and $192$ bytes. Clang continually produced larger regions than GCC. Furthermore, more recent versions of the compilers seem to have produced smaller sizes.
 
 \begin{table}
     \centering
+    \small
     \caption{Stack Size of poly\_Rq\_mul in Bytes for the Optimized Reference Implementation}
     \label{table:results:memory:ntru-stack}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
         \thead{Environment} & \thead{Compiler} & \thead{Compiler Version} & \thead{Optimized Size} & \thead{Reference Size}\\
         \midrule
-        Cloud Provider 1 & clang & 6.0.0 & 702 & N/A \\
-        IBM Community Cloud & clang & 10.0.1 & 522 & N/A \\
-        Cloud Provider 2 & clang & 10.0.0 & 380 & N/A \\
-        Modern Laptop & clang & 10.0.0 & 380 & N/A \\
-        Modern Workstation & clang & 10.0.0 & 380 & N/A \\
-        Modern Laptop & clang & 10.0.0 & 380 & N/A \\
-        Old Low-Range Laptop & clang & 10.0.0 & 300 & N/A \\
-        Old Mid-Range Laptop & clang & 10.0.0 & 300 & N/A \\
+        Cloud Provider 1 & clang & 6.0.0 & 702 & - \\
+        IBM Community Cloud & clang & 10.0.1 & 522 & - \\
+        Cloud Provider 2 & clang & 10.0.0 & 380 & - \\
+        Modern Laptop & clang & 10.0.0 & 380 & - \\
+        Modern Workstation & clang & 10.0.0 & 380 & - \\
+        Modern Laptop & clang & 10.0.0 & 380 & - \\
+        Old Low-Range Laptop & clang & 10.0.0 & 300 & - \\
+        Old Mid-Range Laptop & clang & 10.0.0 & 300 & - \\
     
         IBM Community Cloud & gcc & 8.3.1 & 242 & 382 \\
         Old Low-Range Laptop & gcc & 9.3.0 & 196 & 255 \\
@@ -404,8 +364,6 @@ In terms of stack usage, the results vary between the implementations, compilers
     \end{tabularx}
 \end{table}
 
-
-
 The same correlation between optimization flags and compiler versions could not be found in the case of \gls{mceliece} and pk\_gen. In that case, the largest recorded size was found in IBM Community Cloud's optimized reference implementation with $22858$ bytes. The optimized AVX2 implementation of the Modern Workstation and Modern Laptop came second with $22123$ bytes. Lastly, the smallest size recorded was found in the optimized reference implementation of Old Mid-Range Laptop and Old Low-Range Laptop at $2026$ bytes.
 
 As for other functions of the \glspl{kem}, the data is too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one may see that Clang seems to produce smaller binaries. Furthermore, the optimized AVX2 builds result in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
@@ -414,9 +372,9 @@ As for other functions of the \glspl{kem}, the data is too massive to comprehens
 
 \subsection{Parameter Sizes}
 
-The measurements presented up until this point have been related to either the runtime behavior of the algorithms, or the static requirements they place on the environment. These measurements have not included the parameters fed to the algorithms - which could affect real-world applications. The remaining part of this section will present data gathered from the various implementations.
+The measurements presented up until this point have been related to either the runtime behavior of the algorithms, or the static requirements they place on the environment in the form of stack usage. These measurements have not included the parameters fed to the algorithms - which could affect real-world applications. The remaining part of this section will present data gathered from the various implementations.
 
-The \glspl{kem} tested conform to the same API. Their signatures are presented in figure \ref{figure:result:memory:kem-api}. The function crypto\_kem\_keypair, which generates a keypair takes in a public key and a secret key. The encapsulation function, crypto\_kem\_enc, takes in a ciphertext buffer, a key buffer and the public key of a peer. Lastly, the decapsulation function, crypto\_kem\_dec takes in a key buffer, the ciphertext as received from a peer and the secret key. The sizes of these parameters differ between algorithms and implementations - but is not changed depending on the environment or optimizations. Table \ref{table:results:memory:kem-parameter-sizes} shows the sizes of the parameters in bytes. The sizes do not differ between the "f" variants of \gls{mceliece}. Therefore only two variants of \gls{mceliece} are presented.
+The \glspl{kem} tested conform to the same API. Their signatures are presented in figure \ref{figure:result:memory:kem-api}. The function crypto\_kem\_keypair, which generates a keypair takes in a public key and a secret key. The encapsulation function, crypto\_kem\_enc, takes in a ciphertext buffer, a key buffer and the public key of a peer. Lastly, the decapsulation function, crypto\_kem\_dec takes in a key buffer, the ciphertext as received from a peer and the secret key. The sizes of these parameters differ between algorithms and implementations - but is not changed depending on the environment or optimizations. Table \ref{table:results:memory:kem-parameter-sizes} shows the sizes of the parameters in bytes. The sizes do not differ between the semi-systematic (f) variants of \gls{mceliece}. Therefore only two variants of \gls{mceliece} are presented.
 
 \begin{figure}
     \centering
@@ -431,6 +389,7 @@ int crypto_kem_dec(unsigned char *key, const unsigned char *ciphertext, const un
 
 \begin{table}
     \centering
+    \small
     \caption{Parameter Sizes in Bytes of the \glspl{kem} Under Test}
     \label{table:results:memory:kem-parameter-sizes}
     \begin{tabularx}{\linewidth}{X c c c c c}
@@ -468,6 +427,7 @@ int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const un
 
 \begin{table}
     \centering
+    \small
     \caption{Parameter Sizes in Bytes of the \glspl{kex} Under Test}
     \label{table:results:memory:kex-parameter-sizes}
     \begin{tabularx}{\linewidth}{X c c c c c c}
@@ -483,13 +443,13 @@ int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const un
 
 \subsection{Sequential Performance}
 
-The performance of the algorithms were analyzed by performing a thousand sequential runs in series, for each algorithm under test at two different occasions. The complete method is outlined in section \ref{section:method:experiment:phase1}.
+The performance of the algorithms in a single run was analyzed by performing a thousand sequential runs in series, for each algorithm under test at two different occasions. The complete method is outlined in section \ref{section:method:experiment:phase1}.
 
-As covered in section \ref{section:background:mceliece}, \gls{mceliece} supports two forms of keypair-generation algorithms - a systematic form and a semi-systematic form. The systematic forms, such as \gls{mceliece} 8192128 and the semi-systematic forms, such as \gls{mceliece} 8192128f, use different algorithms for generating the keypairs. The authors of the \gls{nist} submission state that these two forms may have different performance characteristics \cite{mceliece2020}. In Table \ref{table:results:sequential-mceliece-6960119-keypair-modern-workstation}, these two forms can be seen with every set of performance improvements tested in the experiment. As can be seen in the table, the reference implementation in its systematic form is remarkably inconsistent, with a standard deviation of $20580.20$ as compared to the $6.91$ of the semi-systematic form. The change in performance characteristics is also visible in the mean, with the semi-systematic form taking about $30\%$ of the time on average as compared to the systematic form. In both cases, the \gls{avx2} implementation has the second largest standard deviation with $302.58$ and $6.91$ for the systematic form and the semi-systematic form, respectively. Despite being a \gls{simd} implementation, \gls{avx2} performs worse than the optimized reference implementation in both forms of the algorithm. The optimized \gls{avx2}, however, outperforms the optimized reference implementation with a 4-6 times the performance. The same results were found to generalize for several environments, as shown in Table \ref{table:results:sequential:mceliece-6960119-keypair} and \ref{table:results:sequential:mceliece-6960119f-keypair}.
+As covered in section \ref{section:background:mceliece}, \gls{mceliece} supports two forms of keypair-generation algorithms - a systematic form and a semi-systematic form. The systematic forms, such as \gls{mceliece} 8192128 and the semi-systematic forms, such as \gls{mceliece} 8192128f, use different algorithms for generating the keypairs. The authors of the \gls{nist} submission state that these two forms may have different performance characteristics \cite{mceliece2020}. In Table \ref{table:results:sequential-mceliece-6960119-keypair-modern-workstation}, these two forms can be seen with every set of performance improvements tested in the experiment. As can be seen in the table, the reference implementation in its systematic form is remarkably inconsistent, with a standard deviation of $20580.20$ as compared to the $6.91$ of the semi-systematic form. The change in performance characteristics is also visible in the mean, with the semi-systematic form taking about $30\%$ of the time on average as compared to the systematic form. In both cases, the \gls{avx2} implementation has the second largest standard deviation with $302.58$ and $6.91$ for the systematic form and the semi-systematic form, respectively. Despite being a \gls{simd} implementation, \gls{avx2} performs worse than the optimized reference implementation in both forms of the algorithm. The optimized \gls{avx2} implementation, however, outperforms the optimized reference implementation with four to six times the performance. The same results were found to generalize for several environments, as shown in Table \ref{table:results:sequential:mceliece-6960119-keypair} and \ref{table:results:sequential:mceliece-6960119f-keypair}.
 
 \input{chapters/results/sequential/Modern Workstation_deviation_mceliece}
 
-In all environments but one, we found a consistent performance throughout all sequential runs, non-deterministic behavior and outliers aside. The Cloud Provider 2 environment provided inconsistent results throughout the sequential performance benchmarks - across various algorithms and runs. As seen in figure \ref{figure:results:sequential:mceliece-decrpyt-cloud-provider-2}, there are several occasions where the performance shift over time. In the figure, the speedup relative to the reference GCC implementation is used as opposed to the absolute duration of each iteration. Depending on how deterministic the behavior of the algorithms are, as well as how stable the environment is, one could have expected more or less the same performance throughout the test. As the Cloud Provider 2 environment uses two virtual CPU cores, it is not entirely unexpected to find such inconsistent results. The same behavior was not found in any of the environments tested with dedicated hardware, nor the Cloud Provider 1 environment.
+In all environments but one, we found consistent performance throughout all sequential runs, non-deterministic behavior and outliers aside. The Cloud Provider 2 environment provided inconsistent results throughout the sequential performance benchmarks - across various algorithms and runs. As seen in figure \ref{figure:results:sequential:mceliece-decrpyt-cloud-provider-2}, there are several occasions where the performance shift over time. In the figure, the speedup relative to the reference GCC implementation is used as opposed to the absolute duration of each iteration. Depending on how deterministic the behavior of the algorithms are, as well as how stable the environment is, one could have expected more or less the same performance throughout the test. As the Cloud Provider 2 environment uses two virtual CPU cores, it is not entirely unexpected to find such inconsistent results. The same behavior was not found in any of the environments tested with dedicated hardware, nor the Cloud Provider 1 environment.
 
 \begin{figure}
     \centering
@@ -498,7 +458,7 @@ In all environments but one, we found a consistent performance throughout all se
     \label{figure:results:sequential:mceliece-decrpyt-cloud-provider-2}
 \end{figure}
 
-In Table \ref{figure:results:sequential:ntru-hrss701} all of the average durations and speedups for each optimization and environment are shown. In the table, one may see conclusive evidence that the optimized \gls{avx2} implementations perform the best in all environments with support for \gls{avx2}. It is not clear, however, what compiler produces the best performance. In the environments without support for \gls{avx2}, the optimized reference implementation performed the best. Just as with the \gls{avx2} implementations, it's unclear whether or not GCC or Clang produced the best results. It seems as if GCC produces more consistent results, with less variation in the averages. In the Old Low-Range Laptop environment, for example, one may see that Clang requires about two times the duration of the comparable subject compiled with GCC. In other cases, Clang seems to be on par with, or better than, GCC. As the speedup is percentual based on the environment, one may expect them to be similar across environments. That is, the speedup of using \gls{avx2} instead of the reference implementation, should in theory be similar on both the Modern Workstation and Modern Laptop, for example. In practice we found this to not be true. Although similar, the \gls{avx2} implementation compiled and optimized by Clang has an additional 78 times speedup when compared to the Modern Laptop. On the other hand, the Old Mid-Range Laptop and the Old Low-Range Laptop perform near identically in terms of speedup.
+In Table \ref{figure:results:sequential:ntru-hrss701} all of the average durations and speedups for each optimization and environment are shown. In the table, one may see conclusive evidence that the optimized \gls{avx2} implementations perform the best in all environments with support for \gls{avx2}. It is not clear, however, what compiler produces the best performance. In the environments without support for \gls{avx2}, the optimized reference implementation performed the best. Just as with the \gls{avx2} implementations, it's unclear whether or not GCC or Clang produced the best results. It seems as if GCC produces more consistent results, with less variation in the averages. In the Old Low-Range Laptop environment, for example, one may see that Clang requires about two times the duration of the comparable subject compiled with GCC. In other cases, Clang seems to be on par with, or better than, GCC. As the speedup is percentual based on the environment, one may expect them to be similar across environments. That is, the speedup of using \gls{avx2} instead of the reference implementation, should in theory be similar on both the Modern Workstation and Modern Laptop, for example. In practice we found this to not be true. Although similar, the \gls{avx2} implementation compiled and optimized by Clang on the Modern Workstation has an additional 78 times speedup when compared to the Modern Laptop. On the other hand, the Old Mid-Range Laptop and the Old Low-Range Laptop perform near identically in terms of speedup.
 
 \input{chapters/results/sequential/ntru_hrss701}
 
@@ -549,7 +509,7 @@ By studying the average duration taken by the various subjects in each environme
 
 \subsection{Throughput Performance}
 
-As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing algorithm for each environment, as identified by the sequential benchmarks. The results from the sequential benchmark previously presented were not conclusive and we therefore ended up running the parallel benchmarks on both GCC and Clang builds of the best-performing variant.
+As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing implementation of each algorithm for each environment, as identified by the sequential benchmarks. The results from the sequential benchmark previously presented were not conclusive and we therefore ended up running the parallel benchmarks on both GCC and Clang builds of the best-performing variant.
 
 The throughput of the \gls{dhe} implementation was found to consistently slow down after the number of threads surpass the number of physical cores multiplied with the degree of \gls{smt}. In figure \ref{figure:results:throughput:dh-old-mid-range-laptop}, the throughput of the Old Mid-Range Laptop can be seen. Old Mid-Range Laptop, a dual core machine with four threads, levels off at the four threads mark. As mentioned previously in section \ref{table:method:experiment:phase1:implementation-configurations}, two variants of \gls{dhe} were tested - one compiled and optimized by GCC, the other by Clang - both of which are presented in the aforementioned figure. The performance difference between the two compilers seem to be negligible, which one may expect as the OpenSSL library used to provide the implementation with virtually all of its functionality is dynamically linked. That means that it is not recompiled nor optimized by the compiler used to compile the program. The same leveling found in Old Mid-Range Laptop was also identified in all of the other environments tested.
 
@@ -560,7 +520,7 @@ The throughput of the \gls{dhe} implementation was found to consistently slow do
     \label{figure:results:throughput:dh-old-mid-range-laptop}
 \end{figure}
 
-The \gls{ecdhe} implementation was found to be drastically more performant than the \gls{dhe} implementation, with a speedup ranging between 5 to 350 times the throughput. The highest increase in performance was found in the IBM Community Cloud environment, seen in figure \ref{figure:results:throughput:ecdh-ibm-community-cloud}. The throughput, drastically dropped when tested on four or more threads. The peak at two threads coincides with the number of available threads\footnote{It is unknown whether or not the cores are physical cores, logical cores or virtual cores} of the environment. What's more is a 30\% drop in throughput in the exchange phase of the \gls{x25519} implementation compiled and optimized using GCC. The drop was consistent through both of the runs of the complete benchmark at two completely different occasions. It was found that during the \gls{x25519} run on four threads, two of the threads consistently performed half of the throughput of the other two.
+The \gls{ecdhe} implementation was found to be drastically more performant than the \gls{dhe} implementation, with a speedup ranging between 5 to 350 times the throughput. The highest increase in performance was found in the IBM Community Cloud environment, seen in figure \ref{figure:results:throughput:ecdh-ibm-community-cloud}. The throughput, drastically dropped when tested on four or more threads. The peak at two threads coincides with the number of available threads\footnote{It is unknown whether or not the cores are physical cores, logical cores or virtual cores} of the environment. What's more is a 30\% drop in throughput in the exchange phase of the \gls{x25519} implementation compiled and optimized using GCC. The drop was consistent through both of the runs of the complete benchmark at two completely different occasions\todo{analyze further?}. It was found that during the \gls{x25519} run on four threads, two of the threads consistently performed half of the throughput of the other two.
 
 \begin{figure}
     \centering
@@ -569,11 +529,11 @@ The \gls{ecdhe} implementation was found to be drastically more performant than 
     \label{figure:results:throughput:ecdh-ibm-community-cloud}
 \end{figure}
 
-In Table \ref{table:results:throughput:ecdh-25519}, the throughput for each environment is shown for the \gls{x25519} keypair generation. As can be seen, the IBM Community Cloud environment outperforms all of the other environments when using one or two threads. The mainframe and cloud hardware tested saw a decrease in throughput at one point or another, whilst the consumer hardware continually performed better with more threads for all the thread counts tested\todo{explain table - what optimizations were used, what are the values?}.
+In Table \ref{table:results:throughput:ecdh-25519}\todo{explain table}, the throughput for each environment is shown for the \gls{x25519} keypair generation. As can be seen, the IBM Community Cloud environment outperforms all of the other environments when using one or two threads. The mainframe and cloud hardware tested saw a decrease in throughput at one point or another, whilst the consumer hardware continually performed better with more threads for all the thread counts tested\todo{explain table - what optimizations were used, what are the values?}.
 
 \input{chapters/results/throughput/ecdh_25519_keypair}
 
-When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant. There is also a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seems as if the throughput levels off after the number of used threads surpass the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
+When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant\todo{not true! It's the other way around!}. There is also a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seems as if the throughput levels off after the number of used threads surpass the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
 
 \begin{figure}
     \centering
@@ -589,7 +549,7 @@ When looking at the throughput of \gls{mceliece} in environments which do not su
     \label{figure:results:throughput:mceliece-old-mid-range-laptop}
 \end{figure}
 
-When \gls{mceliece} is run in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results tell a different story. Not only are the compilers much more consistent with one another, but the difference in throughput between the two variants seem to become smaller. It is still clear to see, however, that the smallest parameter size has an overall lower throughput for keypair generation and encryption than the largest parameter size tested. The decrypt results seem to show that the smallest parameter size perform the best.
+When \gls{mceliece} is run in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results tell a different story. Not only are the compilers much more consistent with one another, but the difference in throughput between the two variants seem to become smaller. It is still clear to see, however, that the smallest parameter size has an overall lower throughput for keypair generation and encryption than the largest parameter size tested\todo{Is this really true? double check!}. The decrypt results seem to show that the smallest parameter size perform the best.
 
 \begin{figure}
     \centering
@@ -598,7 +558,7 @@ When \gls{mceliece} is run in environments with support for \gls{avx2}, such as 
     \label{figure:results:throughput:mceliece-modern-workstation}
 \end{figure}
 
-When running \gls{ntru} in parallel to measure throughput, we found that the performance scale well in regards to the number of threads used. In figure \ref{figure:results:throughput:ntru-modern-workstation}, \gls{ntru} HRSS 701 running in the Modern Workstation environment seems to have near-linear scaling for the thread counts tested. The variant also performs considerably better than HPS 4096821 in both the keypair generation stage and the encryption stage. The decrypt stage, however, seems to provide near identical measurements. We found that the same scaling also occurs in the Modern Laptop environment.
+When running \gls{ntru} in parallel to measure throughput, we found that the performance scales well with regards to the number of threads used. In figure \ref{figure:results:throughput:ntru-modern-workstation}, \gls{ntru} HRSS 701 running in the Modern Workstation environment seems to have near-linear scaling for the thread counts tested. The variant also performs considerably better than HPS 4096821 in both the keypair generation stage and the encryption stage. The decrypt stage, however, seems to provide near identical measurements. We found that the same scaling also occurs in the Modern Laptop environment.
 
 \begin{figure}
     \centering
@@ -611,9 +571,47 @@ In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements f
 
 \input{chapters/results/throughput/ntru_hrss701_decrypt}
 
-\subsection{Microbenchmarks}
+\subsection{Micro-benchmarks}
 
-To evaluate what changes in the implementations contribute to a certain speedup, microbenchmarks were run as further described in section \ref{section:method:experiment:phase1}. One of the microbenchmarks performed was the counting of the number of cache misses occurring in an environment. The cache misses for various environments and performance optimizations for \gls{mceliece} 8192128f keypair generation is presented in Table \ref{table:results:micro:cache-misses-mceliece-8192128f-enc}. The same stage for the \gls{ntru} HRSS 701 implementations tested are presented in Table \ref{table:results:micro:cache-misses-ntru-hrss701-enc}. In both of the tables, the Old Low-Range Laptop is missing for some configurations, due to it failing to complete the micro benchmarks a multitude of times. Not all environments supported measuring the cache misses. Therefore the Cloud Provider 1 and IBM Community Cloud are not presented in the following tables.
+In section \ref{section:method:experiment:phase1:implementation-configurations} it was written that the monitored functions for the micro benchmark would be based off of data found in the hot paths analysis. In the end, the functions presented in Table \ref{table:results:performance:micro-functions} were monitored during the micro benchmark. Note that although the randombytes function is available in both \gls{ntru} and \gls{mceliece}, it was found in section \ref{section:results:hot-paths} to not be significant enough to warrant further analysis.
+
+\begin{table}[H]
+    \centering
+    \small
+    \caption{Monitored Functions}
+    \label{table:results:performance:micro-functions}
+    \begin{tabularx}{\linewidth}{l X}
+        \toprule
+        \thead{Name} & \thead{Description} \\
+        \midrule
+        \multicolumn{2}{c}{\thead[l]{\gls{mceliece} and \gls{ntru}}} \\
+        %\midrule
+        crypto\_kem\_keypair & Generate a keypair \\
+        crypto\_kem\_enc & Generate and encapsulate a key \\
+        crypto\_kem\_dec & Decapsulate an encapsulated key \\
+        \midrule
+        \multicolumn{2}{c}{\thead[l]{\gls{mceliece}}} \\
+        pk\_gen & Generate the public-key\\
+        gen\_e & Generate an error vector of a specific weight (encryption)\\
+        syndrome & Create the syndrome using the public key and an error vector (encryption)\\
+        % syndrome\_asm & The same as syndrome, but implemented in assembly targeting AVX2\\
+        root & A polynomial at one or more field elements are evaluated (decryption)\\
+        synd & Syndrome computation (decryption)\\
+        \midrule
+        \multicolumn{2}{c}{\thead[l]{\gls{ntru}}} \\
+        poly\_Rq\_mul & Multiply a polynomial with another in $\mathbb{R}_q$\\
+        poly\_S3\_inv & Invert a polynomial in $\mathbb{S}_3$\\
+        randombytes & Retrieve uniformly random bytes \\
+        poly\_Rq\_inv & Invert a polynomial in $\mathbb{R}_2$\\
+        poly\_R2\_inv & Invert a polynomial in $\mathbb{R}_2$\\
+        poly\_R2\_inv\_to\_Rq\_inv & Lift an inverted polynomial from $\mathbb{R}_2$ to $\mathbb{R}_q$ \\
+        poly\_Sq\_mul & Multiply a polynomial in $\mathbb{S}_q$ with another\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+\todo[inline]{gf\_add, gf\_mul missing from the measurements due to extreme overhead? Several millions of invocations too much for perf?}
+
+To evaluate what changes in the implementations contribute to a certain speedup, micro-benchmarks were run as further described in section \ref{section:method:experiment:phase1}. One of the micro-benchmarks performed was the counting of the number of cache misses occurring in an environment. The cache misses for various environments and performance optimizations for \gls{mceliece} 8192128f keypair generation is presented in Table \ref{table:results:micro:cache-misses-mceliece-8192128f-enc}. The same stage for the \gls{ntru} HRSS 701 implementations tested are presented in Table \ref{table:results:micro:cache-misses-ntru-hrss701-enc}. In both of the tables, the Old Low-Range Laptop is missing for some configurations, due to it failing to complete the micro benchmarks a multitude of times. Not all environments supported measuring the cache misses. Therefore the Cloud Provider 1 and IBM Community Cloud are not presented in the following tables.
 
 The number of cache misses in \gls{mceliece}, when compared to \gls{ntru}, is substantially higher with comparable means being up to 190 times as many. The standard deviation is also considerably higher than those found in \gls{ntru} benchmarks. Despite running several generations older hardware with less then half the cache of the Modern Laptop, the Old Low-Range Laptop seem to consistently have fewer cache misses. The only cloud hardware tested, Cloud Provider 2, has an unknown amount of cache available for use during the benchmark, it being a shared environment with virtual cores. The Cloud Provider 2 saw an increased number of cache misses when compared to dedicated consumer hardware such as the Old Mid-Range Laptop, the Old Low-Range Laptop and the Modern Workstation environments.
 
