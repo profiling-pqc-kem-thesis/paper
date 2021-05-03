@@ -119,41 +119,22 @@ The encryption function of \gls{mceliece} is presented in figure \ref{figure:res
 Introductory paragraph here?
 }
 
-\todo[inline]{
-What specialized instructions and features applicable for post-quantum keyencapsulation mechanisms are available in z15?
-
-Litteraturstudien.
-
--- ALU:n? Något speciellt?
--- SIMD?
--- Minnes-säkerhet
-
--- Stort cache? Mycket minne? McEliece stor nyckel exempelvis
-
--- CPACF (coprocessorer)
-
--- Kryptokort
--- FPGA - mycket om, väldigt öppet område, går att inkludera generellt om FPGA?
-
--- De har redan stöd eller planerat stöd för Dilithium (signatur) etc. dock inte KEM verkar det som
-
--- Nästa version skulle ha stöd för något, eller var det POWER? Något om PQ-krypton?
-}
-
 \subsection{Post-Quantum Cryptography Characteristics} 
-
-% Code-based / McEliece operations
-In \cite{wang2018}, \gls{mceliece} is described to make use of matrix multiplication for encryption. As for key generation, \gls{mceliece} relies heavily on the computation of a random permutation of selected field elements. Besides permutations, matrix-related algorithms such as Gaussian elimination is used during key-generation \cite{mceliece2020}. An operation destinct to the code-based \gls{mceliece} submission is the operation of finding the unique codeword in the Goppa code at a certain distance \cite{mceliece2020}.
 
 % Constant-time KEMs
 In \cite{bernstein2018}, Bernstein describes the fundamentals of a \gls{kem} in that a correct public-key encryption is applied to a random input to obtain a ciphertext. Bernstein further describes that it is a standard discipline to avoid data flow from secrets to to array indices and branch conditions. Although it is simple to construct the key generation and encapsulation, it may be difficult to provide constant-time decapsulation\todo{bernstein2018 continues with a more formal explanation using an algorithm explanation / notation}.
 
-% Consumer-grade / server-grade hardware lacks high precision multiplication (SIMD)
-Bernstein \cite{bernstein2014} suggests four changes to the Intel instruction set that would make it easier to implement secure crypto algorithms. The first suggestion is to commit to that an instruction does not change in a way that can break cryptographic functions, for example, committing to hiding the condition bit or keeping an instruction constant-time. He emphasizes the importance of promise secrecy in vector operations. His second suggestion is to expose the 53-bit integer vector multiplication. Now it is limited to 25-bit because it round the lower bits. The third proposal is to add a vector version of the CARRY instruction. His last suggestion is simple, supply documentation on pipelines.
+Some \gls{x86} processors support the \gls{aes-instruction-set} instruction set. This instruction set speeds up \gls{aes}-related operations and may provide cryptosystems with a high-performance choice for noise sampling \cite{alkim2016}. As previously explained in section \ref{section:background:simd-avx}, \gls{x86} also supports the \gls{simd} instruction set \gls{avx}. Sinha Roy \cite{sinha2019} notes that on high-end platforms, \gls{simd} instructions such as those found in \gls{avx2} only provide a limited speedup. On Intel hardware, Sinha Roy measured a 1.5 times higher throughput of an optimized Saber variant, even though the algorithm was expected to achieve nearly four times higher throughput. One reason behind the identified performance bottleneck is the overhead of vector processing. With improved computer architectures, this overhead can be expected to become lower. Bernstein \cite{bernstein2014} further highlights four problems with Intel's \gls{x86} instruction set that make it hard to implement cryptographic algorithms securely. The first problem is that they are not committed to that an instruction does not change in a way that can break cryptographic functions, for example, committing to hiding the condition bit or keeping an instruction constant-time. This is even more important in vector operations. The second problem is that integer vector multiplication is limited to 25-bit. He wants to be able to use the 53-bit multiplier. The third is that the instruction set no not support a vector version of the CARRY instruction. The last problem he highlights with Intel is that they do not supply any documentation on pipelines.
 
-% AES-NI can be used to increase performance of AES-operations and therefore also sampling (NTRU, McEliece)
-Intel processors support the \gls{aes-instruction-set} instruction set. This instruction set speeds up \gls{aes}-related operations and may provide cryptosystems with a high-performance choice for noise sampling \cite{alkim2016}.
+% SHA-3 i ARMv8 - få ihop med arkitekturer på något vis?
+%The reliance on fast \gls{sha3} operations has been answered in the form of added hardware support of \gls{sha3} in ARMv8 \cite{kyber2021}.
 
+% code-based?
+% code-based?
+% code-based?
+
+% Code-based / McEliece operations
+In \cite{wang2018}, \gls{mceliece} is described to make use of matrix multiplication for encryption. As for key generation, \gls{mceliece} relies heavily on the computation of a random permutation of selected field elements. Besides permutations, matrix-related algorithms such as Gaussian elimination is used during key-generation \cite{mceliece2020}. An operation destinct to the code-based \gls{mceliece} submission is the operation of finding the unique codeword in the Goppa code at a certain distance \cite{mceliece2020}.
 
 % lattice-based???
 % lattice-based???
@@ -163,53 +144,45 @@ Intel processors support the \gls{aes-instruction-set} instruction set. This ins
 In \cite{alkim2016}, it is said that one of the inefficiencies of lattice-based cryptosystems stems from the misconception that high-quality Gaussian noise is crucial for encryption based on learning with errors. Using this Gaussian noise was found to make implementations slower and more complex than they would have to be. The Gaussian sampler is also hard to protect against timing attacks. Therefore one may use a centered binomial distribution instead. This distribution may be further optimized by applying vector instructions such as those found in \gls{avx2}. In the case of the New Hope cryptosystem and \gls{avx2}, the operations are carried out on unsigned 16-bit integers.
 
 %% NTT is common in lattice-based crypto. Encoding is important.
-To increase the performance of polynomial operations and, therefore, the performance of lattice-based cryptosystems, one may turn to \gls{ntt} \cite{alkim2016}. \gls{ntt} provides an efficient way of multiplying polynomials. In \cite{alkim2016} the bottleneck of the \gls{ntt}-operations was found to be the butterfly operations - each consisting of one addition, one subtraction, and one multiplication by a pre-computed constant.
-
-%% NTT important. Butterfly operations takes up the most time in NTT
-Another performance-sensitive topic is the use of encodings of polynomials in byte arrays \cite{alkim2016}. There is research on exchanging this encoding with another encoding that is particularly well-suited for NTT-based polynomial multiplication.
-
-% SABER 
-% SABER 
-% SABER 
-% SABER 
-
-%% AVX2 importance (high overhead), serial in nature - fast single core performance?
-Sinha Roy \cite{sinha2019} wrote that the \gls{post-quantum} \gls{kem} Saber is designed to be serial by nature. The design was chosen to attain simplicity and efficiency on constrained devices. Sinha Roy notes that on high-end platforms, \gls{simd} instructions such as those found in \gls{avx2} only provide a limited speedup. On Intel hardware, Sinha Roy measured a 1.5 times higher throughput of an optimized Saber variant, even though the algorithm was expected to achieve nearly four times higher throughput. One reason behind the identified performance bottleneck is the overhead of vector processing. With improved computer architectures, this overhead can be expected to become lower.
-
-%% 50-70% av körtid i SHAKE-128 och slumptal
-The Saber algorithm relies heavily on the pseduo-random number generation implemented using SHAKE-128, which also occupies a significant portion of Saber's execution time \cite{sinha2019}. Some measurements suggest that around 50-70\% of the overall computation time is spent in the pseduo-random number generation \cite{saber}. % TODO: kolla implementation hur ofta den använder slumptal?
-
-%% Importance of hardware implementations, karatsuba algorithms. Multiplication of polynomials is the bottleneck in Saber
-In \cite{zhu2021}, Zhu et. al. discuss the performance of cryptosystems based on learning with rounding, such as Saber. In Saber, the main computational bottleneck is the polynomial multiplication, which can not be accelerated by using the \gls{ntt} fast multiplication algorithm. This is due to Saber using a power-of-two modulo and \glspl{ntt} requiring a prime modulo for ciphertexts. When it comes to hardware implementations, it is therefore important to discuss how one may efficiently implement polynomial multiplication without using \gls{ntt}. One may exchange \gls{ntt} with Toom-Cook and Karatsuba algorithms. However, high-speed implementations of Toom-Cook multiplication have been found to add additional overhead. For implementations in hardware, a Karatsuba algorithm may be adopted for accelerating learning with rounding, as found in Saber. In one implementation, it was found that a 100Mhz hardware implementation required roughly $5.2\mu s$ for encapsulating a key, which was found to be 14 times faster than implementations on a more conventional Intel Core i7 processor.
-
-%% Fullt möjligt med ISA coprocessor för Saber. Polynom-multiplikation är central för prestandan. 50% av tiden i Saber spenderas på slumptal
-Work has been done to bring the \gls{post-quantum} \gls{kem} Saber to hardware \cite{roy2020}. In \cite{roy2020}, a high-speed instruction-set coprocessor for lattice-based \glspl{kem} is presented. The authors identified that polynomial multiplications plays a performance-critical role in lattice-based public-key cryptography. The \gls{ntt}, which is a generalization of \gls{fft}, has an asymptotically-fastest time-complexity of $\mathcal{O}(n\log{}n)$. 
-
-
-% KYBER
-% KYBER
-% KYBER
-
-% One may use AES och KECCAK for random number generation, depending on hardware support
-In Kyber, the choice of random number generation during key generation is considered a local decision that any user may make independently of one another \cite{kyber2021}. On platforms where there is hardware support for \gls{aes}, one may adapt \gls{aes}-based generators. On platforms with support for KECCAK-based algorithms, one may instead rely on them for pseudo-random numbers.
-
-% Mjukvara kan NTTs vara bättre än Toom och Karatsuba. Prestandan bygger mer eller mindre på SHA-3. Hashing halva tiden i Kyber
-The \gls{post-quantum} \gls{kem} Kyber uses \glspl{ntt} as an efficient way of performing multiplications of polynomials in $\mathbf{R}_q$ \cite{kyber2021}. In order to increase the performance of the factors when performing calculations using \gls{avx} \gls{simd} instructions, one may apply bit-reversed order. Kyber further uses SHA3-256, SHA3-512, SHAKE-128 and SHAKE-256. The use of \glspl{ntt} have some advantages over Karatsuba and Toom multiplication algorithms. \glspl{ntt} are extremely fast and do not require additional memory. \glspl{ntt} may also be implemented in very little code. The performance of Kyber is largely bound to the performance of the symmetric primitives of the \gls{sha3} family of algorithms. The hash computations are considerably less performant than the polynomial arithmetic found in Kyber on recent Intel processors. In an \gls{avx2}-optimized Kyber implementation, the hashes constitute almost half of the encapsulation cycles.
+To increase the performance of polynomial operations and, therefore, the performance of lattice-based cryptosystems, one may turn to \gls{ntt} \cite{alkim2016}. \gls{ntt} provides an efficient way of multiplying polynomials. The \gls{ntt}, which is a generalization of \gls{fft}, has an asymptotically-fastest time-complexity of $\mathcal{O}(n\log{}n)$ \cite{roy2020}. In \cite{alkim2016} the bottleneck of the \gls{ntt}-operations was found to be the butterfly operations - each consisting of one addition, one subtraction, and one multiplication by a pre-computed constant. Another performance-sensitive topic is the use of encodings of polynomials in byte arrays \cite{alkim2016}. There has been research on exchanging this encoding with another encoding that is particularly well-suited for NTT-based polynomial multiplication.
 
 % NTTs state-of-the-art performance using AVX2. ARMv8 has hardware support for SHA3
-Roberto et. al. \cite{kyber2021} argue that \glspl{ntt} are extremely efficiently vectorizable on large processors. State-of-the-art performance may be achieved by carefully optimizing \glspl{ntt} using \gls{avx2} integer instructions. The reliance on fast \gls{sha3} operations has been answered in the form of added hardware support of \gls{sha3} in ARMv8.
+Roberto et. al. \cite{kyber2021} argue that \glspl{ntt} are extremely efficiently vectorizable on large processors. State-of-the-art performance may be achieved by carefully optimizing \glspl{ntt} using \gls{avx2} integer instructions.
 
 %% AVX2 - 256-bit multiply four doubles. Problem in Intel - only 16 available SIMD registers. Many load / store (more cache more better?)
 The importance of \gls{simd} instructions such as \gls{avx} is further established in \cite{guneysu2013}. By applying a correct representation of the polynomials used in lattice-based cryptosystems, one may utilize the 256-bit wide \gls{avx2} registers to represent four double-precision floats. In the case of \gls{avx}, one may perform one double-precision-vector multiplication and one addition every cycle. It is further established that the main bottleneck might not always be the arithmetic cost. As only 64 polynomial coefficients fit into the 16 available registers in \gls{avx2} - many additional loads and stores are often necessary. The performance of these loads and stores is also more complex to determine when compared to the arithmetic throughput\todo{guneysu2013 further discuss bank conflicts, how many cycles are required for load/store etc.}.
 
+% SABER 
+% SABER 
+% SABER 
+% SABER 
+
+The \gls{post-quantum} \gls{kem} Saber is designed to be serial by nature \cite{sinha2019}. The design was chosen to attain simplicity and efficiency on constrained devices. The Saber algorithm relies heavily on the pseduo-random number generation implemented using SHAKE-128, which also occupies a significant portion of Saber's execution time \cite{sinha2019}. Some measurements suggest that around 50-70\% of the overall computation time is spent in the pseduo-random number generation \cite{saber}.
+
+In \cite{zhu2021}, Zhu et. al. discuss the performance of cryptosystems based on learning with rounding, such as Saber. In Saber, the main computational bottleneck is the polynomial multiplication, which can not be accelerated by using the \gls{ntt} fast multiplication algorithm. This is due to Saber using a power-of-two modulo and \glspl{ntt} requiring a prime modulo for ciphertexts. When it comes to hardware implementations, it is therefore important to discuss how one may efficiently implement polynomial multiplication without using \gls{ntt}. One may exchange \gls{ntt} with Toom-Cook and Karatsuba algorithms. However, high-speed implementations of Toom-Cook multiplication have been found to add additional overhead. For implementations in hardware, a Karatsuba algorithm may be adopted for accelerating learning with rounding, as found in Saber. In one implementation, it was found that a 100Mhz hardware implementation required roughly $5.2\mu s$ for encapsulating a key, which was found to be 14 times faster than implementations on a more conventional Intel Core i7 processor. Further efforts have been made to implement Saber in hardware \cite{roy2020}. In \cite{roy2020}, a high-speed instruction-set coprocessor for lattice-based \glspl{kem} is presented. The authors also identified that polynomial multiplications plays a performance-critical role in lattice-based public-key cryptography.
+
+% KYBER
+% KYBER
+% KYBER
+
+% Mjukvara kan NTTs vara bättre än Toom och Karatsuba. Prestandan bygger mer eller mindre på SHA-3. Hashing halva tiden i Kyber
+The \gls{post-quantum} \gls{kem} Kyber uses \glspl{ntt} as an efficient way of performing multiplications of polynomials in $\mathbb{R}_q$ \cite{kyber2021}. In order to increase the performance of the factors when performing calculations using \gls{avx} \gls{simd} instructions, one may apply bit-reversed order. Kyber further uses SHA3-256, SHA3-512, SHAKE-128 and SHAKE-256. The use of \glspl{ntt} have some advantages over Karatsuba and Toom multiplication algorithms. \glspl{ntt} are extremely fast and do not require additional memory. \glspl{ntt} may also be implemented in very little code. The performance of Kyber is largely bound to the performance of the symmetric primitives of the \gls{sha3} family of algorithms. The hash computations are considerably less performant than the polynomial arithmetic found in Kyber on recent Intel processors. In an \gls{avx2}-optimized Kyber implementation, the hashes constitute almost half of the encapsulation cycles.
+
+% One may use AES och KECCAK for random number generation, depending on hardware support
+In Kyber, the choice of random number generation during key generation is considered a local decision that any user may make independently of one another \cite{kyber2021}. On platforms where there is hardware support for \gls{aes}, one may adapt \gls{aes}-based generators. On platforms with support for KECCAK-based algorithms, one may instead rely on them for pseudo-random numbers.
+
+% Hardware
+% Hardware
+% Hardware
+
 %% Hårdvara good, software bad. Coprocessor should work. 
-In \cite{roy2020} it is said that there are two general methodologies to implement computationally intensive cryptographic algorithms in hardware. A hardware/software codesign offers a shorter design cycle and higher flexibility, but it may not result in the best performance. The best performance is found in a full-hardware design. By using a instruction-set coprocessor architecture for Saber, the authors achieved programmability and flexibility, which allowed them to easily extend the instruction set and adapt the architecture for other algorithms and tasks. The architecture followed best practices by making the implementation constant-time. Many lattice-based \glspl{kem} have reported that 50-70\% of the overall computation time is spent on executing the KECCAK function - making it the most performance-critical component. On platforms with support for \gls{simd} instructions such as \gls{avx2}, the cost of pseudo-random number generation is reduced by vectorizing the implementation by a factor of four. As KECCAK is very efficient on hardware platforms, one may run the algorithm in parallel. Saber uses a power-of-two modulo, which makes it difficult to apply \glspl{ntt}.
+In \cite{roy2020} it is said that there are two general methodologies to implement computationally intensive cryptographic algorithms in hardware. A hardware/software codesign offers a shorter design cycle and higher flexibility, but it may not result in the best performance. The best performance is found in a full-hardware design. By using a instruction-set coprocessor architecture for Saber, the authors achieved programmability and flexibility, which allowed them to easily extend the instruction set and adapt the architecture for other algorithms and tasks. The architecture followed best practices by making the implementation constant-time. Many lattice-based \glspl{kem} have reported that 50-70\% of the overall computation time is spent on executing the KECCAK function - making it the most performance-critical component. On platforms with support for \gls{simd} instructions such as \gls{avx2}, the cost of pseudo-random number generation is reduced by vectorizing the implementation by a factor of four. As KECCAK is very efficient on hardware platforms, one may run the algorithm in parallel.
 
 \subsection{IBM Z Features and Opportunities} 
 
 Wolpert et. al. \cite{wolpert2020} introduces the IBM \gls{z15} as a chip built on GlobalFoundries 14nm node. A key innovation that enabled a scaled design without targeting a new die size was the development of the 2MB eDRAM. This memory is used to achieve 256MB of L3 cache and 960MB L4 eDRAM cache. The chip targets a lifetime of 100 000 power-on hours and a 99.99999\% uptime guarantee which is about 3.2 seconds of allowed downtime in a year. In a lab environment based on real-world customer environments, the clock frequency reached sustained 6GHz. IBM has control over the entire hardware stack and the software that runs on it, making it possible for every part in the system to work extremely efficiently with one another \cite{wolpert2020}. Further, IBM added support for \gls{ecc} to the \gls{cpacf} \cite{berry2020}.
 
-In \cite{payer2020}, Payer et. al. outlines a completely redesigned binary and hexadecimal floating-point unit in \gls{z15}. The unit allows for an efficient implementation of \gls{simd} operations at 5.2GHz, without sacrificing reliability. Initially designed for accelerating common machine learning operations, the 32-bit floating-point operations have seen a doubling in throughput. The latency of all operations on the binary floating-point unit have also been reduced. 
+In \cite{payer2020}, Payer et. al. outlines a completely redesigned binary and hexadecimal floating-point unit in \gls{z15}. The unit allows for an efficient implementation of \gls{simd} operations at 5.2GHz, without sacrificing reliability. Initially designed for accelerating common machine learning operations, the 32-bit floating-point operations have seen a doubling in throughput. The latency of all operations on the binary floating-point unit have also been reduced. The \gls{z15} has 32 128-bit wide vector registers per processor \cite{redbook:z15}.
 
 Quantum-safe platforms demand increased cryptographic performances, agility and safety \cite{busby2020}. The IBM 4769 cryptographic coprocessor was developed to meet these demands. It was further developed with future workloads in mind, and has support for custom programs via user defined extensions \cite{busby2020, ibm:4769}. Due to the \gls{nist} standardization process being ongoing at the release of both the \gls{z15} and the IBM 4769 \gls{hsm}, the cryptographic agility is important \cite{microsoft2020, ibm:z15:2019}. By combining a new \gls{asic} and a \gls{fpga}, the IBM 4769 is highly programmable and may grow with customer-specific functionality. The IBM 4769 further supports several of the key symmetric primitives used by \gls{post-quantum} algoritms, such as \gls{sha3} and \gls{aes}. It also features a hardware-based Digital Random Number Generator (DRNG) \cite{ibm:4769:ep11}. Furthermore, it also supports the round two \gls{nist} submission CRYSTALS-Dilithium \cite{ibm:4769:ep11, busby2020}.\todo{busby20 - supports entropy functions in HSM}
 
@@ -332,9 +305,6 @@ In section \ref{section:method:experiment:phase1:implementation-configurations} 
         \bottomrule
     \end{tabularx}
 \end{table}
-\todo{Update the table with descriptions for McEliece}
-
-\subsection{Hardware Performance}
 
 \subsection{Heap Usage}
 
@@ -643,7 +613,7 @@ In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements f
 
 \subsection{Microbenchmarks}
 
-To evaluate what changes in the implementations contribute to a certain speedup, microbenchmarks were run as further described in section \ref{section:method:experiment:phase1}. One of the microbenchmarks performed were the counting of the number of cache misses occuring in an enviornment. The cache misses for various environments and performance optimizations for \gls{mceliece} 8192128f keypair generation is presented in Table \ref{table:results:micro:cache-misses-mceliece-8192128f-enc}. The same stage for the \gls{ntru} HRSS 701 implementations tested are presented in Table \ref{table:results:micro:cache-misses-ntru-hrss701-enc}. In both of the tables, the Old Low-Range Laptop is missing for some configurations, due to it failing to complete the micro benchmarks a multitude of times. Not all environments supported measuring the cache misses. Therefore the Cloud Provider 1 and IBM Community Cloud are not presented in the following tables.
+To evaluate what changes in the implementations contribute to a certain speedup, microbenchmarks were run as further described in section \ref{section:method:experiment:phase1}. One of the microbenchmarks performed was the counting of the number of cache misses occurring in an environment. The cache misses for various environments and performance optimizations for \gls{mceliece} 8192128f keypair generation is presented in Table \ref{table:results:micro:cache-misses-mceliece-8192128f-enc}. The same stage for the \gls{ntru} HRSS 701 implementations tested are presented in Table \ref{table:results:micro:cache-misses-ntru-hrss701-enc}. In both of the tables, the Old Low-Range Laptop is missing for some configurations, due to it failing to complete the micro benchmarks a multitude of times. Not all environments supported measuring the cache misses. Therefore the Cloud Provider 1 and IBM Community Cloud are not presented in the following tables.
 
 The number of cache misses in \gls{mceliece}, when compared to \gls{ntru}, is substantially higher with comparable means being up to 190 times as many. The standard deviation is also considerably higher than those found in \gls{ntru} benchmarks. Despite running several generations older hardware with less then half the cache of the Modern Laptop, the Old Low-Range Laptop seem to consistently have fewer cache misses. The only cloud hardware tested, Cloud Provider 2, has an unknown amount of cache available for use during the benchmark, it being a shared environment with virtual cores. The Cloud Provider 2 saw an increased number of cache misses when compared to dedicated consumer hardware such as the Old Mid-Range Laptop, the Old Low-Range Laptop and the Modern Workstation environments.
 

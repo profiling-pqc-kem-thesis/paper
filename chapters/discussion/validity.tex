@@ -21,39 +21,38 @@
 \subsection{Internal validity}
 \label{section:method:internal-validity}
 % History - An unrelated event influences the outcomes.
-Other software running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system and run the experiment multiple times at different times.
+Other software running on the OS may influence the results. To prevent this, we will minimize the set of programs running on the system and run the experiment multiple times at different times to decrease the risk of indexing tasks etcetera running on the system.
 
 % Maturation - The outcomes of the study vary as a natural result of time.
-Another factor, \gls{jit} compilation and garbage collection could influence the results. As we use the programming languages C and Assembly this will not be a problem as they do not use \gls{jit} compilation and provide full control of memory. Other programs running on the system which use JIT compilation or garbage collection falls under the previous category.
+Another factor, \gls{jit} compilation and garbage collection could influence the results. As we use the programming languages C and Assembly this will not be a problem as they do not use \gls{jit} compilation and provide full control of memory. Other programs running on the system which use \gls{jit} compilation or garbage collection falls under the previous category and will be handled in the same way.
 
-\todo{GPU kernel \gls{jit} compilation}
+\todo[inline]{Swap locks the system while writing/reading to from disk}
+\todo[inline]{Cache misses}
 
-\todo{Swap locks the system while writing/reading to from disk}
-\todo{Cache misses}
+Linux is used for many reasons. One of them is that it does not have any background tasks like Windows update that can significantly impact the results.  
 
-\todo{Windows Update?}
 
-The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. \gls{dhe} and \gls{ecdhe} have been standardized and optimized for many years and have mature implementations, they are likely fully optimized by this point.
+The post-quantum implementations are not final nor standardized, which may affect the performance of the implementations and the relevance of the results in the future. \gls{dhe} and \gls{ecdhe} have been standardized and optimized for many years and have mature implementations, meaning they are likely fully optimized by this point. We therefore do not believe that our performance measurements reflect the eventual state of the \gls{post-quantum} algorithms, which should be taken into account when comparing values.
 
 % Instrumentation - Different measures are used in the pre-test and post-test phases.
-We have written the measurement tools, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms\todo{??????}.
+We have written some of the measurement tools used, the implementation may have shortcomings and OS differences may lead to different results. To ensure the correctness and consistency between platforms we both have reviewed the code and tested it on different platforms to ensure it was working correctly. When using third-party tools, we validated the results using other software to ensure that there were no discrepancies without a natural cause.
 
-%Testing - The pre-test influences the outcomes of the post-test.
-Hardware can throttle because of the temperature increase caused by the benchmarks. This could result in worse performance than intended when running consecutive tests. To mitigate this, benchmarks will not be run directly after each other. We will instead wait for the temperature of the system to normalize to the same level it was before the test was started.
+% Testing - The pre-test influences the outcomes of the post-test.
+Hardware can throttle because of the temperature increase caused by the benchmarks. This could result in worse performance than intended when running consecutive tests. To mitigate this, benchmarks will not be run directly after each other. We therefore decided to wait between tests. We initially hoped to be able to wait for the temperature of the system to normalize to the same level it was before the test was started. As we have performed several hundreds of benchmarks in each environment, with several thousand algorithm invocations per benchmark, we were however unable to wait more than one minute between benchmarks. Given more time, we believe one may have gotten more reliable data if the wait between tests was longer.
 
-We cannot necessarily use the same OS for the mainframes and x86, which could cause varying results. This is however not an issue. We do not aim to pit x86 against Z, rather represent a type of computer and evaluate their readiness.
+We cannot not use the same OS for the mainframes and x86, which could cause varying results. This should however not be an issue. We do not aim to pit x86 against \gls{z15} in terms of hardware or software, rather represent a type of computer and evaluate their readiness. We also provide full transparency in the software versions used and data accumulated to help interested parties further study our results.
 
-%Selection bias - Groups are not comparable at the beginning of the study.
-One may argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid. The algorithms were selected from four finalists in round 3 of \gls{nist}'s standardization process. \gls{ntru}, \gls{crystals-kyber}, and \gls{saber} are all lattice-based algorithms, and at most one of these will be standardized. \gls{ntru} was selected based on the comment \gls{nist} gave each of the participants\todo{insert the comment?}. \gls{mceliece} was the only non-lattice-based finalist. It also has a long and good reputation\cite{nist2020}. In addition to these four finalists, there are alternate candidates still in round 3. These were not considered. The choice was made to bring down the scope to a manageable level for this work.
+% Selection bias - Groups are not comparable at the beginning of the study.
+One may argue that the choice of the two post-quantum algorithms is biased, but we argue that that point is invalid or at the very least simplified. The algorithms were selected from four finalists in round 3 of \gls{nist}'s standardization process. \gls{ntru}, \gls{crystals-kyber}, and \gls{saber} are all lattice-based algorithms, and at most one of these will be standardized \cite{nist2020}. \gls{ntru} was selected based on the feedback \gls{nist} gave each of the participants. \gls{mceliece} was the only non-lattice-based finalist. It also has a long and good reputation \cite{nist2020}. In addition to these four finalists, there are alternate candidates still in round 3. These were not considered. The choice was made to bring down the scope to a manageable level for this work. Given more time, we believe that our method would scale well with an additional set of algorithms. Our tooling and procedures were created with the potential of analyzing further algorithms in mind.
 
-As has been mentioned previously, we lean heavily on \gls{nist} recommendations as they in many cases provide the authoritative recommendation of algorithms used by protocol implementers (\todo{to some extent EU paper as well????}). As we have not identified any other standardization process like that of \gls{nist}, we have concluded that relying on their expertise in this context is correct.
+As has been mentioned previously, we rely on \gls{nist} recommendations as they in many cases provide the authoritative recommendation of algorithms used by protocol implementers \cite{nist:round-three-submissions, nist2019}. \cite{eu2015} ware used to back up some of \gls{nist}'s recommendations. As we have not identified any other standardization process like that of \gls{nist}, we have concluded that relying on their expertise in this context is correct.
 
-For the implementations of \gls{dhe} and \gls{ecdhe}, we only use the underlying algorithms provided by \gls{openssl} and \gls{openssl} with the IBM engine. This was done as \gls{openssl} was identified as the main library for these algorithms on the tested platforms. Using other libraries such as BoringSSL might have resulted in different measurements. The implementations available in \gls{openssl} have been rigorously tested and analyzed by the industry over the decades it has seen use. We are therefore confident that, although the exact measurements may differ between libraries, \gls{openssl} provides a solid foundation for our use case as a representation of today's algorithms.
+For the implementations of \gls{dhe} and \gls{ecdhe}, we only use the underlying algorithms provided by \gls{openssl}. This was done as \gls{openssl} was identified as the main library for these algorithms on the tested platforms. Using other libraries such as BoringSSL might have resulted in different measurements. The implementations available in \gls{openssl} have been rigorously tested and analyzed by the industry over the decades it has seen use. We are therefore confident that, although the exact measurements may differ between libraries, \gls{openssl} provides a solid foundation for our use case as a representation of today's algorithms.
 
-\todo{We have only selected a subset of potential optimizations?}
+\todo[inline]{We have only selected a subset of potential optimizations?}
 
 %Attrition - Dropout from participants
-\todo{Not applicable? Perhaps all subjects and platforms will not be able to see all optimizations or compiler flags?}
+% Not applicable? Perhaps all subjects and platforms will not be able to see all optimizations or compiler flags?
 
 \subsection{Construct validity}
 
@@ -61,20 +60,11 @@ For the implementations of \gls{dhe} and \gls{ecdhe}, we only use the underlying
 
 % Construct validity evaluates whether a measurement tool really represents the thing we are interested in measuring. It’s central to establishing the overall validity of a method.
 
-As previously mentioned, we are interested in measuring the following values:
+As previously mentioned in section \ref{section:method:experiment:phase1:variables}, we are interested in measuring throughput-related values such as CPU cycles, instruction count, wall-clock time as well as memory-related measurements such as heap and stack usage.
 
-\todo[inline]{These do not correspond to the ones we actually measure? Update. Also; clarify that we're measuring two different things - single iteration and multi-core.}
-\begin{itemize}
-    \item Encapsulation throughput in number of required CPU cycles, instruction count and wall clock time
-    \item Decapsulation throughput in number of required CPU cycles, instruction count and wall clock time
-    \item Keypair throughput in number of required CPU cycles, instruction count and wall clock time
-    \item Hardware utilization in terms of memory (heap and stack allocation)
-    \item Hardware utilization in terms of processing (logical core utilization)
-\end{itemize}
+For our measurements, we rely on the standard Linux kernel-based API named perf (perf\_event\_open). The API was introduced in Linux 2.6.31 which was released in 2009 \cite{linux:perf-released}. The API has grown, and as is tradition with the Linux development, each iteration of the API has been reviewed extensively by multiple people throughout the years. We are confident that the API provides as accurate data as the kernel is able to collect.
 
-For our measurements, we rely on the standard Linux kernel-based API named perf (perf\_event\_open). The API was introduced in Linux 2.6.31 which was released in 2009\footnote{\href{https://www.linux.com/news/linux-2631-released/}{https://www.linux.com/news/linux-2631-released/}}. The API has grown, and as is tradition with the Linux development, each iteration of the API has been reviewed extensively by multiple people throughout the years. We are confident that the API provides as accurate data as the kernel is able to collect.
-
-To make the API usable, we provide a lightweight instrumentation tool which is used to measure the values as listed above. By using the C pre-processor, usage of the tool is readable and configurable and written to not introduce any overhead over the raw Linux API when performing measurements. We therefore argue that the tool does not introduce any additional risks over the base API.
+To make the API usable, we used a lightweight instrumentation tool\footnote{\url{https://github.com/profiling-pqc-kem-thesis/perforator}} which allowed us to use the perf API to measure events for specific regions of code. As with other third-party tools, we validated its function by comparing the results to other tools. By using Linux By using the C pre-processor, usage of the tool is readable and configurable and written to not introduce any overhead over the raw Linux API when performing measurements. We therefore argue that the tool does not introduce any additional risks over the base API.
 
 By reading the official documentation of the API, we have ensured that the values we measure correspond to those we are interested in. That is, when we use the API to measure CPU cycles, for example, we have asserted that our code indeed refers to the correct measurements as described in the documentation.
 
