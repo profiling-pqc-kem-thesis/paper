@@ -31,6 +31,38 @@ As has been mentioned previously, we rely on \gls{nist} recommendations as they 
 
 For the implementations of \gls{dhe} and \gls{ecdhe}, we only use the underlying algorithms provided by \gls{openssl}. This was done as \gls{openssl} was identified as the main library for these algorithms on the tested platforms. Using other libraries such as BoringSSL might have resulted in different measurements. The implementations available in \gls{openssl} have been rigorously tested and analyzed by the industry over the decades it has seen use. We are therefore confident that, although the exact measurements may differ between libraries, \gls{openssl} provides a solid foundation for our use case as a representation of today's algorithms.
 
+\todo[inline]{
+Perforator, perf lib, go, perf eller något verkar ibland returnera -1 vilket ger talet 9223372036854775808 (int64). Detta är antagligen en bugg i verktygen som vi bortsåg ifrån i resultaten. Vi dubbelkollade så att vi säkert kunde ta bort resultaten utan att det påverkade statistiken. Totalt verkade det utgöra 0.7\% av värdena.
+
+Data från körning på workstation:
+
+% Antal "fel":
+%     330 gen_e
+%     339 poly_R2_inv
+%     164 poly_R2_inv_to_Rq_inv
+%      49 poly_Rq_inv
+%   2293 poly_Rq_mul
+%      56 poly_S3_inv
+%     713 poly_Sq_mul
+%     281 randombytes
+%      24 root
+%      50 syndrome
+%     522 syndrome_asm
+
+% Totalt antal:
+%   16048 gen_e
+%   12036 poly_R2_inv
+%     4012 poly_R2_inv_to_Rq_inv
+%   12036 poly_Rq_inv
+%   204504 poly_Rq_mul
+%   12036 poly_S3_inv
+%   24036 poly_Sq_mul
+%   36108 randombytes
+%   30673 root
+%     8024 syndrome
+%     1578 syndrome_asm
+}
+
 %Attrition - Dropout from participants
 % Not applicable? Perhaps all subjects and platforms will not be able to see all optimizations or compiler flags?
 
@@ -80,84 +112,34 @@ Factors such as various settings, time of day and location may have limited the 
 To counter threats across the experiment we aimed to improve replication of the results by enabling others to carry out the experiment on their own. This was done by providing detailed methodology, the used tools and any accumulated data. The data, tools and the tested implementations used are available as open source\footnote{\url{https://github.com/profiling-pqc-kem-thesis}}.
 
 \iffalse
-\todo[inline]{
-Perforator, perf lib, go, perf eller något verkar ibland returnera -1 vilket ger talet 9223372036854775808 (int64). Detta är antagligen en bugg i verktygen som vi bortsåg ifrån i resultaten. Vi dubbelkollade så att vi säkert kunde ta bort resultaten utan att det påverkade statistiken. Totalt verkade det utgöra 0.7\% av värdena.
-
-Data från körning på workstation:
-
-Antal "fel":
-    330 gen_e
-    339 poly_R2_inv
-    164 poly_R2_inv_to_Rq_inv
-     49 poly_Rq_inv
-   2293 poly_Rq_mul
-     56 poly_S3_inv
-    713 poly_Sq_mul
-    281 randombytes
-     24 root
-     50 syndrome
-    522 syndrome_asm
-
-Totalt antal:
-  16048 gen_e
-   12036 poly_R2_inv
-    4012 poly_R2_inv_to_Rq_inv
-   12036 poly_Rq_inv
-  204504 poly_Rq_mul
-   12036 poly_S3_inv
-   24036 poly_Sq_mul
-   36108 randombytes
-   30673 root
-    8024 syndrome
-    1578 syndrome_asm
-}
-
-\todo[inline]{
-only a single run of callgrind on mceliece and ntru's tests. mceliece is non-deterministic and may behave weird in a single run.
-}
-
-
-\todo[inline]{Validity: vänd på körschemat när man kör så att inte NTRU får köras på natten varje gång - utan att sådana saker slås ut.}
-
-\todo[inline]{Taskigt att mäta avx på intel, men inget vektoriserat på IBM}
-
-
+% == 1 ==
+% Medium?
 \todo[inline]{
 Vi behövde köra om micro en jäkla massa gånger - främst på gammal / "low-end" hårdvara. Low-end-laptop fick inte komplett data trots många omkörningar.
 }
 
+% Låg?
 \todo[inline]{
-we did not get OpenSSL working on IBM, which could have altered the results for ecdh, dh.
-Not an issue as we got great performance anyway?
+only a single run of callgrind on mceliece and ntru's tests. mceliece is non-deterministic and may behave weird in a single run.
 }
 
+% Lågprioriterad - poteniell risk att history-valididet blivit sämre? Pauser mellan borde löst det
+\todo[inline]{Validity: vänd på körschemat när man kör så att inte NTRU får köras på natten varje gång - utan att sådana saker slås ut.}
+
+% Low?
 \todo[inline]{Svårt att mäta på IBM och i molnet?}
 
-\todo[inline]{ diskutera hur benchmarks inte säkerställer att rätt svar ges från algoritmerna. Detta utelämnas p.g.a. prestanda / träffsäkerhet i mätningar. Vi löser det genom att ha tester som är samma kod som benchmarken, fast med validering}
+% Låg?
+\todo[inline]{diskutera hur benchmarks inte säkerställer att rätt svar ges från algoritmerna. Detta utelämnas p.g.a. prestanda / träffsäkerhet i mätningar. Vi löser det genom att ha tester som är samma kod som benchmarken, fast med validering}
 
+% Låg?
 \todo[inline]{
--- Update after result and method changes.
-
--- Difficult to measure in Cloud environments - shared hosting etc.
-
 -- Dedicated hardware for mainframes may behave differently
-
--- Did not use Intel C++ Compiler (ICC)
-
--- Did not use IBM XL
 }
 
-\todo[inline]{
-Rewrite as past tense
-}
-
-\todo[inline]{
-Alla andra stänger av turbo och hyperthreads, vi gjorde det inte
-}
-
-\todo[inline]{Measurement issues with perf - overflow or negative numbers in uint64}
-
+% Låg? SSD på alla system. Tillräckligt med RAM, det gick aldrig lågt
 \todo[inline]{Swap locks the system while writing/reading to from disk}
 
+% Låg? Conclusion validity? Kan vi anta att våra resultat generaliseras om vi bara testat tre algoritmer (HRSS, HPS, Classic McEliece).
 \todo[inline]{We have only selected a subset of potential optimizations?}
 \fi

@@ -145,6 +145,14 @@ Cryptography does not usually come with any guarantee of being secure forever. A
 
 Since the 1980s, research has been made to utilize quantum mechanics for computation, thus introducing the quantum computer\cite{benioff1980}. By utilizing quantum bits or \textit{\glspl{qubit}} instead of the bits used in classical computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a classical computer\cite{jordan2021}. Recent progress in the field has shown that, as progress have halted in the area of classical computers, progress made on quantum computers has been increasing exponentially\cite{ibm2020:quantum-computer}.
 
+\todo[inline]{
+The accenture report cites academic research consensus that by 2028 quantum computer will be capable of implementing Shor's algorithm at the scale needed to break current cryptographic algorithms
+
+(2018) Cryptography in a postquantum world. url- https://www.accenture.com/ acnmedia/PDF87/Accenture- 809668QuantumCryptographyWhitepaperv05.pdf. (Last accessed Aug 1, 2020).
+
+https://www.accenture.com/
+}
+
 Parallel to the development of the theoretical quantum computer, algorithms have been developed to make use of the mechanics. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical or impossible to implement or use on a classical system, but feasible to use on a quantum computer\cite{shor1997, jordan2021}. Demonstrating that a quantum computer is able to feasibly perform an algorithm that a classical computer cannot is referred to as Quantum Supremacy\cite{farhi2019}.
 
 Shor's algorithm can solve the problems posed by many of the traditional cryptosystems - integer factorization and discrete logarithms, rendering the cryptosystems useless\cite{shor1997}. Today's quantum computers are however not powerful enough to use Shor's algorithm to break the security offered by classical cryptography \cite{bernstein2017}. A study \cite{gidney2019} suggests that it would require 20 million so called noisy \glspl{qubit} to break 2048 bits \gls{rsa}. Among today's most powerful quantum computers are Google's 53-\glspl{qubit} system\cite{google2019:quantum-computer} and IBM's 65-\glspl{qubit} system\cite{ibm2020:quantum-computer}. IBM has a 1000-\glspl{qubit} system on their road map scheduled for release in 2023\cite{ibm2020:quantum-computer}.
@@ -209,9 +217,9 @@ At the time of writing, the process has been ongoing for four years and it has r
         \gls{kyber} & \acrlong{kem} & Lattice-based \\
         \gls{ntru} & \acrlong{kem} & Lattice-based \\
         \gls{saber} & \acrlong{kem} & Lattice-based \\
-        CRYSTALS-DILITHIUM & Digital Signature & Lattice-based \\
-        FALCON & Digital Signature & Lattice-based \\
-        Rainbow & Digital Signature & Lattice-based \\
+        \gls{dilithium} & Digital Signature & Lattice-based \\
+        \gls{falcon} & Digital Signature & Lattice-based \\
+        \gls{rainbow} & Digital Signature & Lattice-based \\
         \bottomrule
     \end{tabularx}
 \end{table}

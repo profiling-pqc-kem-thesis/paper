@@ -10,6 +10,13 @@ Introductory paragraph here?
 
 \subsection{Post-Quantum Cryptography Characteristics} 
 
+\todo[inline]{
+% https://ieeexplore-ieee-org.miman.bib.bth.se/stamp/stamp.jsp?tp=&arnumber=9286147
+
+Om vi vill fördjupa bakgrunden - kring algebran etc. för alla submissions
+Kanske resultat kring matematiken för krypton?
+}
+
 % Constant-time KEMs
 In \cite{bernstein2018}, Bernstein describes the fundamentals of a \gls{kem} in that a correct public-key encryption is applied to a random input to obtain a ciphertext. Bernstein further describes that it is a standard discipline to avoid data flow from secrets to array indices and branch conditions. Although it is simple to construct a valid key generation and encapsulation for a \gls{kem}, it may be difficult to provide constant-time decapsulation\todo{bernstein2018 continues with a more formal explanation using an algorithm explanation / notation}.
 %%% === THERE IS A LARGE CHANGE IN TOPICS HERE === %%%
@@ -336,8 +343,8 @@ Is this all due to OpenSSL allocating and handling its own memory? Easy to blame
 In terms of stack usage, the results vary between the implementations, compilers and features. For instance, the polynomial math function poly\_Rq\_mul in \gls{ntru}, which was identified as constituting most of the time spent in the algorithm, varies between taking up $70499$ and $188$ bytes. In all environments, the HPS 4096821 AVX2 variant takes up $70499$ bytes. This does not change between compilers or optimization flags, which could be due to the fact that the implementation is written in assembly - leaving little room for the compiler to alter the behavior. The same goes for the HRSS 701 variant of \gls{ntru} - the size is consistently 55317 bytes across environments and optimization flags. The lowest sizes are found when the reference implementation is compiled with optimization. The sizes are presented in Table \ref{table:results:memory:ntru-stack}. Although the optimization flags used were not chosen for improving the size of the binary, the size of the function has been lowered in all cases. Although the same version of GCC was used for several environments, the results differed between $188$ and $192$ bytes. Clang continually produced larger regions than GCC. Furthermore, more recent versions of the compilers seem to have produced smaller sizes.
 
 \begin{table}
-    \centering
     \small
+    \centering
     \caption{Stack Size of poly\_Rq\_mul in Bytes for the Optimized Reference Implementation}
     \label{table:results:memory:ntru-stack}
     \begin{tabularx}{\linewidth}{X c c c c}
