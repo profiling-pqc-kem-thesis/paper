@@ -9,12 +9,12 @@ We used two methods to answer our three research questions - a literature study 
 
 A literature study was conducted to answer \researchquestion{2} and \researchquestion{3}. We have chosen to base our study in literature. We did so as the scope of the question, as well as our limited access to mainframe hardware, made it difficult for us to perform a practical study of the performance potentials of using various hardware features.
 
-To provide information to help us answer \researchquestion{1}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}\todo{revisit motivation}.
+To provide information to help us answer \researchquestion{1}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences \cite{wohlin2012}\todo{revisit motivation}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
 
-As previously mentioned, we aimed to answer \researchquestion{2} and \researchquestion{3} by conducting a literature study. We limited the scope to the four finalists in \gls{nist}'s standardization process, round 3.
+As previously mentioned, we aimed to answer \researchquestion{2} and \researchquestion{3} by conducting a literature study. We limited the scope to focus on \gls{z15} and the four finalists in \gls{nist}'s standardization process, round 3.
 
 By studying the algorithms' underlying mathematics, the authors' own optimizations as well as relevant literature on cryptography optimization, we aimed to identify what parts of the algorithms are possible and suitable to optimize.
 
@@ -22,7 +22,7 @@ When potential areas of improvements were identified, literature was studied to 
 
 To identify relevant research papers, we searched for peer-reviewed papers by using databases such as Scopus and Web of Science. By searching for relevant keywords such as \textit{mainframe cryptography}, \textit{z15 cryptography}, \textit{cpacf performance}, \textit{mainframe cpu cache}, \textit{cryptocards}, \textit{z15 simd}, \textit{z15 memory security} and \textit{z15 alu} we selected papers that seemed relevant based on their title and abstracts. We then read the selected papers in their entirety to determine the quality and relevance.
 
-The selected papers, as well as the the papers submitted to \gls{nist}, was included in a start set. The start set was then used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
+The selected papers, as well as the the papers submitted to \gls{nist}, was included in a start set. The start set was then used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question \cite{wohlin2014}.
 
 \section{Experiment}
 \label{section:method:experiment}
@@ -39,9 +39,9 @@ In the second phase, we aimed to test the performance characteristics of the alg
 \subsection{Subjects}
 \label{section:method:experiment:subjects}
 
-The test subjects of the experiment were two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation\cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process \cite{viet2020}.
+The test subjects of the experiment were two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation \cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process \cite{viet2020}.
 
-The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:phase1:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also relied on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded based on their key sizes \cite{eu2015}.
+The \gls{nist} submissions under test are presented in Table \ref{table:method:experiment:phase1:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also relied on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded based on their key sizes \cite{eu2015}.
 
 \begin{table}[H]
     \centering
@@ -162,7 +162,7 @@ In the first phase, we aimed to identify how possibly performance-related indepe
 \subsubsection{Variables}
 \label{section:method:experiment:phase1:variables}
 
-The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase1:independent-variables}. There are virtually infinite possible flags. The ones presented are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications)\todo{cite?}. The implementation optimizations listed are the optimizations available in the studied implementations.
+The independent variables that were identified to potentially be related to performance are presented in Table \ref{table:method:experiment:phase1:independent-variables}. There are virtually infinite possible flags. The ones presented are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications). The implementation optimizations listed are the optimizations available in the studied implementations.
 
 As we were interested in the performance characteristics of consumer, cloud and mainframe hardware, \gls{fpga} implementations have been left out from the table. Furthermore, older vectorization extensions sets such as SSE were not considered as they have been superseeded by \gls{avx}.
 
@@ -319,7 +319,7 @@ The implementation details presented in Table \ref{table:method:experiment:phase
 \subsubsection{Configuration Summary}
 \label{section:method:experiment:phase1:configuration-summary}
 
-All of the aforementioned compiler configurations were tested in all of the environments previously listed. On all environments, the reference implementations of all the algorithms under test were evaluated. If an environment supported \gls{avx2}, an \gls{avx2} implementation was tested as well. Due to the potential cost in time of running Clang builds for each implementation, we opted to only use Clang on the optimized implementation. \todo[inline]{Describe all of our "feature flags" - ref-optimized, avx2, avx2-optimized etc. For future reference. It's used in the result quite a bit, as well as tables etc.}
+All of the aforementioned compiler configurations were tested in all of the environments previously listed. On all environments, the reference implementations of all the algorithms under test were evaluated. If an environment supported \gls{avx2}, an \gls{avx2} implementation was tested as well. Due to the potential cost in time of running Clang builds for each implementation, we opted to only use Clang on the optimized implementation.
 
 \subsection{Phase Two - Throughput and Scalability}
 \label{section:method:experiment:phase2}
@@ -329,7 +329,7 @@ In phase two, the performance characteristics of the best-performing algorithms 
 \subsubsection{Variables}
 \label{section:method:experiment:phase2:variables}
 
-The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase2:independent-variables}. As previously mentioned, the algorithms under test were run in parallel. As the implementations were selected based on the result from the first phase, several independent variables identified in the first phase were omitted and not of interest in the second phase.
+The independent variables that were identified to potentially be related to performance are presented in Table \ref{table:method:experiment:phase2:independent-variables}. As previously mentioned, the algorithms under test were run in parallel. As the implementations were selected based on the result from the first phase, several independent variables identified in the first phase were omitted and not of interest in the second phase.
 
 \begin{table}[H]
     \centering
