@@ -4,14 +4,12 @@
 \section{Post-Quantum Cryptography on z15}
 \label{section:results:z15}
 
-\todo[inline]{
-Introductory paragraph here?
-}
+In the following sections, the results from the literature study are presented. First, information on the underlying primitives and algorithms, as well as potential optimizations is presented. How the \gls{z15} may take advantage of these characteristics is then presented in the following section.
 
 \subsection{Post-Quantum Cryptography Characteristics} 
 
 \todo[inline]{
-% https://ieeexplore-ieee-org.miman.bib.bth.se/stamp/stamp.jsp?tp=&arnumber=9286147
+https://ieeexplore-ieee-org.miman.bib.bth.se/stamp/stamp.jsp?tp=\&arnumber=9286147
 
 Om vi vill fördjupa bakgrunden - kring algebran etc. för alla submissions
 Kanske resultat kring matematiken för krypton?
@@ -77,9 +75,9 @@ In \cite{roy2020} it is said that there are two general methodologies to impleme
 
 \subsection{IBM Z Features and Opportunities} 
 
-Wolpert et. al. \cite{wolpert2020} introduces the IBM \gls{z15} as a chip built on GlobalFoundries' 14nm node. A key innovation that enabled a scaled design without targeting a new die size was the development of the 2MB eDRAM. This memory is used to achieve 256MB of L3 cache and 960MB L4 eDRAM cache. The chip targets a lifetime of 100 000 power-on hours and a 99.99999\% uptime guarantee which is about 3.2 seconds of allowed downtime in a year. In a lab environment based on real-world customer environments, the clock frequency reached sustained 6GHz. IBM has control over the entire hardware stack and the software that runs on it, making it possible for every part in the system to work extremely efficiently with one another \cite{wolpert2020}. Further, IBM added support for \gls{ecc} to the \gls{cpacf} \cite{berry2020}.
+Wolpert et. al. \cite{wolpert2020} introduced the IBM \gls{z15} as a chip built on GlobalFoundries' 14nm node. A key innovation that enabled a scaled design without targeting a new die size was the development of the 2MB eDRAM. This memory is used to achieve 256MB of L3 cache and 960MB L4 eDRAM cache. The chip targets a lifetime of 100 000 power-on hours and a 99.99999\% uptime guarantee which is about 3.2 seconds of allowed downtime in a year. In a lab environment based on real-world customer environments, the clock frequency reached sustained 6GHz. IBM has control over the entire hardware stack and the software that runs on it, making it possible for every part in the system to work extremely efficiently with one another \cite{wolpert2020}. Further, IBM added support for \gls{ecc} to the \gls{cpacf} \cite{berry2020}.
 
-In \cite{payer2020}, Payer et. al. outlines a completely redesigned binary and hexadecimal floating-point unit in \gls{z15}. The unit allows for an efficient implementation of \gls{simd} operations at 5.2GHz, without sacrificing reliability. Initially designed for accelerating common machine learning operations, the 32-bit floating-point operations have seen a doubling in throughput. The latency of all operations on the binary floating-point unit have also been reduced. The \gls{z15} has 32 128-bit wide vector registers per processor \cite{redbook:z15}.
+In \cite{payer2020}, Payer et. al. outlined a completely redesigned binary and hexadecimal floating-point unit in \gls{z15}. The unit allows for an efficient implementation of \gls{simd} operations at 5.2GHz, without sacrificing reliability. Initially designed for accelerating common machine learning operations, the 32-bit floating-point operations have seen a doubling in throughput. The latency of all operations on the binary floating-point unit have also been reduced. The \gls{z15} has 32 128-bit wide vector registers per processor \cite{redbook:z15}.
 
 Quantum-safe platforms demand increased cryptographic performances, agility and safety \cite{busby2020}. The IBM 4769 cryptographic coprocessor was developed to meet these demands. It was further developed with future workloads in mind, and has support for custom programs via user defined extensions \cite{busby2020, ibm:4769}. Due to the \gls{nist} standardization process being ongoing at the release of both the \gls{z15} and the IBM 4769 \gls{hsm}, the cryptographic agility is important \cite{microsoft2020, ibm:z15:2019}. By combining a new \gls{asic} and a \gls{fpga}, the IBM 4769 is highly programmable and may grow with customer-specific functionality. The IBM 4769 further supports several of the key symmetric primitives used by \gls{post-quantum} algoritms, such as \gls{sha3} and \gls{aes}. It also features a hardware-based Digital Random Number Generator (DRNG) \cite{ibm:4769:ep11}. Furthermore, it also supports the round two \gls{nist} submission CRYSTALS-Dilithium \cite{ibm:4769:ep11, busby2020}.\todo{busby20 - supports entropy functions in HSM}
 

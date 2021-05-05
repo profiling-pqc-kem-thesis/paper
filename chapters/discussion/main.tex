@@ -21,13 +21,11 @@ One complaint regarding the performance of \gls{simd} instructions on hardware w
 
 \todo[inline]{
 Minnessäkerhet
-Yada yada... we have not focused on memory security in this blabbasd.... IBM memory security...
+We have not focused on memory security in this blabbasd.... IBM memory security...
 }
 
 \todo[inline]{
 Cache-storlekar. L3 på Z är gigantisk, våra egna resultat verkar tyda på att cache kan vara viktigt.
-
-Svårt att mäta på IBM? Mer validitet kanske...
 }
 
 \todo[inline]{
@@ -36,24 +34,12 @@ Argue that some cryptos use 16-bit, others 64-bit. It may be important. For cryp
 
 \section{Readiness of Hardware and Adoption of Post-Quantum Key Encapsulation Mechanisms}
 
-Jacobi and Webb \cite{jacobi2020} claim that mainframes process 90\% of the world's credit card transactions. This sensitive information must be kept secure. Therefore you may argue that the transition to post-quantum cryptography needs to happen earlier in the banking sector than in other sectors. How would the transition to post-quantum cryptography affect mainframe users? Our data suggest that the performance hit would be severe, especially on mainframe hardware. Mainframes have an outstanding \gls{ecdh} performance because it takes advantage of \gls{cpacf} co-processor to accelerate the calculations. But \gls{cpacf} does not support any of the post-quantum cryptographic algorithms. After \gls{nist}'s standardization process is finished, IBM should consider adding support for the standardized algorithms on the \gls{cpacf}  to alleviate the performance impact of the transition. Further, could IBM add support for it in their crypto cards.
+Jacobi and Webb \cite{jacobi2020} claim that mainframes process 90\% of the world's credit card transactions. This sensitive information must be kept secure. Therefore one may argue that the transition to post-quantum cryptography needs to happen earlier in the banking sector than in other sectors. A question one may then ask them self is, how would the transition to post-quantum cryptography affect mainframe users? Our data suggests that the performance hit would be severe, especially on mainframe hardware. Mainframes have an outstanding \gls{ecdh} performance because it takes advantage of the \gls{cpacf} co-processor to accelerate the calculations. But \gls{cpacf} does not support any of the post-quantum cryptographic algorithms. After \gls{nist}'s standardization process is finished, IBM should consider adding support for the standardized algorithms on the \gls{cpacf} to alleviate the performance impact of the transition. Furthermore, could IBM add support for it in their cryptocards.
 
+Suppose we have a scenario where we replace the \gls{ecdhe} algorithm in \gls{tls} 1.2 with \gls{kem} and keep everything else unchanged. Then consider a using requesting a website such as a search engine. Note that this is only a theoretical scenario; in reality, further parts will likely be changed to accommodate the \gls{post-quantum} \glspl{kem}. Further, the best case will be used in this scenario - the most optimized versions of the algorithms running on a modern workstation. How would the performance of \gls{tls} be affected? If we replace \gls{ecdhe} with \gls{mceliece} 6960119f, the client will notice an extra delay of about 80 ms, about 800 times slower than today. For the server, this will significantly lower the throughput. If we replace \gls{ecdhe} with \gls{ntru} HPS 4096821, the extra delay is about 0.3 ms, around 4 times slower, probably not noticeable for a client. But for a server handling thousands of requests a second, the transition to post-quantum will be prominent. It is not yet clear if one will be required to generate a new key for every transaction when switching to \glspl{kem} from the traditional \glspl{kex}. If it is not required, we may remove the key generation time from the calculation. The extra delay could be cut down to about 0.1 ms and 0.05 ms for \gls{mceliece} and \gls{ntru}, respectively. We can see that \gls{mceliece} is slower in comparison to \gls{ntru}, but we need to take into account that \gls{mceliece} 6960119f has a higher security level.
+\todo{data taken from modern workstation good or bad?}
 
-\todo[inline]{
-Från wang2018: https://eprint.iacr.org/2017/1180.pdf:
-
-The large public keys of the Niederreiter cryptosystem using binary Goppa codes make it particularly troublesome for use in embedded systems (due to strong restrictions on resource usage) and in server scenarios (given a large number of simultaneous connections). In both cases, hardware acceleration can help to improve the performance — either by providing a low-area, power efficient crypto core in the embedded scenario or by providing a large, latency or through- put optimized crypto accelerator for the server scenario.
-}
-
-\todo[inline]{
--- Påverkan i kontext (knyt an introduktion?) Mainframe: IBM pratade om 90\% av airline bookings, hotels etc. every day.
-
--- Samhällsviktiga tjänster kanske går över till PQC tidigare än konsumentkrypto - måste vara förberedda, påverkar samhällsviktiga tjänster
-
--- Talk about possible future hardware support, the need for cross-platform vectorization etc?
-
--- Ersätt ECDHE i TLS etc. med KEM, jämför prestandan. Notera att fler saker kan komma att behöva ändras.
-}
+To make implementations of cryptos more cross-platform, one may use vector-based intrinsics. The support for these varies between platforms, however. For example, \gls{ibmz} only supports a limited range of the functions. In order to effectively rely on vector intrinsics, we would need a standard that all platforms have support for. A problem with using intrinsics is that it can be hard to ensure constant time operations over multiple platforms. Because the intrinsics would be compiled into different instructions for each architecture, this is also true for the IBM XL AutoSIMD feature that can convert \gls{avx} to \gls{ibmz} \gls{simd} instructions.
 
 \section{The Performance of Post-Quantum Key Encapsulation Mechanisms}
 

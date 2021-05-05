@@ -5,24 +5,24 @@
 \label{section:method:selected-method}
 
 %Argue for one or more methods that are applicable for our questions...
-We are using two methods to answer our three research questions - a literature study and an experiment.
+We used two methods to answer our three research questions - a literature study and an experiment.
 
-A literature study will be conducted to answer \researchquestion{2} and \researchquestion{3}. We have chosen a study based in literature. We have done so as the scope of the question, as well as our limited access to mainframe hardware, makes it difficult for us to perform a practical study of the performance potentials of using various hardware features.
+A literature study was conducted to answer \researchquestion{2} and \researchquestion{3}. We have chosen to base our study in literature. We did so as the scope of the question, as well as our limited access to mainframe hardware, made it difficult for us to perform a practical study of the performance potentials of using various hardware features.
 
-To provide information to help us answer \researchquestion{1}, we will conduct an experiment in form of a performance test. An experiment was chosen as we may isolate variables and control the environment in which the study is conducted. Furthermore, we are only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we are not interested in user experience, rather the algorithms' performance on various platforms. Neither is a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}\todo{revisit motivation}.
+To provide information to help us answer \researchquestion{1}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences\cite{wohlin2012}\todo{revisit motivation}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
 
-As previously mentioned, we aim to answer \researchquestion{2} and \researchquestion{3} by conducting a literature study. We will limit the scope to the four finalists in \gls{nist}'s standardization process, round 3.
+As previously mentioned, we aimed to answer \researchquestion{2} and \researchquestion{3} by conducting a literature study. We limited the scope to the four finalists in \gls{nist}'s standardization process, round 3.
 
-By studying the algorithms' underlying mathematics, the authors' own optimizations as well as relevant literature on cryptography optimization, we aim to identify what parts of the algorithms are possible and suitable to optimize.
+By studying the algorithms' underlying mathematics, the authors' own optimizations as well as relevant literature on cryptography optimization, we aimed to identify what parts of the algorithms are possible and suitable to optimize.
 
-When potential areas of improvements have been identified, literature will be studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third parties will be studied. That way, we hope to get a balanced view of the capabilities of the platform.
+When potential areas of improvements were identified, literature was studied to find relevant methods available on \gls{z15}, such as specialized instruction sets and other hardware features. IBM's official documentation as well as research conducted by third parties was also studied. That way, we hoped to get a balanced view of the capabilities of the platform.
 
-To identify relevant research papers, we will search for peer-reviewed papers by using databases such as Scopus and Web of Science. By searching for relevant keywords such as \textit{mainframe cryptography}, \textit{z15 cryptography}, \textit{cpacf performance}, \textit{mainframe cpu cache}, \textit{cryptocards}, \textit{z15 simd}, \textit{z15 memory security} and \textit{z15 alu} we will select papers that seem relevant based on their title and abstracts. We will then read the selected papers in their entirety to determine the quality and relevance.
+To identify relevant research papers, we searched for peer-reviewed papers by using databases such as Scopus and Web of Science. By searching for relevant keywords such as \textit{mainframe cryptography}, \textit{z15 cryptography}, \textit{cpacf performance}, \textit{mainframe cpu cache}, \textit{cryptocards}, \textit{z15 simd}, \textit{z15 memory security} and \textit{z15 alu} we selected papers that seemed relevant based on their title and abstracts. We then read the selected papers in their entirety to determine the quality and relevance.
 
-The selected papers, as well as the the papers submitted to \gls{nist}, will be included in a start set. The start set will then be used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
+The selected papers, as well as the the papers submitted to \gls{nist}, was included in a start set. The start set was then used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question\cite{wohlin2014}.
 
 \section{Experiment}
 \label{section:method:experiment}
@@ -30,18 +30,18 @@ The selected papers, as well as the the papers submitted to \gls{nist}, will be 
 \subsection{Goal}
 \label{section:method:experiment:goal}
 
-Our goal with the experiment is to analyze \gls{post-quantum} \glspl{kem} for the purpose of evaluating the readiness of today's consumer, mainframe and cloud hardware with respect to their performance from the point of view of businesses and professionals, in the context of replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.
+Our goal with the experiment was to analyze \gls{post-quantum} \glspl{kem} for the purpose of evaluating the readiness of today's consumer, mainframe and cloud hardware with respect to their performance from the point of view of businesses and professionals, in the context of replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.
 
-The experiment has two phases. In phase one, we aim to study the effects of changing independent variables possibly related to the performance of the subjects. By studying the performance characteristics of a single run of the algorithms, we also aim to be able to identify what implementation of each algorithm is the fastest.
+The experiment had two phases. In phase one, we aimed to study the effects of changing independent variables possibly related to the performance of the subjects. By studying the performance characteristics of a single run of the algorithms, we also aimed to be able to identify what implementation of each algorithm is the fastest.
 
-In the second phase, we aim to test the performance characteristics of the algorithms in a parallel fashion. By evaluating the performance of the algorithms when performed in parallel over multiple threads, we aim to identify how the underlying platform takes advantage of the available hardware to run the best optimized implementation as identified in the first phase.
+In the second phase, we aimed to test the performance characteristics of the algorithms in a parallel fashion. By evaluating the performance of the algorithms when performed in parallel over multiple threads, we aimed to identify how the underlying platform takes advantage of the available hardware to run the best optimized implementation as identified in the first phase.
 
 \subsection{Subjects}
 \label{section:method:experiment:subjects}
 
-The test subjects of the experiment are two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation\cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process \cite{viet2020}.
+The test subjects of the experiment were two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation\cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process \cite{viet2020}.
 
-The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:phase1:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also rely on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded based on their key sizes \cite{eu2015}.
+The \gls{nist} submissions under test are presented in table \ref{table:method:experiment:phase1:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also relied on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded based on their key sizes \cite{eu2015}.
 
 \begin{table}[H]
     \centering
@@ -62,7 +62,7 @@ The \gls{nist} submissions under test are presented in table \ref{table:method:e
 
 \end{table}
 
-As previously mentioned in section \ref{section:background:classical-cryptography}, there are several recommended classical \glspl{kex}. These recommended algorithms and parameter sets will constitute the control subjects for this study and are presented in table \ref{table:method:experiment:phase1:control-subjects}. Although the control subjects may not be directly comparable to the \glspl{kem}, we hope to provide context for how these classical algorithms perform.
+As previously mentioned in section \ref{section:background:classical-cryptography}, there are several recommended classical \glspl{kex}. These recommended algorithms and parameter sets constituted the control subjects for this study and are presented in Table \ref{table:method:experiment:phase1:control-subjects}. Although the control subjects may not be directly comparable to the \glspl{kem}, we hoped to provide context for how these classical algorithms perform.
 
 \begin{table}[H]
     \centering
@@ -78,18 +78,18 @@ As previously mentioned in section \ref{section:background:classical-cryptograph
     \end{tabularx}
 \end{table}
 
-In the case of the \gls{nist} submissions, in this context, the submitted implementations are not thought to be production-ready due to them not yet being standardized nor battle-tested. Due to this, as well as our interest in exploring optimization techniques that are applicable for post-quantum cryptography, we will explore various ways the implementations may be optimized.
+In the case of the \gls{nist} submissions, in this context, the submitted implementations were not thought to be production-ready due to them not yet being standardized nor battle-tested. Due to this, as well as our interest in exploring optimization techniques that are applicable for post-quantum cryptography, we explored various ways the implementations may be optimized.
 
-As the control subjects are intended to represent the algorithms already in use, they are thought to be a solved problem. That is, in this context, implementation details are of no concern - an implementation on the native platform is assumed to be optimized and production-ready.
+As the control subjects were intended to represent the algorithms already in use, they were thought to be a solved problem. That is, in this context, implementation details were of no concern - an implementation on the native platform was assumed to be optimized and production-ready.
 
 \subsection{Target Environments}
 \label{section:method:experiment:environments}
 
-To fulfil the goal of the experiment, several hardware configurations will be tested. These configurations have been divided into three categories, namely consumer, cloud and mainframe hardware.
+To fulfil the goal of the experiment, several hardware configurations was tested. These configurations were divided into three categories, namely consumer, cloud and mainframe hardware.
 
-The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications \cite{eurostat2021}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment. The selected mainframe hardware is intended to represent the latest mainframes available from IBM at the time of writing.
+The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications \cite{eurostat2021}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment. The selected mainframe hardware was intended to represent the latest mainframes available from IBM at the time of writing.
 
-Where possible and applicable, the environments run on the same version of Ubuntu (20.04) and use the same versions of GCC (9.3.0) and Clang (10.0.0). The exact version of each tool in each environment is available in the data published alongside this work in a GitHub repository\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
+Where possible and applicable, the environments ran on the same version of Ubuntu (20.04) and used the same versions of GCC (9.3.0) and Clang (10.0.0). The exact version of each tool in each environment is available in the data published alongside this work in a GitHub repository\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
 
 \begin{table}[H]
     \centering
@@ -157,14 +157,14 @@ Where possible and applicable, the environments run on the same version of Ubunt
 \subsection{Phase One - Profiling}
 \label{section:method:experiment:phase1}
 
-In the first phase, we aim to identify how possibly performance-related independent variables alter the performance characteristics of the subjects. The performance of the algorithms in a single sequential run will be evaluated.
+In the first phase, we aimed to identify how possibly performance-related independent variables alter the performance characteristics of the subjects. The performance of the algorithms in a single sequential run was evaluated.
 
 \subsubsection{Variables}
 \label{section:method:experiment:phase1:variables}
 
-The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase1:independent-variables}. There are virtually infinite possible flags. These are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications)\todo{cite?}. The implementation optimizations listed are the optimizations available in the studied implementations.
+The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase1:independent-variables}. There are virtually infinite possible flags. The ones presented are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications)\todo{cite?}. The implementation optimizations listed are the optimizations available in the studied implementations.
 
-As the thesis is interested in the performance characteristics of consumer, cloud and mainframe hardware, \gls{fpga} implementations have been left out from the table. Furthermore, older vectorization extensions sets such as SSE is not considered as they have been superseeded by \gls{avx}.
+As we were interested in the performance characteristics of consumer, cloud and mainframe hardware, \gls{fpga} implementations have been left out from the table. Furthermore, older vectorization extensions sets such as SSE were not considered as they have been superseeded by \gls{avx}.
 
 \begin{table}[H]
     \centering
@@ -184,7 +184,7 @@ As the thesis is interested in the performance characteristics of consumer, clou
     \end{tabularx}
 \end{table}
 
-The dependent variables we've identified are presented in the following non exhaustive list.
+The dependent variables we identified are presented in the following non-exhaustive list.
 
 \begin{itemize}
     \item CPU cycles
@@ -203,11 +203,11 @@ Förtydliga att hot-paths enbart utförs på referens-implementationen på en pl
 
 \subsubsection{Selected Toolset - Processor}
 \label{section:method:experiment:phase1:selected-toolset-processor}
-The instrumentation will rely on the Linux perf (perf\_event\_open) API. This API is part of the kernel and produces highly accurate measurements, regardless of the underlying hardware. The recorded values for CPU cycles, instructions etcetera may be counted or sampled\todo{Emphasize on counted - this is a great feature we use for increased accuracy}\todo{cite}. The API functions externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
+The instrumentation relied on the Linux perf (perf\_event\_open) API. The API is part of the Linux kernel and produces highly accurate measurements, regardless of the underlying hardware - given support. The recorded values for CPU cycles, instructions, etcetera may be counted or sampled\todo{Emphasize on counted - this is a great feature we use for increased accuracy}\todo{cite}. The API functions externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
 
 As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. To help aid the usage of the API, we used a small tool\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perforator}{https://github.com/profiling-pqc-kem-thesis/perforator}} which enabled us to monitor the algorithms during their lifetime.
 
-Valgrind and its Callgrind module was identified as usable for identifying hot paths of the reference implementations as the implementation can be run in a working environment with its results general to wherever the implementation may be run\todo{cite?}. The tool was run on a single iteration of the reference implementations' tests to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce data for graphs of the hot paths.
+Valgrind and its Callgrind module was identified as usable for identifying hot paths of the reference implementations as the implementation can be run in a working environment with its results general to wherever the implementation may be run\todo{cite?}. The tool ran on a single iteration of the reference implementations' tests to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce data for graphs of the hot paths.
 
 \subsubsection{Rejected Toolset - Processor}
 \label{section:method:experiment:phase1:rejected-toolset-processor}
@@ -220,7 +220,7 @@ Other libraries or APIs such as those available in \gls{supercop} and PAPI were 
 \subsubsection{Selected Toolset - Memory}
 \label{section:method:experiment:phase1:selected-toolset-memory}
 
-To identify the heap usage we resorted to heaptrack, a tool which allowed us to intercept each heap allocation and deallocation. The tool was found to be simple to build and run on all of our target environments, without yielding a significant overhead. Furthermore, the accompanying tools let us easily automate the process of identifying heap usage on a per-function basis.
+To identify the heap usage we resorted to heaptrack, a tool which allowed us to intercept each heap allocation and deallocation. The tool was found to be simple to build and run on all of our target environments, without yielding a significant run-time overhead. Furthermore, the accompanying tools let us easily automate the process of identifying heap usage on a per-function basis.
 
 For stack analysis we aimed to identify what amount of memory was required to use a specific algorithm. To identify the stack usage we resorted to statically analyzing the assembly code and symbol table produced by the compilers used. The symbol table includes the size of each (non-inlined) function and the assembly code could be used to identify the stack allocation made by each function, if any. The script we wrote to solve this automatically is produced is published alongside this work.
 
@@ -229,12 +229,12 @@ For stack analysis we aimed to identify what amount of memory was required to us
 
 Intel's vTune is a profiling suite with support for x86. It was found to work well for gathering memory-related metrics of the CPU during execution of a program. It was unavailable on \gls{s390x}, however. It was therefore rejected as we could rely on other tools to yield cross-platform metrics. 
 
-As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the runtime stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically.
+As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the run-time stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase1:measurements}
 
-Using the aforementioned toolset, we will monitor the subjects and measure the following values. Note that not all platforms support measuring all values as some require hardware support.
+Using the aforementioned toolset, we monitored the subjects and measured the following values. Note that not all platforms supported measuring all values as some require hardware support.
 
 \begin{itemize}
     \item Retired instruction count
@@ -247,9 +247,9 @@ Using the aforementioned toolset, we will monitor the subjects and measure the f
     \item Wall clock time
 \end{itemize}
 
-The measurements will be taken at different points in the algorithms' lifecycles - such as at the start and end of the algorithm's invocation. The same measurements are to be repeated for all of the stages of the algorithms as presented in section \ref{table:method:experiment:phase1:independent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we will also measure the parts of the algorithm that are invoked the most. As some variables in the environment have been identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these will be measured as well. In some cases, the authors have provided optimized implementations. In such cases, these optimized functions will be measured as well.
+The measurements were taken at different points in the algorithms' lifecycles - such as at the start and end of the algorithm's invocation. The same measurements were also repeated for all of the stages of the algorithms as presented in section \ref{table:method:experiment:phase1:independent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we also measured the parts of the algorithm that constituted the highest cost. As some variables in the environment were identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these were measured as well. In some cases, the authors had provided optimized implementations. In such cases, these optimized functions were measured as well.
 
-As we've identified that some tools may introduce overhead when monitoring a program, we have decided to split the tests into four parts. These parts are presented in Table \ref{table:method:experiment:phase1:benchmark-divisions}. By splitting the benchmarks we hope to capture accurate values for each measurements without affecting others.
+As we identified that some tools may introduce overhead when monitoring a program, we decided to split the tests into four parts. These parts are presented in Table \ref{table:method:experiment:phase1:benchmark-divisions}. By splitting the benchmarks we aimed to capture accurate values for each measurements without affecting others.
 
 \begin{table}[H]
     \centering
@@ -267,7 +267,7 @@ As we've identified that some tools may introduce overhead when monitoring a pro
     \end{tabularx}
 \end{table}
 
-The measurement will be repeated 1000 times for each stage of the algorithms and each part of the benchmark. The heap benchmark will run 10 iterations as the heap usage should be deterministic. Furthermore, the cost of running further iterations is deemed too large. If the total duration of a benchmark surpasses 15 minutes, the test will be set to timeout and any complete results up until that point recorded. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated budget.
+The measurement was repeated 1000 times for each stage of the algorithms and each part of the benchmark. The heap benchmark ran 10 iterations as the heap usage should be deterministic. Furthermore, the cost of running further iterations was deemed too large. If the total duration of a benchmark surpassed 15 minutes, the test was set to timeout and any complete results up until that point recorded. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated budget.
 
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
 
@@ -276,7 +276,7 @@ For the exact instrumentation used in each subject, please refer to the source c
 
 % The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. With IBM XL on Power, for example, -O5 implies automatic \gls{simd} via -qsimd=auto and improved data locality via -qhot \cite{ibmxl2018}. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
 
-The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
+The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but were identified to imply most of the performance-related options. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
 \begin{table}[H]
     \centering
     \caption{Compiler Configurations}
@@ -300,7 +300,7 @@ In order to see the exact flags used to compile each sample, please refer to the
 \subsubsection{Implementation Configurations}
 \label{section:method:experiment:phase1:implementation-configurations}
 
-The implementation details presented in Table \ref{table:method:experiment:phase1:implementation-configurations} will be changed in order to evaluate potential performance differences. As the number of variables would become unfeasible if we were to evaluate each combination of the implementations, we opted for running a reference implementation and an optimized implementation.
+The implementation details presented in Table \ref{table:method:experiment:phase1:implementation-configurations} were changed in order to evaluate potential performance differences. As the number of variables would become unfeasible if we were to evaluate each combination of the implementations, we opted for running a reference implementation and an optimized implementation.
 
 \begin{table}[H]
     \centering
@@ -319,17 +319,17 @@ The implementation details presented in Table \ref{table:method:experiment:phase
 \subsubsection{Configuration Summary}
 \label{section:method:experiment:phase1:configuration-summary}
 
-All of the aforementioned compiler configurations will be tested in all of the environments previously listed. On all environments, the reference implementations of all the algorithms under test will be evaluated. If an environment supports \gls{avx2}, an \gls{avx2} implementation will be tested as well. Due to the potential cost in time of running Clang builds for each implementation, we opted to only use Clang on the optimized implementation. \todo[inline]{Describe all of our "feature flags" - ref-optimized, avx2, avx2-optimized etc. For future reference. It's used in the result quite a bit, as well as tables etc.}
+All of the aforementioned compiler configurations were tested in all of the environments previously listed. On all environments, the reference implementations of all the algorithms under test were evaluated. If an environment supported \gls{avx2}, an \gls{avx2} implementation was tested as well. Due to the potential cost in time of running Clang builds for each implementation, we opted to only use Clang on the optimized implementation. \todo[inline]{Describe all of our "feature flags" - ref-optimized, avx2, avx2-optimized etc. For future reference. It's used in the result quite a bit, as well as tables etc.}
 
 \subsection{Phase Two - Throughput and Scalability}
 \label{section:method:experiment:phase2}
 
-In phase two, the performance characteristics of the best-performing algorithms from the first phase will be tested in a parallel environment. We aim to identify how the underlying platform takes advantage of the available hardware to run the subjects in a parallel fashion. The same toolset as previously presented was used in this phase.
+In phase two, the performance characteristics of the best-performing algorithms from the first phase was tested in a parallel environment. We aimed to identify how the underlying platform takes advantage of the available hardware to run the subjects in a parallel fashion. The same toolset as previously presented was used in this phase.
 
 \subsubsection{Variables}
 \label{section:method:experiment:phase2:variables}
 
-The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase2:independent-variables}. As previously mentioned, the algorithms under test will be run in parallel. As the implementations are selected based on the result from the first phase, several independent variables identified in the first phase are omitted and not of interest in the second phase.
+The independent variables that were identified to potentially be related to performance are presented in table \ref{table:method:experiment:phase2:independent-variables}. As previously mentioned, the algorithms under test were run in parallel. As the implementations were selected based on the result from the first phase, several independent variables identified in the first phase were omitted and not of interest in the second phase.
 
 \begin{table}[H]
     \centering
@@ -346,20 +346,20 @@ The independent variables that were identified to potentially be related to perf
     \end{tabularx}
 \end{table}
 
-We have identified throughput and hardware utilization to be dependent variables of potential interest. The hardware utilization of the system will however not be considered for this test, instead we focus on how the throughput differs between architectures and environments.
+We identified throughput and hardware utilization to be dependent variables of potential interest. The hardware utilization of the system were however not considered for this test, instead we focused on how the throughput differs between architectures and environments.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase2:measurements}
 
-Using the aforementioned toolset, we will instrument the subjects and measure the wall clock time whilst running the benchmark. To evaluate the parallel performance behavior of the algorithm and environment, a simple tool was written. The tool creates a number of threads and lets each thread perform the algorithm under test for 100 iterations. The total wall-clock time for all threads to complete their iterations will be used to calculate the throughput. If the total duration of the benchmark surpassed 15 minutes, the test was set to timeout and the results recorded until then used. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. Early testing showed that idling the system for one minute was sufficient for the systems to cool down to a temperature comparable to that before the run. Further was one minute the maximum amount of time we could afford in our time budget
+Using the aforementioned toolset, we instrumented the subjects and measured the wall clock time whilst running the benchmark. To evaluate the parallel performance behavior of the algorithm and environment, a simple tool was written and used. The tool created a number of threads and let each thread perform the algorithm under test for 100 iterations. The total wall-clock time for all threads to complete their iterations was used to calculate the throughput. As with previous tests, we set a timeout for 15 minutes and waited for one minute between benchmarks.
 
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
 
 \subsubsection{Configurations}
 \label{section:method:experiment:phase2:configurations}
 
-The best-performing implementation for each subject as identified in phase one will be tested on a series of parallelism configurations, on each environment specified in section \ref{section:method:experiment:environments}.
+The best-performing implementation for each subject as identified in phase one was tested on a series of parallelism configurations, on each environment specified in section \ref{section:method:experiment:environments}.
 
-The parallelism configurations is synonymous with the number of threads used and will depend on the degree of \gls{smt} and available physical cores on the target environment. The number of threads will start of at one and double, up to the product of the number of physical cores and the \gls{smt} degree, multiplied by four.
+The parallelism configurations are synonymous with the number of threads used and depended on the degree of \gls{smt} and available physical cores on the target environment. The number of threads started of at one and doubled, up to the product of the number of physical cores and the \gls{smt} degree, multiplied by four.
 
 For a machine with two physical cores and a \gls{smt} degree of two, this calculation yields the thread counts $1$, $2$, $4$, $8$ and $16$.

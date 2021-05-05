@@ -1,52 +1,40 @@
 \chapter{Conclusions and Future Work}
 \label{chapter:conclusion}
 
-\todo[inline]{
-Briefly discuss your results through a different perspective. This will allow you to see aspects that were not apparent to you at the project preparation stage.
-Highlight alternative research questions that you have found in the source materials used in the project.
- Show how others have placed the subject area in a wider context.
-If others have drawn different conclusions from yours, this will provide you with ideas of new ways to view the research question.
-Describe any unanswered aspects of your project.
-Specify potential follow up and new projects. 
-}
+% 1. Återintroduktion till problemet - 1 stycke
+% Vad är problemet, varför behöver vi byta till PQ.
+% Vad NIST gör. Vad vi anser är problemet - vi vill mäta ...
+% Introducera // upprepa RQ1-3 igen.
+\noindent Web traffic, \glspl{vpn} and messaging applications are secured using public-key cryptography algorithms. For now, it is believed that the algorithms in use will continue to be secure from attacks by conventional computers for the foreseeable future. The rise of the quantum computer and algorithms such as Shor's threaten the security of the classical algorithms and may completely break the classical algorithms in the near future. As these developments have been followed for a long time, progress have been made throughout the years to introduce new, \gls{post-quantum}, algorithms. \acrfull{nist} published an open call for submissions, thus starting their standardization process. Their third round of submissions provide two prominent finalists. Although research has been made on the performance of the submissions, we identified a gap in research. With regards to these developments we have answered the following research questions.
 
-\todo[inline]{
-1. Återintroduktion till problemet - 1 stycke
+\begin{description}
+    \item \textbf{RQ1} Does the performance of \gls{post-quantum} \glspl{kem} differ between architectures and if so, how?
+    
+    \item \textbf{RQ2} What specialized instructions and features applicable for \gls{post-quantum} \glspl{kem} are available in \gls{z15}?
+    
+    \item \textbf{RQ3} What techniques may be used to increase the performance of \gls{post-quantum} \glspl{kem}?
+\end{description}
 
-Vad är problemet, varför behöver vi byta till PQ.
+% 2. Tydligt via hur man svarar på forskningsfrågor - 3 stycke
+% RQ1 - skiljer sig tydligt. moderna workstation x86 etc. presterar mycket bra - mycket AVX2. Äldra x86 presterar klart sämre. Mainframe har potential att dra nytta av CPACF när stöd finns. FPGA etc. i HSM.
+% RQ2 - CPACF, HSM, SIMD, (Memory safety), (Enormous cache?)
+% RQ3 - Vectorization - SIMD, Hardware implementations (ASIC / FPGA), algorithmic changes - semi-systematic mceliece. Tillgängliggöra mer cache, fler trådar?.
 
-Vad NIST gör. Vad vi anser är problemet - vi vill mäta ...
-Introducera // upprepa RQ1-3 igen.
-}
+By researching the sequential performance of algorithms and the throughput we have collected data which allows us to answer \researchquestion{1}. Based on our measurements, it is clear to see that the performance of \gls{post-quantum} \glspl{kem} varies largely between architectures and environments. Modern computers running on \gls{x86} hardware using the \gls{avx2} instruction set performs considerably better than older \gls{x86} computers without support for \gls{avx}. The performance on the non-vectorized implementations run on \gls{z15} was found to be similar to that on \gls{x86} hardware. Though we were unable to target the \gls{z15} with target-specific optimizations for the \gls{post-quantum} \glspl{kem}, we believe our results for \researchquestion{2} provide us with enough information to certainly state that there are considerable performance gains to be made on \gls{z15} hardware. As the \gls{z15} supports \gls{cpacf}, several key symmetric primitives such as \gls{sha3} and \gls{aes} may be accelerated. Furthermore, the support for \glspl{hsm} with purpose-built hardware for accelerating these primitives allow for further performance increases. Though the \glspl{hsm} do not support the \gls{post-quantum} \glspl{kem} we studied, they do offer programmability and cryptographic agility, enabling future algorithms to be accelerated once standardized. The \gls{z15} furhter offers \gls{simd} instructions at sustained 5.2GHz, theoretically allowing for highly performant software implementations of \gls{post-quantum} algorithms. Finally, with respect to \researchquestion{3}, we identified that vectorization of \gls{post-quantum} algorithms makes a key difference in performance based on our measurements. Though not all algorithms saw a significant performance increase when vectorized, hardware implementations in either \glspl{asic} or \glspl{fpga} were found to significantly increase performance, based on literature. Our measurements further provide evidence that the algorithmic change of using the semi-systematic form of \gls{mceliece} outperforms the non-systematic variant. To increase throughput of the \glspl{kem}, more threads may be used. We found that \gls{ntru} scaled the best with regards to the number of threads used.
 
-\todo[inline]{
-2. Tydligt via hur man svarar på forskningsfrågor - 3 stycke
+%3. Allmän summering - baserat på våra mätningar bla bla bla
+%Återkoppla till introduktion?
 
-RQ1 - skiljer sig tydligt. moderna workstation x86 etc. presterar mycket bra - mycket AVX2. Äldra x86 presterar klart sämre. Mainframe har potential att dra nytta av CPACF när stöd finns. FPGA etc. i HSM.
+%Vi kommer se en perfromance-hit, men det kan vara så att plattformer hinner med. Utvecklingen är snabb och har pågått under en lång tid. IBM, Microsoft m.fl. har investerat för att vara väl förberedda. Vi har ett antal år kvar, beroende på källa.
 
-RQ2 - CPACF, HSM, SIMD, (Memory safety), (Enormous cache?)
+When considering the readiness of hardware for the transition to \gls{post-quantum} \glspl{kem}, we found that the \glspl{kem} submitted to \gls{nist} in their current state do not perform nearly as well as the classical algorithms. A transition today would therefore result in a noticeable overhead for clients and servers. As the algorithms and implementations have improved significantly in a short period of time, it is likely that the software will continue to improve and lower the overhead before the transition occurs. To further help the transition, processors should see increased performance in \gls{simd} instructions and an increase in cache sizes. Furthermore, processor designers should should commit to bring constant-time vector instructions as well as wider and further vector registers to help improve the speed of the \gls{post-quantum} \glspl{kem}. By bringing hardware-accelerated polynomial multiplication as well as complete hardware-based \gls{kem} implementations, current and future lattice-based cryptosystems may be further optimized.
 
-RQ3 - Vectorization - SIMD, Hardware implementations (ASIC / FPGA), algorithmic changes - semi-systematic mceliece. Tillgängliggöra mer cache, fler trådar?.
-}
-
-\todo[inline]{
-3. Allmän summering - baserat på våra mätningar bla bla bla
-Återkoppla till introduktion?
-
-Vi kommer se en perfromance-hit, men det kan vara så att plattformer hinner med. Utvecklingen är snabb och har pågått under en lång tid. IBM, Microsoft m.fl. har investerat för att vara väl förberedda. Vi har ett antal år kvar, beroende på källa.
-}
-
-\todo[inline]{
-4. Future work - "baserat på det vi lärt oss nu, kan man undersöka det här A, det här B och det här C..."
-
+% 4. Future work - "baserat på det vi lärt oss nu, kan man undersöka det här A, det här B och det här C..."
 % TODO: Kolla på hur latency påverkas - future work? SaberX4 high-throughput software ...
-Analysera latency, inte bara throughput.
+% Analysera latency, inte bara throughput.
+% Applicera samma metod på samtliga submissions.
+% Ta fram perf-liknande verktyg för z15 för hårdvarubaserad mätning.
+% Dedikerad hårdvara för mainframes, HSMs, CPACF - stort fokus?
+% Totalt ungefär 3-5 (concl.) + 3-5 stycken (future.)
 
-Applicera samma metod på samtliga submissions.
-
-Ta fram perf-liknande verktyg för z15 för hårdvarubaserad mätning.
-
-Dedikerad hårdvara för mainframes, HSMs, CPACF - stort fokus?
-
-Totalt ungefär 3-5 (concl.) + 3-5 stycken (future.)
-}
+As for future work, we have identified several potential topics. For one, our work measures throughput performance without any regard to how the latency of the algorithms is affected. By studying the latency alongside the throughput, one may have provided data to further understand how the two correlate. Furthermore, we decided to limit our work to two \gls{nist} submissions as the time constraints we were under would not enable us to study further algorithms in the time we had allocated. By applying the method presented in this paper to further algorithms, we believe a broader understanding of the performance of \gls{post-quantum} \glspl{kem} perform on various hardware. To further increase the amount of data collectable from the \gls{z15} platform, we believe a further study of perf-like tools for the platform is warranted. Furthermore, a more complete study targeting the \gls{z15}, applying a more direct method with new implementations for the platform would yield a more representative result for the performance of the \gls{z15}.
