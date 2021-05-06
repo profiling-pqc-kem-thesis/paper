@@ -9,7 +9,7 @@ We used two methods to answer our three research questions - a literature study 
 
 A literature study was conducted to answer \researchquestion{1} and \researchquestion{3}. We have chosen to base our study in literature. We did so as the scope of the question, as well as our limited access to mainframe hardware, made it difficult for us to perform a practical study of the performance potentials of using various hardware features.
 
-To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences \cite{wohlin2012}\todo{revisit motivation}.
+To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences~\cite{wohlin2012}\todo{revisit motivation}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
@@ -22,7 +22,7 @@ When potential areas of improvements were identified, literature was studied to 
 
 To identify relevant research papers, we searched for peer-reviewed papers by using databases such as Scopus and Web of Science. By searching for relevant keywords such as \textit{mainframe cryptography}, \textit{z15 cryptography}, \textit{cpacf performance}, \textit{mainframe cpu cache}, \textit{cryptocards}, \textit{z15 simd}, \textit{z15 memory security} and \textit{z15 alu} we selected papers that seemed relevant based on their title and abstracts. We then read the selected papers in their entirety to determine the quality and relevance.
 
-The selected papers, as well as the the papers submitted to \gls{nist}, was included in a start set. The start set was then used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question \cite{wohlin2014}.
+The selected papers, as well as the the papers submitted to \gls{nist}, was included in a start set. The start set was then used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question~\cite{wohlin2014}.
 
 \section{Experiment}
 \label{section:method:experiment}
@@ -39,9 +39,9 @@ In the second phase, we aimed to test the performance characteristics of the alg
 \subsection{Subjects}
 \label{section:method:experiment:subjects}
 
-The test subjects of the experiment were two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation \cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process \cite{viet2020}.
+The test subjects of the experiment were two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation~\cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process~\cite{viet2020}.
 
-The \gls{nist} submissions under test are presented in Table \ref{table:method:experiment:phase1:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also relied on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded based on their key sizes \cite{eu2015}.
+The \gls{nist} submissions under test are presented in Table \ref{table:method:experiment:phase1:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also relied on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded based on their key sizes~\cite{eu2015}.
 
 \begin{table}[H]
     \centering
@@ -87,7 +87,7 @@ As the control subjects were intended to represent the algorithms already in use
 
 To fulfil the goal of the experiment, several hardware configurations was tested. These configurations were divided into three categories, namely consumer, cloud and mainframe hardware.
 
-The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications \cite{eurostat2021}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment. The selected mainframe hardware was intended to represent the latest mainframes available from IBM at the time of writing.
+The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications~\cite{eurostat2021}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment. The selected mainframe hardware was intended to represent the latest mainframes available from IBM at the time of writing.
 
 Where possible and applicable, the environments ran on the same version of Ubuntu (20.04) and used the same versions of GCC (9.3.0) and Clang (10.0.0). The exact version of each tool in each environment is available in the data published alongside this work in a GitHub repository\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
 
@@ -211,7 +211,7 @@ Valgrind and its Callgrind module was identified as usable for identifying hot p
 
 \subsubsection{Rejected Toolset - Processor}
 \label{section:method:experiment:phase1:rejected-toolset-processor}
-Other sampling-based measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the retired instructions or time spent inside of the kernel \cite{gprof}.
+Other sampling-based measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the retired instructions or time spent inside of the kernel~\cite{gprof}.
 
 Another, non-sampling-based tool that monitor the entire lifetime of a process, Valgrind and its sub-tool Callgrind was found to not support running all of our samples on all targeted environments and was therefore deemed inappropriate for use as the main instrumentation tool.
 
@@ -274,9 +274,9 @@ For the exact instrumentation used in each subject, please refer to the source c
 \subsubsection{Compiler Configurations}
 \label{section:method:experiment:phase1:compiler-configurations}
 
-% The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. With IBM XL on Power, for example, -O5 implies automatic \gls{simd} via -qsimd=auto and improved data locality via -qhot \cite{ibmxl2018}. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
+% The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. With IBM XL on Power, for example, -O5 implies automatic \gls{simd} via -qsimd=auto and improved data locality via -qhot~\cite{ibmxl2018}. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera~\cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions~\cite{gcc2021}.
 
-The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but were identified to imply most of the performance-related options. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera \cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions \cite{gcc2021}.
+The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but were identified to imply most of the performance-related options. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera~\cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions~\cite{gcc2021}.
 \begin{table}[H]
     \centering
     \caption{Compiler Configurations}
