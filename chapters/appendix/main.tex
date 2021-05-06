@@ -64,8 +64,9 @@ Is the average size increase only or based on reference? If it's based on the re
 
 \begin{table}
     \centering
-    \caption{Average Symbol Increase in NTRU on Consumer Hardware}
-    \label{table:result:ntru-average-stack-increase-consumer}
+    \footnotesize
+    \caption{Average Symbol Increase in NTRU on Modern Consumer Hardware}
+    \label{table:result:ntru-average-stack-increase-modern-consumer}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
         \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
@@ -94,7 +95,20 @@ Is the average size increase only or based on reference? If it's based on the re
           Modern Workstation &              hrss701 &                clang &        ref-optimized &                4.45x\\
           Modern Workstation &              hrss701 &                  gcc &       avx2-optimized &                7.73x\\
           Modern Workstation &              hrss701 &                clang &       avx2-optimized &                8.21x\\
-        Old Low-Range Laptop &              hrss701 &                  gcc &                  ref &                  N/A\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\begin{table}
+    \centering
+    \footnotesize
+    \caption{Average Symbol Increase in NTRU on Old Consumer Hardware}
+    \label{table:result:ntru-average-stack-increase-old-consumer}
+    \begin{tabularx}{\linewidth}{X c c c c}
+        \toprule
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \midrule
+               Old Low-Range Laptop &              hrss701 &                  gcc &                  ref &                  N/A\\
         Old Low-Range Laptop &              hrss701 &                  gcc &        ref-optimized &                3.33x\\
         Old Low-Range Laptop &              hrss701 &                clang &        ref-optimized &                4.12x\\
         Old Low-Range Laptop &           hps4096821 &                  gcc &                  ref &                  N/A\\
@@ -112,6 +126,7 @@ Is the average size increase only or based on reference? If it's based on the re
 
 \begin{table}[H]
     \centering
+    \footnotesize
     \caption{Average Symbol Increase in Classic McEliece on Cloud Hardware}
     \label{table:result:mceliece-average-stack-increase-cloud}
     \begin{tabularx}{\linewidth}{X c c c c}
@@ -172,6 +187,7 @@ Is the average size increase only or based on reference? If it's based on the re
 
 \begin{table}[H]
     \centering
+    \small
     \caption{Average Symbol Increase in Classic McEliece on Mainframe Hardware}
     \label{table:result:mceliece-average-stack-increase-mainframe}
     \begin{tabularx}{\linewidth}{X c c c c}
@@ -197,8 +213,9 @@ Is the average size increase only or based on reference? If it's based on the re
 
 \begin{table}[H]
     \centering
-    \caption{Average Symbol Increase in Classic McEliece on Consumer Hardware}
-    \label{table:result:mceliece-average-stack-increase-consumer}
+    \footnotesize
+    \caption{Average Symbol Increase in Classic McEliece on Modern Consumer Hardware}
+    \label{table:result:mceliece-average-stack-increase-modern-consumer}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
         \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
@@ -251,7 +268,20 @@ Is the average size increase only or based on reference? If it's based on the re
           Modern Workstation &             8192128f &                  gcc &       avx2-optimized &                1.49x\\
           Modern Workstation &             8192128f &                clang &        ref-optimized &                1.86x\\
           Modern Workstation &             8192128f &                clang &       avx2-optimized &                2.45x\\
-        Old Low-Range Laptop &              6960119 &                  gcc &                  ref &                  N/A\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \caption{Average Symbol Increase in Classic McEliece on Old Consumer Hardware}
+    \label{table:result:mceliece-average-stack-increase-old-consumer}
+    \begin{tabularx}{\linewidth}{X c c c c}
+        \toprule
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \midrule
+               Old Low-Range Laptop &              6960119 &                  gcc &                  ref &                  N/A\\
         Old Low-Range Laptop &              6960119 &                  gcc &        ref-optimized &                1.26x\\
         Old Low-Range Laptop &              6960119 &                clang &        ref-optimized &                2.24x\\
         Old Low-Range Laptop &              8192128 &                  gcc &                  ref &                  N/A\\

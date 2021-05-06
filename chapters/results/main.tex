@@ -538,7 +538,7 @@ In Table \ref{table:results:throughput:ecdh-25519}\todo{explain table}, the thro
 
 \input{chapters/results/throughput/ecdh_25519_keypair}
 
-When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant\todo{not true! It's the other way around!}. There is also a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seems as if the throughput levels off after the number of used threads surpass the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
+When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant. There is also a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seems as if the throughput levels off after the number of used threads surpass the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
 
 \begin{figure}
     \centering
@@ -622,8 +622,12 @@ The number of cache misses in \gls{mceliece}, when compared to \gls{ntru}, is su
 
 \input{chapters/results/micro/mceliece_8192128f_crypto_kem_enc}
 
-With an average of 6911670 cache misses when the GCC reference implementation was run in the Cloud Provider 2 environment, keypair generation in \gls{mceliece} 8192128 had the largest number of cache misses recorded during our testing. For the same algorithm and compiler configuration, the Modern Workstation had an average of 20403 cache misses. In the other end of the spectrum, the Modern Workstation saw an average of a single cache miss for all configurations of \gls{ntru} HPS 4096821 keypair generation. Using the same configurations, the Cloud Provider 2 environment saw an average of between 1440 and 3468 cache misses. 
+With an average of 6911670 cache misses when the GCC reference implementation was run in the Cloud Provider 2 environment, keypair generation in \gls{mceliece} 8192128 had the largest number of cache misses recorded during our testing. For the same algorithm and compiler configuration, the Modern Workstation had an average of 20403 cache misses. In the other end of the spectrum, the Modern Workstation saw an average of a single cache miss for all configurations of \gls{ntru} HPS 4096821 keypair generation. Using the same configurations, the Cloud Provider 2 environment saw an average of between 1440 and 3468 cache misses.
 
 That the \gls{mceliece} implementations had a drastically larger amount of cache misses than the \gls{ntru} implementations was found in all of the tests of the experiment.
 
 \input{chapters/results/micro/ntru_hrss701_crypto_kem_enc}
+
+\todo[inline]{Insert information on page faults?}
+
+\todo[inline]{Fix microbenchmark graphs and insert them?}
