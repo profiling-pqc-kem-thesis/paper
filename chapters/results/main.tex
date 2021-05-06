@@ -243,26 +243,26 @@ The operation of dividing an integer was found to correlate to an additional $53
         \thead{Environment} & \thead{Curve} & \thead{OpenSSL Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
         & & & \thead{Keypair} & \thead{Exchange} \\
         \midrule
-        IBM Community Cloud & P-256 & 1.1.1g FIPS & 12184 & 0 \\
-        IBM Community Cloud & 25519 & 1.1.1g FIPS & 4524 & 1024 \\
+        IBM Community Cloud & \gls{p-256} & 1.1.1g FIPS & 12184 & 0 \\
+        IBM Community Cloud & \gls{curve25519} & 1.1.1g FIPS & 4524 & 1024 \\
 
-        Cloud Provider 1 & P-256 & 1.1.1 & 9220 & 0 \\
-        Cloud Provider 1 & 25519 & 1.1.1 & 8380 & 0 \\
+        Cloud Provider 1 & \gls{p-256} & 1.1.1 & 9220 & 0 \\
+        Cloud Provider 1 & \gls{curve25519} & 1.1.1 & 8380 & 0 \\
 
-        Cloud Provider 2 & P-256 & 1.1.1f & 4884 & 1872 \\
-        Cloud Provider 2 & 25519 & 1.1.1f & 2556 & 512\\
+        Cloud Provider 2 & \gls{p-256} & 1.1.1f & 4884 & 1872 \\
+        Cloud Provider 2 & \gls{curve25519} & 1.1.1f & 2556 & 512\\
 
-        Modern Workstation & P-256 & 1.1.1f & 4884 & 1872 \\
-        Modern Workstation & 25519 & 1.1.1f & 2556 & 512 \\
+        Modern Workstation & \gls{p-256} & 1.1.1f & 4884 & 1872 \\
+        Modern Workstation & \gls{curve25519} & 1.1.1f & 2556 & 512 \\
         
-        Modern Laptop & P-256 & 1.1.1f & 4884 & 1872 \\
-        Modern Laptop & 25519 & 1.1.1f & 2556 & 512 \\
+        Modern Laptop & \gls{p-256} & 1.1.1f & 4884 & 1872 \\
+        Modern Laptop & \gls{curve25519} & 1.1.1f & 2556 & 512 \\
         
-        Old Mid-Range Laptop & P-256 & 1.1.1f & 4884 & 1872\\
-        Old Mid-Range Laptop & 25519 & 1.1.1f & 2556 & 512\\
+        Old Mid-Range Laptop & \gls{p-256} & 1.1.1f & 4884 & 1872\\
+        Old Mid-Range Laptop & \gls{curve25519} & 1.1.1f & 2556 & 512\\
         
-        Old Low-Range Laptop & P-256 & 1.1.1f & 4884 & 1872\\
-        Old Low-Range Laptop & 25519 & 1.1.1f & 2556 & 512\\
+        Old Low-Range Laptop & \gls{p-256} & 1.1.1f & 4884 & 1872\\
+        Old Low-Range Laptop & \gls{curve25519} & 1.1.1f & 2556 & 512\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -344,7 +344,7 @@ int crypto_kem_dec(unsigned char *key, const unsigned char *ciphertext, const un
     \end{tabularx}
 \end{table}
 
-The APIs are similar, but not the same for the \gls{kex} implementations. That is due to \gls{dh} requiring the so called Diffie-Hellman Parameters $p$ and $g$. The APIs are shown in figure \ref{figure:results:memory:kex-api}. As with the \gls{kem} implementations, the \gls{kex} implementations use two buffers for a public and a private key when generating a keypair. The \gls{dh} implementation also requires the previously mentioned domain parameters $p$ and $g$ - both buffers of bytes containing the respective parameter. The crypto\_dh\_enc functions further use a key buffer. There is no analogous ciphertext as the \glspl{kex} are fundamentally different from the \glspl{kem} as covered in \ref{section:background:diffie-hellman}. The sizes of the parameters are presented in Table \ref{table:results:memory:kex-parameter-sizes}.
+The APIs are similar, but not the same for the \gls{kex} implementations. That is due to \gls{dh} requiring the so called Diffie-Hellman Parameters $p$ and $g$. The APIs are shown in figure \ref{figure:results:memory:kex-api}. As with the \gls{kem} implementations, the \gls{kex} implementations use two buffers for a public and a private key when generating a keypair. The \gls{dhe} implementation also requires the previously mentioned domain parameters $p$ and $g$ - both buffers of bytes containing the respective parameter. The crypto\_dh\_enc functions further use a key buffer. There is no analogous ciphertext as the \glspl{kex} are fundamentally different from the \glspl{kem} as covered in \ref{section:background:diffie-hellman}. The sizes of the parameters are presented in Table \ref{table:results:memory:kex-parameter-sizes}.
 
 \begin{figure}
     \centering
@@ -374,9 +374,9 @@ int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const un
         \toprule
         \thead{Algorithm} & \thead{Parameters} & \thead{public\_key} & \thead{private\_key} & \thead{$p$} & \thead{$g$} & \thead{key}\\
         \midrule
-        \gls{dh} & 2048    &255 & 255 & 256  & 1 & 32 \\
-        \gls{ecdh} & P-256 & 65 & 32 & - & - & 32 \\
-        \gls{ecdh} & 25519 & 32 & 32 & - & - & 32 \\
+        \gls{dhe} & 2048 & 255 & 255 & 256  & 1 & 32 \\
+        \gls{ecdhe} & P-256 & 65 & 32 & - & - & 32 \\
+        \gls{x25519} & - & 32 & 32 & - & - & 32 \\
         \bottomrule
     \end{tabularx}
 \end{table}
