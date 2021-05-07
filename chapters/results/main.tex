@@ -563,6 +563,10 @@ That the \gls{mceliece} implementations had a drastically larger amount of cache
 
 \input{chapters/results/micro/ntru_hrss701_crypto_kem_enc}
 
-\todo[inline]{Insert information on page faults?}
+Another value we measured were the number of page-faults that occurred during each stage of the algorithms. As with other micro-benchmarks, this data was collected for the \gls{post-quantum} \glspl{kem} in environments with support for measuring them.
+
+\gls{ntru} had zero page-faults in all of the runs, across all implementations and environments. Like \gls{ntru}, \gls{mceliece} had zero page-faults, except during key-pair generation. In Table \ref{table:results:micro:page-faults-mceliece} the mean of each parameter set is presented for the implementations which had page faults. All page faults occured during the keypair stage and for the GCC compiler.
+
+\input{chapters/results/micro/page-faults}
 
 \todo[inline]{Fix microbenchmark graphs and insert them?}

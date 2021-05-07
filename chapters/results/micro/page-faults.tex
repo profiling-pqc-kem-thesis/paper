@@ -1,0 +1,22 @@
+\begin{table}
+    \centering
+    \small
+    % All are GCC
+    % Compiled from copy+paste in page-faults script
+    \caption{Page Faults in \gls{mceliece} Keypair Generation}
+    \label{table:results:micro:page-faults-mceliece}
+    \begin{tabularx}{\linewidth}{X c c c c c}
+        \toprule
+        \thead{Environment} & \thead{Flags} & \multicolumn{4}{c}{\thead{Mean}}\\
+        & & \thead{6960119} & \thead{6960119f} & \thead{8192128} & \thead{8192128f}\\
+        \midrule
+        Old Low-Range Laptop & ref & 13 & 5 & 20 & 8\\
+        Old Mid-Range Laptop & ref &  9 & 4 & 18 & 6\\
+            Cloud Provider 2 & ref &  9 & 3 & 16 & 6\\
+            Cloud Provider 1 & ref &  9 & 3 & 13 & 5\\
+               Modern Laptop & ref &  8 & 2 & 12 & 4\\
+          Modern Workstation & ref &  6 & 2 & 10 & 3\\
+        Old Low-Range Laptop & ref-optimized & 0 & 0 & 1 & 0\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
