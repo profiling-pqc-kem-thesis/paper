@@ -62,7 +62,7 @@ The \gls{nist} submissions under test are presented in Table \ref{table:method:e
 
 \end{table}
 
-As previously mentioned in section \ref{section:background:classical-cryptography}, there are several recommended classical \glspl{kex}. These recommended algorithms and parameter sets constituted the control subjects for this study and are presented in Table \ref{table:method:experiment:phase1:control-subjects}. Although the control subjects may not be directly comparable to the \glspl{kem}, we hoped to provide context for how these classical algorithms perform.
+\noindent As previously mentioned in section \ref{section:background:classical-cryptography}, there are several recommended classical \glspl{kex}. These recommended algorithms and parameter sets constituted the control subjects for this study and are presented in Table \ref{table:method:experiment:phase1:control-subjects}. Although the control subjects may not be directly comparable to the \glspl{kem}, we hoped to provide context for how these classical algorithms perform.
 
 \begin{table}[H]
     \centering
@@ -78,14 +78,14 @@ As previously mentioned in section \ref{section:background:classical-cryptograph
     \end{tabularx}
 \end{table}
 
-In the case of the \gls{nist} submissions, in this context, the submitted implementations were not thought to be production-ready due to them not yet being standardized nor battle-tested. Due to this, as well as our interest in exploring optimization techniques that are applicable for post-quantum cryptography, we explored various ways the implementations may be optimized.
+\noindent In the case of the \gls{nist} submissions, in this context, the submitted implementations were not thought to be production-ready due to them not yet being standardized nor battle-tested. Due to this, as well as our interest in exploring optimization techniques that are applicable for post-quantum cryptography, we explored various ways the implementations may be optimized.
 
 As the control subjects were intended to represent the algorithms already in use, they were thought to be a solved problem. That is, in this context, implementation details were of no concern - an implementation on the native platform was assumed to be optimized and production-ready.
 
 \subsection{Target Environments}
 \label{section:method:experiment:environments}
 
-To fulfil the goal of the experiment, several hardware configurations was tested. These configurations were divided into three categories, namely consumer, cloud and mainframe hardware.
+To fulfil the goal of the experiment, several hardware configurations were tested. These configurations were divided into three categories, namely consumer, cloud and mainframe hardware depicted in figures \ref{table:method:experiment:phase1:consumer-hardware}, \ref{table:method:experiment:phase1:server-hardware} and \ref{table:method:experiment:phase1:mainframe-hardware}.
 
 The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications~\cite{eurostat2021}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment. The selected mainframe hardware was intended to represent the latest mainframes available from IBM at the time of writing.
 
@@ -243,7 +243,7 @@ Using the aforementioned toolset, we monitored the subjects and measured the fol
     \item Wall clock time
 \end{itemize}
 
-The measurements were taken at different points in the algorithms' lifecycles - such as at the start and end of the algorithm's invocation. The same measurements were also repeated for all of the stages of the algorithms as presented in section \ref{table:method:experiment:phase1:independent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we also measured the parts of the algorithm that constituted the highest cost. As some variables in the environment were identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these were measured as well. In some cases, the authors had provided optimized implementations. In such cases, these optimized functions were measured as well.
+\noindent The measurements were taken at different points in the algorithms' lifecycles - such as at the start and end of the algorithm's invocation. The same measurements were also repeated for all of the stages of the algorithms as presented in section \ref{table:method:experiment:phase1:independent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we also measured the parts of the algorithm that constituted the highest cost. As some variables in the environment were identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these were measured as well. In some cases, the authors had provided optimized implementations. In such cases, these optimized functions were measured as well.
 
 As we identified that some tools may introduce overhead when monitoring a program, we decided to split the tests into four parts. These parts are presented in Table \ref{table:method:experiment:phase1:benchmark-divisions}. By splitting the benchmarks we aimed to capture accurate values for each measurements without affecting others.
 
@@ -273,6 +273,9 @@ For the exact instrumentation used in each subject, please refer to the source c
 % The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but have been identified to imply most of the performance-related options. With IBM XL on Power, for example, -O5 implies automatic \gls{simd} via -qsimd=auto and improved data locality via -qhot~\cite{ibmxl2018}. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera~\cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions~\cite{gcc2021}.
 
 The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but were identified to imply most of the performance-related options. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera~\cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions~\cite{gcc2021}.
+
+In order to see the exact flags used to compile each sample, please refer to the source code for the experiment\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
+
 \begin{table}[H]
     \centering
     \caption{Compiler configurations}
@@ -290,8 +293,6 @@ The compilers were configured using a series of performance-related flags. The f
         \bottomrule
     \end{tabularx}
 \end{table}
-
-In order to see the exact flags used to compile each sample, please refer to the source code for the experiment\footnote{\href{https://github.com/profiling-pqc-kem-thesis}{https://github.com/profiling-pqc-kem-thesis}}.
 
 \subsubsection{Implementation Configurations}
 \label{section:method:experiment:phase1:implementation-configurations}
@@ -342,7 +343,7 @@ The independent variables that were identified to potentially be related to perf
     \end{tabularx}
 \end{table}
 
-We identified throughput and hardware utilization to be dependent variables of potential interest. The hardware utilization of the system were however not considered for this test, instead we focused on how the throughput differs between architectures and environments.
+\noindent We identified throughput and hardware utilization to be dependent variables of potential interest. The hardware utilization of the system were however not considered for this test, instead we focused on how the throughput differs between architectures and environments.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase2:measurements}

@@ -9,7 +9,7 @@ In this section, symmetric-key, public-key and related topics will be further di
 
 \subsection{Symmetric-Key Cryptography}
 
-Symmetric-key cryptography is where the same key is shared between both parties and used for both encryption and decryption~\cite{bernstein2017}. Symmetric functions can, besides providing confidentiality, also be used to provide authenticity. If only the two parties know of the secret key, one of them may request the other to prove possession of the key.
+Symmetric-key cryptography is where the same key is shared between both parties and used for both encryption and decryption~\cite{bernstein2017}. Symmetric functions can, besides providing confidentiality, also be used to provide authenticity. If only two parties know of the secret key, one of them may request the other to prove possession of it.
 
 A potential problem when using a symmetric key is the fact that the two parties have to somehow securely exchanged a secret key~\cite{delfs2007}. It is not a trivial task to exchange the keys securely, as anyone may intercept their communication channel. There are many ways of securely exchanging a symmetric key by relying on public-key cryptography.
 
@@ -34,9 +34,7 @@ In another class of protocols, the key agreement protocols, the parties jointly 
 
 \subsection{Key Encapsulation Mechanism}
 
-A \acrfull{kem} is a form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs ~\cite{boyd2020}.
-
-A \gls{kem} consists of four sets and three algorithms~\cite{boyd2020}, listed below.
+A \acrfull{kem} is a form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs ~\cite{boyd2020}. A \gls{kem} consists of four sets and three algorithms~\cite{boyd2020}, listed below.
 
 \begin{itemize}
     \item $K_E$ - a set of public keys for encryption.
@@ -51,7 +49,7 @@ A \gls{kem} consists of four sets and three algorithms~\cite{boyd2020}, listed b
     \item $k=\text{Decapsulate}_{K^{-1}}(c)$ - a decapsulation algorithm which takes a private key $K^{-1}$ and a ciphertext $c$ and produces the same symmetric key $k$ as received from the encapsulation algorithm.
 \end{itemize}
 
-To further restrict the definition, we require that if $(c,k)$ is output by the encapsulation function $\text{Encapsulate}_K()$, then $k$ must be output by the corresponding decapsulation function $\text{Decapsulate}_{K^{-1}}(c)$~\cite{boyd2020}.
+\noindent To further restrict the definition, we require that if $(c,k)$ is output by the encapsulation function $\text{Encapsulate}_K()$, then $k$ must be output by the corresponding decapsulation function $\text{Decapsulate}_{K^{-1}}(c)$~\cite{boyd2020}.
 
 Although the notation used in the listing above does not respect the chosen randomness set, \glspl{kem} in practice often rely on the use of randomness so that a different $(c,k)$ is returned for each invocation of $\text{Encapsulate}_K()$~\cite{boyd2020}. 
 
@@ -102,7 +100,7 @@ To use an elliptic curve for cryptography, one must establish the following doma
     \item $h$ - the cofactor defined by $hn=|E(\mathbb{F}_q)|$
 \end{itemize}
 
-The domain parameters $a,b\in\mathbb{F}_q$ describe the curve $E$ as $y^2=x^3+ax+b$. Illustrations of these curves may be seen in figure \ref{figure:background:elliptic-curves}. Not all curves are suitable for elliptic-curve cryptography, which has led to some being standardized for mass usage~\cite{nist2018}.
+\noindent The domain parameters $a,b\in\mathbb{F}_q$ describe the curve $E$ as $y^2=x^3+ax+b$. Illustrations of these curves may be seen in figure \ref{figure:background:elliptic-curves}. Not all curves are suitable for elliptic-curve cryptography, which has led to some being standardized for mass usage~\cite{nist2018}.
 
 \begin{figure}[t]
     \centering
@@ -258,7 +256,7 @@ The $(\mu, \nu)$-semi-systematic form of \gls{mceliece} is designed to take both
     \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. AES 256)
 \end{enumerate}
 
-\gls{nist}~\cite{nist2017} further discuss that it is worth mentioning that the security categories previously presented provide more quantum security that a naïve analysis might suggest. They further state that security category 1, 3, and 5 are defined in terms of block ciphers - which may be broken by Grover's algorithm, given a quadratic quantum speedup. The potential impact, presented in Table \ref{table:background:post-quantum:bit-security}, could be that the \gls{aes} bit security is halved. \gls{nist}~\cite{nist2017} further claim that such an attack requires a long-running serial computation, which is difficult to implement in practice. For the attack to be practical, \gls{nist} believe that many smaller instances of the algorithm must be run in parallel, making the quantum speedup less dramatic.
+\noindent \gls{nist}~\cite{nist2017} further discuss that it is worth mentioning that the security categories previously presented provide more quantum security that a naïve analysis might suggest. They further state that security category 1, 3, and 5 are defined in terms of block ciphers - which may be broken by Grover's algorithm, given a quadratic quantum speedup. The potential impact, presented in Table \ref{table:background:post-quantum:bit-security}, could be that the \gls{aes} bit security is halved. \gls{nist}~\cite{nist2017} further claim that such an attack requires a long-running serial computation, which is difficult to implement in practice. For the attack to be practical, \gls{nist} believe that many smaller instances of the algorithm must be run in parallel, making the quantum speedup less dramatic.
 
 In Table \ref{table:background:submissions-security-level}, the security level of the \gls{nist} submissions are presented. Each parameter set of the algorithm is presented with its security level right below it. Chen et.al.~\cite{ntru2020} present two different models for assessing the security level of \gls{ntru} - a local and a stricter non-local model. Both of these models are presented in the aforementioned table and labeled accordingly.
 
@@ -320,7 +318,7 @@ The classification of computer architectures proposed by Flynn~\cite{flynn1972},
     \item The \gls{mimd} organization is typically referred to as multi-processors. The organization may be subject to saturation.
 \end{itemize}
 
-Due to the properties of \gls{simd}, it has been an attractive target for software optimization with practical use seeing significant throughput increases~\cite{dickson2011}.
+\noindent Due to the properties of \gls{simd}, it has been an attractive target for software optimization with practical use seeing significant throughput increases~\cite{dickson2011}.
 
 In order to use the properties of \gls{simd}, the target architecture has to be a vector architecture or one that supports \gls{simd} extensions~\cite{hennessy2011:vectorization}. Such a target will work on sets of data elements in memory, placing them in sequential registers, operate on the vectors of data using a single instruction and then disperse the results back to main memory. In the case of a vector architecture, these vector payloads are heavily pipelined. The memory overhead is consistent for an entire vector of operands as opposed to linear in regular \gls{sisd} architectures. Furthermore, a piece of code may have to be vectorized to use the properties offered by \gls{simd}. That is, it will need to be written in such a way that the same operation can be performed on multiple units of data. Not all algorithms can be written in such a way~\cite{dickson2011}.
 

@@ -337,16 +337,55 @@
 
 \input{chapters/results/sequential/mceliece_8192128f}
 
-\begin{figure}
+\begin{sidewaysfigure}
     \centering
     \includegraphics[width=\textwidth]{chapters/results/micro/mceliece_8192128f_Modern Workstation_cpu-cycles.pdf}
     \caption{CPU cycles consumed for \gls{mceliece} 8192128f on Modern Workstation}
     \label{figure:results:micro:mceliece-8192128f-modern-workstation}
-\end{figure}
+\end{sidewaysfigure}
 
-\begin{figure}
+\begin{sidewaysfigure}
     \centering
     \includegraphics[width=\textwidth]{chapters/results/micro/ntru_hrss701_Modern Laptop_cpu-cycles.pdf}
     \caption{CPU cycles consumed for \gls{ntru} HRSS 701 on Modern Laptop}
     \label{figure:results:micro:ntru-hrss701-modern-laptop}
+\end{sidewaysfigure}
+
+\begin{figure}
+    \centering
+    \begin{lstlisting}[language=C]
+int crypto_kem_keypair(unsigned char *public_key, unsigned char *private_key);
+int crypto_kem_enc(unsigned char *ciphertext, unsigned char *key, const unsigned char *public_key);
+int crypto_kem_dec(unsigned char *key, const unsigned char *ciphertext, const unsigned char *private_key);
+    \end{lstlisting}
+    \caption{The API of the \gls{kem} implementations}
+    \label{figure:result:memory:kem-api}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \begin{lstlisting}[language=C]
+// Diffie-Hellman
+int crypto_dh_keypair(unsigned char *public_key, unsigned char *private_key, unsigned char *p, unsigned char *g);
+
+// Diffie-Hellman
+int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const unsigned char *public_key, unsigned char *p, unsigned char *g);
+
+// Elliptic-Curve Diffie-Hellman
+int crypto_dh_keypair(unsigned char *public_key, unsigned char *private_key);
+
+// Elliptic-Curve Diffie-Hellman
+int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const unsigned char *public_key);
+    \end{lstlisting}
+    \caption{The API of the \gls{kex} implementations}
+    \label{figure:results:memory:kex-api}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.75]{chapters/results/throughput/Old Mid-Range Laptop_mceliece.pdf}
+    \caption{Throughput of \gls{mceliece} on Old Mid-Range Laptop for various thread counts}
+    \label{figure:results:throughput:mceliece-old-mid-range-laptop}
+\end{figure}
+
+\input{chapters/results/micro/ntru_hrss701_crypto_kem_enc}

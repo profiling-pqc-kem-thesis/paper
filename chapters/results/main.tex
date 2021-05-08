@@ -148,7 +148,7 @@ void poly_Rq_mul(poly *r, const poly *a, const poly *b) {
     \label{figure:result:hot-paths:ntru:poly_Rq_mul}
 \end{figure}
 
-To summarize, it is shown that factors such as the speed of \gls{aes} has little to do with the overall performance of the algorithm. Furthermore, it seems as if the polynomial library functions account for the vast majority of instructions spent on key-pair generation, encryption and decryption. The function \textit{poly\_Rq\_mul}, which multiplies two polynomials in $\mathbb{R}^q$, accounts for most of the calculations performed.
+\clearpage To summarize, it is shown that factors such as the speed of \gls{aes} has little to do with the overall performance of the algorithm. Furthermore, it seems as if the polynomial library functions account for the vast majority of instructions spent on key-pair generation, encryption and decryption. The function \textit{poly\_Rq\_mul}, which multiplies two polynomials in $\mathbb{R}^q$, accounts for most of the calculations performed.
 
 \subsection{Classic McEliece}
 As with \gls{ntru}, the reference implementation of \gls{mceliece} consists of three API methods - \textit{crypto\_kem\_keypair}, \textit{crypto\_kem\_enc} and \textit{crypto\_kem\_dec} for key-pair generation, encryption (encapsulation) and decryption (decapsulation), respectively. These API functions may in turn call several internal functions. We will only present the hot-paths for the \gls{mceliece} 8192128 non-f variant because it can quite accurately represent the hot-paths for all \gls{mceliece} variants.
@@ -169,7 +169,7 @@ In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_keypair}, we 
     \label{figure:result:hot-paths:classic-mceliece:pk_gen}
 \end{figure}
 
-The encryption function of \gls{mceliece} is presented in figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_enc}. Most time is spent in the syndrome function. In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_dec} the decryption function is presented. The majority of the time is spent in the \textit{synd} function.
+\noindent The encryption function of \gls{mceliece} is presented in figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_enc}. Most time is spent in the syndrome function. In figure \ref{figure:result:hot-paths:classic-mceliece:crypto_kem_dec} the decryption function is presented. The majority of the time is spent in the \textit{synd} function.
 
 \begin{figure}[H]
     \centering
@@ -263,7 +263,7 @@ The \gls{ecdhe} implementation behaved much like the \gls{dhe}, with the peaks d
 
 In terms of stack usage, the results vary between the implementations, compilers and features. For instance, the polynomial math function poly\_Rq\_mul in \gls{ntru}, which was identified as constituting most of the time spent in the algorithm, varies between taking up $70499$ and $188$ bytes. In all environments, the HPS 4096821 AVX2 variant takes up $70499$ bytes. This does not change between compilers or optimization flags, which could be due to the fact that the implementation is written in assembly - leaving little room for the compiler to alter the behavior. The same goes for the HRSS 701 variant of \gls{ntru} - the size is consistently 55317 bytes across environments and optimization flags. The lowest sizes are found when the reference implementation is compiled with optimization. The sizes are presented in Table \ref{table:results:memory:ntru-stack}. Although the optimization flags used were not chosen for improving the size of the binary, the size of the function has been lowered in all cases. Although the same version of GCC was used for several environments, the results differed between $188$ and $192$ bytes. Clang continually produced larger regions than GCC. Furthermore, more recent versions of the compilers seem to have produced smaller sizes.
 
-\begin{table}[t]
+\begin{table}
     \small
     \centering
     \caption{Stack size of poly\_Rq\_mul in bytes for the optimized reference implementation}
@@ -300,20 +300,11 @@ As the \gls{ecdhe} and \gls{dhe} implementations studied relied on the dynamical
 
 \subsection{Parameter Sizes}
 
-The measurements presented up until this point have been related to either the runtime behavior of the algorithms, or the static requirements they place on the environment in the form of stack usage. These measurements have not included the parameters fed to the algorithms - which could affect real-world applications. The remaining part of this section will present data gathered from the various implementations.
+The measurements presented up until this point have been related to either the runtime behavior of the algorithms, or the static requirements they place on the environment in the form of stack usage. These measurements have not included the parameters fed to the algorithms - which could affect real-world applications. The remaining part of this section presents data gathered from the implementations.
 
 The \glspl{kem} tested conform to the same API. Their signatures are presented in figure \ref{figure:result:memory:kem-api}. The function crypto\_kem\_keypair, which generates a keypair takes in a public key and a secret key. The encapsulation function, crypto\_kem\_enc, takes in a ciphertext buffer, a key buffer and the public key of a peer. Lastly, the decapsulation function, crypto\_kem\_dec takes in a key buffer, the ciphertext as received from a peer and the secret key. The sizes of these parameters differ between algorithms and implementations - but is not changed depending on the environment or optimizations. Table \ref{table:results:memory:kem-parameter-sizes} shows the sizes of the parameters in bytes. The sizes do not differ between the semi-systematic (f) variants of \gls{mceliece}. Therefore only two variants of \gls{mceliece} are presented.
 
-\begin{figure}
-    \centering
-    \begin{lstlisting}[language=C]
-int crypto_kem_keypair(unsigned char *public_key, unsigned char *private_key);
-int crypto_kem_enc(unsigned char *ciphertext, unsigned char *key, const unsigned char *public_key);
-int crypto_kem_dec(unsigned char *key, const unsigned char *ciphertext, const unsigned char *private_key);
-    \end{lstlisting}
-    \caption{The API of the \gls{kem} implementations}
-    \label{figure:result:memory:kem-api}
-\end{figure}
+The APIs are similar, but not the same for the \gls{kex} implementations. That is due to \gls{dh} requiring the so called Diffie-Hellman Parameters $p$ and $g$. The APIs are shown in figure \ref{figure:results:memory:kex-api}. As with the \gls{kem} implementations, the \gls{kex} implementations use two buffers for a public and a private key when generating a keypair. The \gls{dhe} implementation also requires the previously mentioned domain parameters $p$ and $g$ - both buffers of bytes containing the respective parameter. The crypto\_dh\_enc functions further use a key buffer. There is no analogous ciphertext as the \glspl{kex} are fundamentally different from the \glspl{kem} as covered in \ref{section:background:diffie-hellman}. The sizes of the parameters are presented in Table \ref{table:results:memory:kex-parameter-sizes}.
 
 \begin{table}
     \centering
@@ -331,27 +322,6 @@ int crypto_kem_dec(unsigned char *key, const unsigned char *ciphertext, const un
         \bottomrule
     \end{tabularx}
 \end{table}
-
-The APIs are similar, but not the same for the \gls{kex} implementations. That is due to \gls{dh} requiring the so called Diffie-Hellman Parameters $p$ and $g$. The APIs are shown in figure \ref{figure:results:memory:kex-api}. As with the \gls{kem} implementations, the \gls{kex} implementations use two buffers for a public and a private key when generating a keypair. The \gls{dhe} implementation also requires the previously mentioned domain parameters $p$ and $g$ - both buffers of bytes containing the respective parameter. The crypto\_dh\_enc functions further use a key buffer. There is no analogous ciphertext as the \glspl{kex} are fundamentally different from the \glspl{kem} as covered in \ref{section:background:diffie-hellman}. The sizes of the parameters are presented in Table \ref{table:results:memory:kex-parameter-sizes}.
-
-\begin{figure}
-    \centering
-    \begin{lstlisting}[language=C]
-// Diffie-Hellman
-int crypto_dh_keypair(unsigned char *public_key, unsigned char *private_key, unsigned char *p, unsigned char *g);
-
-// Diffie-Hellman
-int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const unsigned char *public_key, unsigned char *p, unsigned char *g);
-
-// Elliptic-Curve Diffie-Hellman
-int crypto_dh_keypair(unsigned char *public_key, unsigned char *private_key);
-
-// Elliptic-Curve Diffie-Hellman
-int crypto_dh_enc(unsigned char *key, const unsigned char *private_key, const unsigned char *public_key);
-    \end{lstlisting}
-    \caption{The API of the \gls{kex} implementations}
-    \label{figure:results:memory:kex-api}
-\end{figure}
 
 \begin{table}
     \centering
@@ -386,11 +356,11 @@ In all environments but one, we found consistent performance throughout all sequ
     \label{figure:results:sequential:mceliece-decrpyt-cloud-provider-2}
 \end{figure}
 
-In Table \ref{figure:results:sequential:ntru-hrss701} all of the average durations and speedups for each optimization and environment are shown. In the table, one may see conclusive evidence that the optimized \gls{avx2} implementations perform the best in all environments with support for \gls{avx2}. It is not clear, however, what compiler produces the best performance. In the environments without support for \gls{avx2}, the optimized reference implementation performed the best. Just as with the \gls{avx2} implementations, it's unclear whether or not GCC or Clang produced the best results. It seems as if GCC produces more consistent results, with less variation in the averages. In the Old Low-Range Laptop environment, for example, one may see that Clang requires about two times the duration of the comparable subject compiled with GCC. In other cases, Clang seems to be on par with, or better than, GCC. As the speedup is percentual based on the environment, one may expect them to be similar across environments. That is, the speedup of using \gls{avx2} instead of the reference implementation, should in theory be similar on both the Modern Workstation and Modern Laptop, for example. In practice we found this to not be true. Although similar, the \gls{avx2} implementation compiled and optimized by Clang on the Modern Workstation has an additional 78 times speedup when compared to the Modern Laptop. On the other hand, the Old Mid-Range Laptop and the Old Low-Range Laptop perform near identically in terms of speedup.
+In Table \ref{figure:results:sequential:ntru-hrss701} all of the average durations and speedups for each optimization and environment are shown. In the table, one may see conclusive evidence that the optimized \gls{avx2} implementations perform the best in all environments with support for \gls{avx2}. It is not clear, however, what compiler produces the best performance. In the environments without support for \gls{avx2}, the optimized reference implementation performed the best. Just as with the \gls{avx2} implementations, it's unclear whether or not GCC or Clang produced the best results. It seems as if GCC produces more consistent results, with less variation in the averages. In the Old Low-Range Laptop environment, for example, one may see that Clang requires about two times the duration of the comparable subject compiled with GCC. In other cases, Clang seems to be on par with, or better than, GCC. As the speedup is percentual based on the environment, one may expect them to be similar across environments. That is, the speedup of using \gls{avx2} instead of the reference implementation, should in theory be similar on both the Modern Workstation and Modern Laptop, for example. In practice we found this to not be true. Although similar, the \gls{avx2} implementation compiled and optimized by Clang on the Modern Workstation has an additional 78 times speedup when compared to the Modern Laptop. On the other hand, the Old Mid-Range Laptop and the Old Low-Range Laptop performed near identically.
 
 \input{chapters/results/sequential/ntru_hrss701}
 
-By studying the average duration taken by the various subjects in each environment, one may clearly see that \gls{avx2} performs the best when it's available. When \gls{avx2} is not available, the optimized reference implementation performs the best. The results are however indecisive in terms of what compiler performed the best in each environment.
+By studying the average duration taken by the various subjects in each environment, one may clearly see that \gls{avx2} performs the best when it's available. When \gls{avx2} was not available, the optimized reference implementation performed the best. The results are however indecisive in terms of what compiler performed the best.
 
 \begin{table}
     \centering
@@ -427,11 +397,11 @@ By studying the average duration taken by the various subjects in each environme
     \end{tabularx}
 \end{table}
 
-In Table \ref{table:results:sequential:nist-vs-ours} the measurements performed by the respective submission authors are compared to the measurements gathered in this thesis. Both the \gls{mceliece}~\cite{mceliece2020} and \gls{ntru}~\cite{ntru2020} measurements were gather using \gls{supercop} whilst ours were counted using hardware registers. The authors of the \gls{mceliece} submission did not present any measurements for the reference implementation. The measurements presented as ours were performed in the Modern Workstation environment with an Intel i9-9990k. The consumed cycles of the \gls{mceliece} \gls{avx2} implementation were measured by the authors on a Intel Xeon E3-1275v3. The \gls{ntru} authors used an Intel i3-6100T for the reference implementation and an Intel i7-4770k for the \gls{avx2} implementation.
+In Table \ref{table:results:sequential:nist-vs-ours} the measurements performed by the respective submission authors are compared to the measurements gathered in this thesis. Both the \gls{mceliece} and \gls{ntru} measurements were gather using \gls{supercop}~\cite{mceliece2020,ntru2020} whilst ours were counted using hardware registers. The authors of the \gls{mceliece} submission did not present any measurements for the reference implementation. Our measurements were performed in the Modern Workstation environment with an Intel i9-9990k. The consumed cycles of the \gls{mceliece} \gls{avx2} implementation were measured by the authors on a Intel Xeon E3-1275v3. The \gls{ntru} authors used an Intel i3-6100T for the reference implementation and an Intel i7-4770k for the \gls{avx2} implementation.
 
 \subsection{Throughput Performance}
 
-As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing implementation of each algorithm for each environment, as identified by the sequential benchmarks. The results from the sequential benchmark previously presented were not conclusive and we therefore ended up running the parallel benchmarks on both GCC and Clang builds of the best-performing variant.
+As outlined in section \ref{section:method:experiment:phase2}, the throughput of the algorithms in each environment under test was evaluated for a series of parallelism configurations. The initial plan was to use the best-performing implementation of each algorithm for each environment, as identified by the sequential benchmarks. The results from the sequential benchmark previously presented were not conclusive. We therefore ran the parallel benchmarks on both GCC and Clang builds of the best-performing variant.
 
 The throughput of the \gls{dhe} implementation was found to consistently slow down after the number of threads surpass the number of physical cores multiplied with the degree of \gls{smt}. In figure \ref{figure:results:throughput:dh-old-mid-range-laptop}, the throughput of the Old Mid-Range Laptop can be seen. Old Mid-Range Laptop, a dual core machine with four threads, levels off at the four threads mark. As mentioned previously in section \ref{table:method:experiment:phase1:implementation-configurations}, two variants of \gls{dhe} were tested - one compiled and optimized by GCC, the other by Clang - both of which are presented in the aforementioned figure. The performance difference between the two compilers seem to be negligible, which one may expect as the OpenSSL library used to provide the implementation with virtually all of its functionality is dynamically linked. That means that it is not recompiled nor optimized by the compiler used to compile the program. The same leveling found in Old Mid-Range Laptop was also identified in all of the other environments tested.
 
@@ -442,7 +412,7 @@ The throughput of the \gls{dhe} implementation was found to consistently slow do
     \label{figure:results:throughput:dh-old-mid-range-laptop}
 \end{figure}
 
-The \gls{ecdhe} implementation was found to be drastically more performant than the \gls{dhe} implementation, with a speedup ranging between 5 to 350 times the throughput. The highest increase in performance was found in the IBM Community Cloud environment, seen in figure \ref{figure:results:throughput:ecdh-ibm-community-cloud}. The throughput, drastically dropped when tested on four or more threads. The peak at two threads coincides with the number of available threads\footnote{It is unknown whether or not the cores are physical cores, logical cores or virtual cores} of the environment. What's more is a 30\% drop in throughput in the exchange phase of the \gls{x25519} implementation compiled and optimized using GCC. The drop was consistent through both of the runs of the complete benchmark at two completely different occasions. It was found that during the \gls{x25519} run on four threads, two of the threads consistently performed half of the throughput of the other two.
+The \gls{ecdhe} implementation was found to be drastically more performant than the \gls{dhe} implementation, with a speedup ranging between 5 to 350 times the throughput. The highest increase in performance was found in the IBM Community Cloud environment, seen in figure \ref{figure:results:throughput:ecdh-ibm-community-cloud}. The throughput, drastically dropped when tested on four or more threads. The peak at two threads coincides with the number of available threads\footnote{It is unknown whether or not the cores are physical cores, logical cores or virtual cores} of the environment. What's more is a 30\% drop in throughput in the exchange phase of the \gls{x25519} implementation compiled and optimized using GCC. The drop was consistent through both of the runs of the complete benchmark at two completely different occasions. It was found that during the \gls{x25519} run on four threads, two achieved half the throughput of the others.
 
 \begin{figure}
     \centering
@@ -455,7 +425,9 @@ In Table \ref{table:results:throughput:ecdh-25519}, the throughput for each envi
 
 \input{chapters/results/throughput/ecdh_25519_keypair}
 
-When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant. There is also a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seems as if the throughput levels off after the number of used threads surpass the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
+When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant.
+
+Furthermore, there is a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seems as if the throughput levels off after the number of used threads surpass the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
 
 \begin{figure}
     \centering
@@ -464,14 +436,8 @@ When looking at the throughput of \gls{mceliece} in environments which do not su
     \label{figure:results:throughput:mceliece-ibm-community-cloud}
 \end{figure} 
 
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.75]{chapters/results/throughput/Old Mid-Range Laptop_mceliece.pdf}
-    \caption{Throughput of \gls{mceliece} on Old Mid-Range Laptop for various thread counts}
-    \label{figure:results:throughput:mceliece-old-mid-range-laptop}
-\end{figure}
-
-When \gls{mceliece} is run in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results tell a different story. Not only are the compilers much more consistent with one another, but the difference in throughput between the two variants seem to become smaller. It is still clear to see, however, that the smallest parameter size has an overall lower throughput for encryption than the largest parameter size tested. The keypair and decrypt results seem to show that the smallest parameter size perform the best.
+\clearpage
+\noindent When \gls{mceliece} ran in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results are more stable. Not only are the compilers much more consistent with one another, but the difference in throughput between the two variants seem to become smaller. It is still clear to see, however, that the smallest parameter size has an overall lower throughput for encryption than the largest parameter size tested. The keypair and decrypt results seem to show that the smallest parameter size perform the best.
 
 \begin{figure}
     \centering
@@ -495,11 +461,9 @@ In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements f
 
 \subsection{Micro-benchmarks}
 
-In section \ref{section:method:experiment:phase1:implementation-configurations} it was written that the monitored functions for the micro benchmark would be based off of data found in the hot paths analysis. In the end, the functions presented in Table \ref{table:results:performance:micro-functions} were monitored during the micro benchmark. Note that although the randombytes function is available in both \gls{ntru} and \gls{mceliece}, it was found in section \ref{section:results:hot-paths} to not be significant enough for \gls{mceliece} to warrant further analysis. Note also that the gf\_add and gf\_mul are missing from the \gls{mceliece} monitored functions. Due to their extremely high invocation count, an equally extreme overhead was induced. This made the process of measuring these regions infeasible.
-
-\begin{table}
+\begin{table}[H]
     \centering
-    \small
+    \footnotesize
     \caption{Monitored functions}
     \label{table:results:performance:micro-functions}
     \begin{tabularx}{\linewidth}{l X}
@@ -532,40 +496,41 @@ In section \ref{section:method:experiment:phase1:implementation-configurations} 
     \end{tabularx}
 \end{table}
 
-To evaluate what changes in the implementations contribute to a certain speedup, micro-benchmarks were run as further described in section \ref{section:method:experiment:phase1}. One of the micro-benchmarks performed was the counting of the number of cache misses occurring in an environment. The cache misses for various environments and performance optimizations for \gls{mceliece} 8192128f keypair generation is presented in Table \ref{table:results:micro:cache-misses-mceliece-8192128f-enc}. The same stage for the \gls{ntru} HRSS 701 implementations tested are presented in Table \ref{table:results:micro:cache-misses-ntru-hrss701-enc}. In both of the tables, the Old Low-Range Laptop is missing for some configurations, due to it failing to complete the micro benchmarks a multitude of times. Not all environments supported measuring the cache misses. Therefore the Cloud Provider 1 and IBM Community Cloud are not presented in the following tables.
+In section \ref{section:method:experiment:phase1:implementation-configurations} it was written that the monitored functions for the micro benchmark would be based off of data found in the hot paths analysis. In the end, the functions presented in Table \ref{table:results:performance:micro-functions} were monitored during the micro benchmark. Note that although the randombytes function is available in both \gls{ntru} and \gls{mceliece}, it was found in section \ref{section:results:hot-paths} to not be significant enough for \gls{mceliece} to warrant further analysis. Note also that the gf\_add and gf\_mul are missing from the \gls{mceliece} monitored functions. Due to their extremely high invocation count, an equally extreme overhead was induced. This made the process of measuring these regions infeasible.
 
-The number of cache misses in \gls{mceliece}, when compared to \gls{ntru}, is substantially higher with comparable means being up to 190 times as many. The standard deviation is also considerably higher than those found in \gls{ntru} benchmarks. Despite running several generations older hardware with less then half the cache of the Modern Laptop, the Old Low-Range Laptop seem to consistently have fewer cache misses. The only cloud hardware tested, Cloud Provider 2, has an unknown amount of cache available for use during the benchmark, it being a shared environment with virtual cores. The Cloud Provider 2 saw an increased number of cache misses when compared to dedicated consumer hardware such as the Old Mid-Range Laptop, the Old Low-Range Laptop and the Modern Workstation environments.
+To evaluate what changes in the implementations contribute to a certain speedup, micro-benchmarks were run as further described in section \ref{section:method:experiment:phase1}. One of the micro-benchmarks performed was the counting of the number of cache misses occurring in an environment. The cache misses for various environments and performance optimizations for \gls{mceliece} 8192128f keypair generation is presented in Table \ref{table:results:micro:cache-misses-mceliece-8192128f-enc}. The same stage for the \gls{ntru} HRSS 701 implementations tested are presented in Table \ref{table:results:micro:cache-misses-ntru-hrss701-enc}. In both of the tables, the Old Low-Range Laptop is missing for some configurations, due to it failing to complete the micro benchmarks a multitude of times. Not all environments supported measuring the cache misses. Therefore the Cloud Provider 1 and IBM Community Cloud environments are not presented.
+
+The number of cache misses in \gls{mceliece}, when compared to \gls{ntru}, is substantially higher with comparable means being up to 190 times as many. The standard deviation is also considerably higher than those found in \gls{ntru} benchmarks. Despite running several generations older hardware with less then half the cache of the Modern Laptop, the Old Low-Range Laptop seem to consistently have fewer cache misses. The only cloud hardware tested, Cloud Provider 2, has an unknown amount of cache available for use during the benchmark, it being a shared environment with virtual cores. The Cloud Provider 2 saw an increased number of cache misses when compared to dedicated consumer hardware such as the Old Mid-Range Laptop, the Old Low-Range Laptop and the Modern Workstation.
 
 \input{chapters/results/micro/mceliece_8192128f_crypto_kem_enc}
 
-With an average of 6911670 cache misses when the GCC reference implementation was run in the Cloud Provider 2 environment, keypair generation in \gls{mceliece} 8192128 had the largest number of cache misses recorded during our testing. For the same algorithm and compiler configuration, the Modern Workstation had an average of 20403 cache misses. In the other end of the spectrum, the Modern Workstation saw an average of a single cache miss for all configurations of \gls{ntru} HPS 4096821 keypair generation. Using the same configurations, the Cloud Provider 2 environment saw an average of between 1440 and 3468 cache misses.
+With an average of 6911670 cache misses when the GCC reference implementation was run in the Cloud Provider 2 environment, keypair generation in \gls{mceliece} 8192128 had the largest number of cache misses recorded during our testing. For the same algorithm and compiler configuration, the Modern Workstation had an average of 20403 cache misses. As the 8192128 parameter set of \gls{mceliece} is the systematic variant, it may run further iterations than the semi-systematic variant of \gls{mceliece}. As this is the only difference between the 8192128 and the 8192128f parameter set, it is likely to be the cause of the higher number of cache misses. In the lower end of the spectrum, the Modern Workstation saw an average of a single cache miss for all configurations of \gls{ntru} HPS 4096821 keypair generation. The environment has the largest amount of cache out of all the dedicated hardware tested. Using the same configurations, the Cloud Provider 2 environment saw an average of between 1440 and 3468 cache misses. As dedicated hardware had similar amounts of cache misses as the tested cloud environments, it may be difficult to directly determine if the type of environment affects the number of cache misses.
 
 That the \gls{mceliece} implementations had a drastically larger amount of cache misses than the \gls{ntru} implementations was found in all of the tests of the experiment.
 
-\input{chapters/results/micro/ntru_hrss701_crypto_kem_enc}
-
-Another value we measured were the number of page-faults that occurred during each stage of the algorithms. As with other micro-benchmarks, this data was collected for the \gls{post-quantum} \glspl{kem} in environments with support for measuring them.
+\clearpage
+\noindent Another value we measured were the number of page-faults that occurred during each stage of the algorithms. As with other micro-benchmarks, this data was collected for the \gls{post-quantum} \glspl{kem} in environments with support for measuring them.
 
 \gls{ntru} had zero page-faults in all of the runs, across all implementations and environments. Like \gls{ntru}, \gls{mceliece} had zero page-faults, except during key-pair generation. In Table \ref{table:results:micro:page-faults-mceliece} the mean of each parameter set is presented for the implementations which had page faults. All page faults occured during the keypair stage and for the GCC compiler.
 
 \input{chapters/results/micro/page-faults}
 
-In figure \ref{figure:results:micro:mceliece-8192128f-cloud-provider-2} the CPU cycles consumed for various regions of code in the \gls{mceliece} 8192128f implementation run on Cloud Provider 2 may be seen. The number of CPU cycles used for the unoptimized reference implementation compiled with GCC during keypair generation is about 30\% of the decrypt stage. In comparable implementations such as those presented in figure \ref{figure:results:micro:mceliece-8192128f-modern-workstation}, the value was found to be much closer to one another. The Cloud Provider 2 environment is the only environment where such a drastic change in consumed CPU cycles may be seen between the two stages.
+In figure \ref{figure:results:micro:mceliece-8192128f-cloud-provider-2} the CPU cycles consumed for various regions of code in the \gls{mceliece} 8192128f implementation run on Cloud Provider 2 may be seen. The number of CPU cycles used for the unoptimized reference implementation compiled with GCC during keypair generation is about 30\% of the decrypt stage. In comparable implementations such as those presented in figure \ref{figure:results:micro:mceliece-8192128f-modern-workstation}, the value was found to be much closer to one another. The Cloud Provider 2 environment is the only environment where such a drastic change in consumed CPU cycles may be seen between the two stages. As the Cloud Provider 2 used the same compiler versions as the environments it outperformed, it is unlikely that the performance gain came from a difference in versions. As the increase was consistent throughout all of the measurements, the performance may be connected to an optimization made for the specific platform not found in other environments.
 
-\begin{figure}
+\begin{sidewaysfigure}
     \centering
     \includegraphics[width=\textwidth]{chapters/results/micro/mceliece_8192128f_Cloud Provider 2_cpu-cycles.pdf}
     \caption{CPU cycles consumed for \gls{mceliece} 8192128f on Cloud Provider 2}
     \label{figure:results:micro:mceliece-8192128f-cloud-provider-2}
-\end{figure}
+\end{sidewaysfigure}
 
-In just about all cases, implementations optimized by Clang performs better than the comparable GCC implementation. In most other cases Clang's optimizations performs similar to GCC's. In some few cases, however, Clang was found to yield a binary which performed significantly worse than the GCC optimization. In figure \ref{figure:results:micro:ntru-hps4096821-modern-laptop}, for example, the reference implementation optimized by Clang requires 13 times the cycles of the GCC implementation when considering the poly\_R2\_inv region.
+In just about all cases, implementations optimized by Clang performed better than the comparable GCC implementation. In most other cases Clang's optimizations performed similar to GCC's. In some few cases, however, Clang was found to yield a binary which performed significantly worse than the GCC optimization. In figure \ref{figure:results:micro:ntru-hps4096821-modern-laptop}, for example, the reference implementation optimized by Clang required 13 times the cycles of the GCC implementation for the poly\_R2\_inv region.
 
-When comparing the HPS 4096821 and the HRSS 701 parameter sets of \gls{ntru}, it was found that the performance is close to identical for each of the studied optimizations. The relationship to the previously mentioned figure may be seen in figure \ref{figure:results:micro:ntru-hrss701-modern-laptop} where the \gls{ntru} HRSS 701 algorithm is run in the Modern Laptop environment.
+When comparing the HPS 4096821 and the HRSS 701 parameter sets of \gls{ntru}, it was found that the performance is close to identical for each of the studied optimizations. The relationship to the previously mentioned figure may be seen in figure \ref{figure:results:micro:ntru-hrss701-modern-laptop} where the \gls{ntru} HRSS 701 algorithm is run in the Modern Laptop environment. 
 
-\begin{figure}
+\begin{sidewaysfigure}
     \centering
     \includegraphics[width=\textwidth]{chapters/results/micro/ntru_hps4096821_Modern Laptop_cpu-cycles.pdf}
     \caption{CPU cycles consumed for \gls{ntru} HPS 4096821 on Modern Laptop}
     \label{figure:results:micro:ntru-hps4096821-modern-laptop}
-\end{figure}
+\end{sidewaysfigure}
