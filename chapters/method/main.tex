@@ -30,7 +30,7 @@ The selected papers, as well as the the papers submitted to \gls{nist}, was incl
 \subsection{Goal}
 \label{section:method:experiment:goal}
 
-Our goal with the experiment was to analyze \gls{post-quantum} \glspl{kem} for the purpose of evaluating the readiness of today's consumer, mainframe and cloud hardware with respect to their performance from the point of view of businesses and professionals, in the context of replacing the \glspl{kex} used today in TLS, SSH, VPNs and other applications.
+Our goal with the experiment was to analyze \gls{post-quantum} \glspl{kem} for the purpose of evaluating the readiness of today's consumer, mainframe and cloud hardware with respect to their performance from the point of view of businesses and professionals, in the context of replacing the \glspl{kex} used today in \gls{tls}, SSH, \glspl{vpn} and other applications.
 
 The experiment had two phases. In phase one, we aimed to study the effects of changing independent variables possibly related to the performance of the subjects. By studying the performance characteristics of a single run of the algorithms, we also aimed to be able to identify what implementation of each algorithm is the fastest.
 
@@ -39,7 +39,7 @@ In the second phase, we aimed to test the performance characteristics of the alg
 \subsection{Subjects}
 \label{section:method:experiment:subjects}
 
-The test subjects of the experiment were two of the post-quantum algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation~\cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process~\cite{viet2020}.
+The test subjects of the experiment were two of the \gls{post-quantum} algorithms as submitted to \gls{nist}'s third round of submissions, namely \gls{mceliece} and \gls{ntru}. Three of the four finalists - \gls{ntru}, \gls{kyber}, and \gls{saber}, are lattice-based algorithms, and at most one of these will be standardized. We selected \gls{ntru} based on the positive comments it received and the negative comments the other contestants received from \gls{nist}. \gls{mceliece} was chosen as it was the only non-lattice-based finalist and it has a long and excellent reputation~\cite{nist2020}. Furthermore, it's not untypical for the future winners to be identified early in the evaluation process~\cite{viet2020}.
 
 The \gls{nist} submissions under test are presented in Table \ref{table:method:experiment:phase1:test-subjects}. All of the selected parameter sets for the subjects have been recommended by their respective authors in the third round of submissions. In the case of \gls{mceliece}, we also relied on previous work from the EU-funded project \gls{pqcrypto}, which identified that not all parameter sets recommended by the authors are appropriate. That is, \gls{pqcrypto} identified that the key size should be a minimum of one megabyte, meaning some candidates were excluded based on their key sizes~\cite{eu2015}.
 
@@ -164,7 +164,7 @@ In the first phase, we aimed to identify how possibly performance-related indepe
 
 The independent variables that were identified to potentially be related to performance are presented in Table \ref{table:method:experiment:phase1:independent-variables}. There are virtually infinite possible flags. The ones presented are the minimal ones used for optimization in this context and as used by previous work (\gls{supercop}, \gls{nist} publications). The implementation optimizations listed are the optimizations available in the studied implementations.
 
-As we were interested in the performance characteristics of consumer, cloud and mainframe hardware, \gls{fpga} implementations have been left out from the table. Furthermore, older vectorization extensions sets such as SSE were not considered as they have been superseeded by \gls{avx}.
+As we were interested in the performance characteristics of consumer, cloud and mainframe hardware, \gls{fpga} implementations have been left out from the table. Furthermore, older vectorization extensions sets such as \gls{sse} were not considered as they have been superseeded by \gls{avx}.
 
 \begin{table}[H]
     \centering
@@ -223,7 +223,7 @@ For stack analysis we aimed to identify what amount of memory was required to us
 \subsubsection{Rejected Toolset - Memory}
 \label{section:method:experiment:phase1:rejected-toolset-memory}
 
-Intel's vTune is a profiling suite with support for x86. It was found to work well for gathering memory-related metrics of the CPU during execution of a program. It was unavailable on \gls{s390x}, however. It was therefore rejected as we could rely on other tools to yield cross-platform metrics. 
+Intel's vTune is a profiling suite with support for \gls{x86}. It was found to work well for gathering memory-related metrics of the CPU during execution of a program. It was unavailable on \gls{s390x}, however. It was therefore rejected as we could rely on other tools to yield cross-platform metrics. 
 
 As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the run-time stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically.
 

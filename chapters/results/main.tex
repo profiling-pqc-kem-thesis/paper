@@ -194,11 +194,11 @@ This section presents the results of the experiment as outlined in section \ref{
 
 As outlined in the method, section \ref{section:method:experiment:phase1:measurements}, we measured the heap usage of the algorithms by monitoring heap allocation and deallocation methods such as malloc using heaptrack. We found that the heap allocation did not change across environments nor between the analyzed optimizations except for some few. As for the implementations, this is rather unsurprising as changing how the allocations worked would alter the behavior of the code. As we found that the heap behavior of the algorithms were consistent throughout our test, we will for the rest of this section not refer to any specific environment or optimization used for the algorithms unless otherwise noted. When talking about allocation, we will refer to the peak allocation - that is, the maximum allocated bytes recorded during a function's lifetime. Our measurements did not capture the peak heap allocation during a benchmark as it would include memory allocations introduced by our tooling. The heap usage metrics do not reflect total memory usage as memory in the form of parameters passed to the algorithms or memory that's part of the stack is not included.
 
-At one point, the \gls{ntru} implementations allocated $264$ bytes generating a keypair. These bytes were allocated by OpenSSL to initialize the library's envelope suite of functions. In context, this is done as the \gls{ntru} implementation uses OpenSSL's \gls{aes} ECB implementation to generate uniform pseduo-random bytes. The invocation of the \gls{aes} function itself resulted in $208$ bytes being allocated by the OpenSSL \gls{aes} ECB implementation. Beyond these bytes, the \gls{ntru} implementation did not require any additional heap allocation during its runtime.
+At one point, the \gls{ntru} implementations allocated $264$ bytes generating a keypair. These bytes were allocated by \gls{openssl} to initialize the library's envelope suite of functions. In context, this is done as the \gls{ntru} implementation uses \gls{openssl}'s \gls{aes} ECB implementation to generate uniform pseduo-random bytes. The invocation of the \gls{aes} function itself resulted in $208$ bytes being allocated by the \gls{openssl} \gls{aes} ECB implementation. Beyond these bytes, the \gls{ntru} implementation did not require any additional heap allocation during its runtime.
 
-Just like the \gls{ntru} implementations, the \gls{mceliece} implementations make use of OpenSSL to create uniform pseudo-random bytes. As such, the same $264$ bytes are allocated to initialize OpenSSL's envelope suite of functions, as well as the $208$ bytes to actually encrypt random data to produce a uniformly distributed series of bytes. No further allocations were found to be made.
+Just like the \gls{ntru} implementations, the \gls{mceliece} implementations make use of \gls{openssl} to create uniform pseudo-random bytes. As such, the same $264$ bytes are allocated to initialize \gls{openssl}'s envelope suite of functions, as well as the $208$ bytes to actually encrypt random data to produce a uniformly distributed series of bytes. No further allocations were found to be made.
 
-The \gls{ecdhe} and \gls{dhe} implementations are based entirely on functions made available via the OpenSSL library. All of the implementations had an increase in the number of allocations made when compared to \gls{ntru} and \gls{mceliece}. The \gls{dhe} implementation when run in the IBM Community Cloud environment saw an allocation of $16960$ bytes during keypair generation made from a function to calculate the constant-time modulo exponentiation on an arbitrary large number. All other environments allocated $9024$ bytes for the same invocation. Furthermore, the keypair generation saw the allocation of a further $1024$ bytes in the IBM Community Cloud environment seemingly related to the same modulo operation.
+The \gls{ecdhe} and \gls{dhe} implementations are based entirely on functions made available via the \gls{openssl} library. All of the implementations had an increase in the number of allocations made when compared to \gls{ntru} and \gls{mceliece}. The \gls{dhe} implementation when run in the IBM Community Cloud environment saw an allocation of $16960$ bytes during keypair generation made from a function to calculate the constant-time modulo exponentiation on an arbitrary large number. All other environments allocated $9024$ bytes for the same invocation. Furthermore, the keypair generation saw the allocation of a further $1024$ bytes in the IBM Community Cloud environment seemingly related to the same modulo operation.
 
 \begin{table}
     \centering
@@ -207,7 +207,7 @@ The \gls{ecdhe} and \gls{dhe} implementations are based entirely on functions ma
     \label{table:results:memory:dhe-heap}
     \begin{tabularx}{\linewidth}{X c c c}
         \toprule
-        \thead{Environment} & \thead{OpenSSL Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
+        \thead{Environment} & \thead{\gls{openssl} Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
         & & \thead{Keypair} & \thead{Exchange} \\
         \midrule
         IBM Community Cloud & 1.1.1g FIPS & 42800 & 39908 \\
@@ -233,8 +233,8 @@ The operation of dividing an integer was found to correlate to an additional $53
         \thead{Environment} & \thead{Curve} & \thead{OpenSSL Version} & \multicolumn{2}{c}{\thead{Sum of Peaks}}\\
         & & & \thead{Keypair} & \thead{Exchange} \\
         \midrule
-        IBM Community Cloud & \gls{p-256} & 1.1.1g FIPS & 12184 & 0 \\
-        IBM Community Cloud & \gls{curve25519} & 1.1.1g FIPS & 4524 & 1024 \\
+        IBM Community Cloud & \gls{p-256} & 1.1.1g \gls{fips} & 12184 & 0 \\
+        IBM Community Cloud & \gls{curve25519} & 1.1.1g \gls{fips} & 4524 & 1024 \\
 
         Cloud Provider 1 & \gls{p-256} & 1.1.1 & 9220 & 0 \\
         Cloud Provider 1 & \gls{curve25519} & 1.1.1 & 8380 & 0 \\
@@ -257,11 +257,11 @@ The operation of dividing an integer was found to correlate to an additional $53
     \end{tabularx}
 \end{table}
 
-The \gls{ecdhe} implementation behaved much like the \gls{dhe}, with the peaks differing between some environments. The implementation too worked with OpenSSL's arbitrary numbers and as such had several of the same allocations as the \gls{dhe} implementations. The peaks are presented in Table \ref{table:results:memory:ecdhe-heap}. Though it is unclear why the exchange stage is sometimes zero, it could be due to OpenSSL's internal handling of memory.
+The \gls{ecdhe} implementation behaved much like the \gls{dhe}, with the peaks differing between some environments. The implementation too worked with \gls{openssl}'s arbitrary numbers and as such had several of the same allocations as the \gls{dhe} implementations. The peaks are presented in Table \ref{table:results:memory:ecdhe-heap}. Though it is unclear why the exchange stage is sometimes zero, it could be due to \gls{openssl}'s internal handling of memory.
 
 \subsection{Stack Usage}
 
-In terms of stack usage, the results vary between the implementations, compilers and features. For instance, the polynomial math function poly\_Rq\_mul in \gls{ntru}, which was identified as constituting most of the time spent in the algorithm, varies between taking up $70499$ and $188$ bytes. In all environments, the HPS 4096821 AVX2 variant takes up $70499$ bytes. This does not change between compilers or optimization flags, which could be due to the fact that the implementation is written in assembly - leaving little room for the compiler to alter the behavior. The same goes for the HRSS 701 variant of \gls{ntru} - the size is consistently 55317 bytes across environments and optimization flags. The lowest sizes are found when the reference implementation is compiled with optimization. The sizes are presented in Table \ref{table:results:memory:ntru-stack}. Although the optimization flags used were not chosen for improving the size of the binary, the size of the function has been lowered in all cases. Although the same version of GCC was used for several environments, the results differed between $188$ and $192$ bytes. Clang continually produced larger regions than GCC. Furthermore, more recent versions of the compilers seem to have produced smaller sizes.
+In terms of stack usage, the results vary between the implementations, compilers and features. For instance, the polynomial math function poly\_Rq\_mul in \gls{ntru}, which was identified as constituting most of the time spent in the algorithm, varies between taking up $70499$ and $188$ bytes. In all environments, the HPS 4096821 \gls{avx2} variant takes up $70499$ bytes. This does not change between compilers or optimization flags, which could be due to the fact that the implementation is written in assembly - leaving little room for the compiler to alter the behavior. The same goes for the HRSS 701 variant of \gls{ntru} - the size is consistently 55317 bytes across environments and optimization flags. The lowest sizes are found when the reference implementation is compiled with optimization. The sizes are presented in Table \ref{table:results:memory:ntru-stack}. Although the optimization flags used were not chosen for improving the size of the binary, the size of the function has been lowered in all cases. Although the same version of GCC was used for several environments, the results differed between $188$ and $192$ bytes. Clang continually produced larger regions than GCC. Furthermore, more recent versions of the compilers seem to have produced smaller sizes.
 
 \begin{table}
     \small
@@ -292,9 +292,9 @@ In terms of stack usage, the results vary between the implementations, compilers
     \end{tabularx}
 \end{table}
 
-The same correlation between optimization flags and compiler versions could not be found in the case of \gls{mceliece} and pk\_gen. In that case, the largest recorded size was found in IBM Community Cloud's optimized reference implementation with $22858$ bytes. The optimized AVX2 implementation of the Modern Workstation and Modern Laptop came second with $22123$ bytes. Lastly, the smallest size recorded was found in the optimized reference implementation of Old Mid-Range Laptop and Old Low-Range Laptop at $2026$ bytes.
+The same correlation between optimization flags and compiler versions could not be found in the case of \gls{mceliece} and pk\_gen. In that case, the largest recorded size was found in IBM Community Cloud's optimized reference implementation with $22858$ bytes. The optimized \gls{avx2} implementation of the Modern Workstation and Modern Laptop came second with $22123$ bytes. Lastly, the smallest size recorded was found in the optimized reference implementation of Old Mid-Range Laptop and Old Low-Range Laptop at $2026$ bytes.
 
-As for other functions of the \glspl{kem}, the data is too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one may see that Clang seems to produce smaller binaries. Furthermore, the optimized AVX2 builds result in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
+As for other functions of the \glspl{kem}, the data is too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one may see that Clang seems to produce smaller binaries. Furthermore, the optimized \gls{avx2} builds result in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
 
 As the \gls{ecdhe} and \gls{dhe} implementations studied relied on the dynamically linked OpenSSL library, the stack usage of these were found to be minimal.
 

@@ -73,7 +73,7 @@ In \acrfull{tls}, key establishment is used to let to parties establish a shared
 
 \gls{x25519} (in some contexts known as \gls{curve25519}~\cite{25519naming}), is used for key exchange in the \gls{vpn} Wireguard~\cite{wireguard2020}.
 
-\gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in TLS~\cite{rfc8446}, SSH~\cite{williams2011}, \glspl{vpn} such as OpenVPN~\cite{openvpn} and IPSec~\cite{rfc2409}.
+\gls{ecdh}, \gls{ecdhe}, \gls{dh}, \gls{dhe} are used to exchange session keys in \gls{tls}~\cite{rfc8446}, SSH~\cite{williams2011}, \glspl{vpn} such as OpenVPN~\cite{openvpn} and IPSec~\cite{rfc2409}.
 
 Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol~\cite{gordon2017}.
 
@@ -116,15 +116,15 @@ Elliptic curves are used to replace the multiplicative subgroup $\mathbb{Z}_p^*$
 
 The \gls{dh} \gls{kex} is a key establishment protocol conceived by Ralph Merkle and published in 1978~\cite{merkle1978}. The work was centered around a novel idea, that anything sent across a communication channel will be intercepted by a malicious party. To enable such a secure key exchange, the idea was for the two trusting parties to ensure that the malicious party has to perform a much higher amount of work to derive the shared secret than the exchanging parties. That is, although it is possible for the malicious party to successfully break the key exchange, it must be unfeasible.
 
-In the \gls{dh} protocol, two parties (\gls{alice} and \gls{bob}) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$~\cite{merkle1978, boyd2020}. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. \gls{alice} calculates $t_A=g^{r_A}$ and Bob calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not required to be secure. \gls{alice} and \gls{bob} may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$.
+In the \gls{dh} protocol, two parties (\gls{alice} and \gls{bob}) agree publicly on a secret element $g$ that generates a multiplicative group $\mathbb{G}$~\cite{merkle1978, boyd2020}. Each party selects a random value $r_A$ and $r_B$, respectively. These random values are in the range between $1$ and the order of $\mathbb{G}$. \gls{alice} calculates $t_A=g^{r_A}$ and \gls{bob} calculates $t_B=g^{r_B}$. The values $t_A$ and $t_B$ are exchanged on a channel that is not required to be secure. \gls{alice} and \gls{bob} may now both calculate a shared secret $\mathbf{Z}=g^{r_A r_B}$ as $\mathbf{Z}=t_A^{r_B}=t_B{r_A}$.
 
 The security of the key exchange comes from the assumption that it is computationally difficult for a malicious party to recover $g^{r_A r_B}$ from the public channel~\cite{boyd2020}. The problem is that of a discrete logarithm which was deemed unfeasible in the pre-quantum era, given a sufficient key size.
 
 \subsection{Elliptic-Curve Diffie-Hellman}
 
-The \gls{ecdh} \gls{kex} is an adaption of \gls{dh} over elliptic curves~\cite{nist2018}. In this case, \gls{ecc} refers to the use of one of the so called NIST curves (\gls{p-256} etc.).
+The \gls{ecdh} \gls{kex} is an adaption of \gls{dh} over elliptic curves~\cite{nist2018}. In this case, \gls{ecc} refers to the use of one of the so called \gls{nist} curves (\gls{p-256} etc.).
 
-\gls{alice} computes the point $P=hd_aQ_b$, where $d_A$ is \gls{alice}'s private key, $Q_B$ Bob's public key and $h$ a \gls{ecc} domain parameter~\cite{nist2018}. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
+\gls{alice} computes the point $P=hd_aQ_b$, where $d_A$ is \gls{alice}'s private key, $Q_B$ \gls{bob}'s public key and $h$ a \gls{ecc} domain parameter~\cite{nist2018}. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
 
 The \gls{x25519} \gls{kex} is a special case of \gls{ecdh} where \gls{curve25519} is used~\cite{rfc7748}. 
 
@@ -155,43 +155,43 @@ Another algorithm threatening classical cryptography is Grover's algorithm. The 
         \midrule
         \multicolumn{5}{c}{\thead[l]{Symmetric Cryptography}} \\
         %\midrule
-        AES-128 & block cipher & 128 & 64 & Grover\\
-        AES-256 & block cipher & 256 & 128 & Grover\\
+        \gls{AES}-128 & block cipher & 128 & 64 & Grover\\
+        \gls{AES}-256 & block cipher & 256 & 128 & Grover\\
         Salsa20 & stream cipher & 256 & 128 & Grover\\
         GMAC & MAC & 128 & 128 & -\\
         Poly1305 & MAC & 128 & 128 & -\\
         SHA-256 & hash & 256 & 128 & Grover\\
-        SHA-3 & hash & 256 & 128 & Grover\\
+        \gls{sha3} & hash & 256 & 128 & Grover\\
         \multicolumn{5}{c}{\thead[l]{Public-key Cryptography}} \\
         %\midrule
-        RSA-3072 & encryption & 128 & broken & Shor \\
-        RSA-3072 & signature & 128 & broken & Shor \\
-        DH-3072 & key exchange & 128 & broken & Shor \\
+        \gls{rsa}-3072 & encryption & 128 & broken & Shor \\
+        \gls{rsa}-3072 & signature & 128 & broken & Shor \\
+        \gls{dh}-3072 & key exchange & 128 & broken & Shor \\
         DSA-3072 & signature & 128 & broken & Shor \\
-        256-bit ECDH & key exchange & 128 & broken & Shor \\
+        256-bit \gls{ecdh} & key exchange & 128 & broken & Shor \\
         256-bit ECDSA & signature & 128 & broken & Shor \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-\noindent The performance increase offered by quantum computers and the threats that Shor's and Grover's algorithms impose have led to a new epoch in computing and cryptography - post-quantum.
+\noindent The performance increase offered by quantum computers and the threats that Shor's and Grover's algorithms impose have led to a new epoch in computing and cryptography - \gls{post-quantum}.
 
 \section{Post-Quantum Cryptography}
 
-Classical cryptosystems rely on mathematical problems shown to be easy for quantum computers to solve, resulting in their security being diminished or entirely broken~\cite{shor1997, jordan2021}. With the dawn of practical quantum computers, a new set of mathematical problems needs to be used to protect from the attacks made feasible by the quantum computers. Cryptography built on such problems is referred to as post-quantum cryptography~\cite{nist:round-three-submissions}. Note, however, that such cryptography may still be used by classical computers. 
+Classical cryptosystems rely on mathematical problems shown to be easy for quantum computers to solve, resulting in their security being diminished or entirely broken~\cite{shor1997, jordan2021}. With the dawn of practical quantum computers, a new set of mathematical problems needs to be used to protect from the attacks made feasible by the quantum computers. Cryptography built on such problems is referred to as \gls{post-quantum} cryptography~\cite{nist:round-three-submissions}. Note, however, that such cryptography may still be used by classical computers. 
 
-This section further describes post-quantum cryptography, the \gls{nist} standardization process and post-quantum cryptosystems.\todo{This line is not with the previous lines, weird split?}
+This section further describes \gls{post-quantum} cryptography, the \gls{nist} standardization process and \gls{post-quantum} cryptosystems.\todo{This line is not with the previous lines, weird split?}
 
 \subsection{The NIST Post-Quantum Standardization Process}
 \acrfull{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness~\cite{nist:about}.
 
-The organization is split into various divisions~\cite{nist:ct}. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and post-quantum cryptography.
+The organization is split into various divisions~\cite{nist:ct}. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and \gls{post-quantum} cryptography.
 
-The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}~\cite{nist:call-for-proposals}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for post-quantum cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions.
+The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}~\cite{nist:call-for-proposals}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for \gls{post-quantum} cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions.
 
 At the time of writing, the process has been ongoing for four years and it has reached a third round of submissions~\cite{nist:round-three-submissions}. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms. The finalists are presented in Table \ref{table:background:nist:finalists}. The algorithms rely on two types of cryptography - code-based and lattice-based.
 
-\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack~\cite{nist2017}. Resistence to such an attack is referred to as \gls{ind-cca2} security.
+\gls{nist} has identified that a relevant attack on \gls{post-quantum} \glspl{kem} is a chosen-ciphertext attack~\cite{nist2017}. Resistence to such an attack is referred to as \gls{ind-cca2} security.
 
 \begin{table}[t]
     \centering
@@ -226,7 +226,7 @@ One of the proposed lattice-based cryptosystems is \gls{kyber}, which relies on 
 
 \subsection{NTRU}
 
-The \gls{ntru} \gls{kem} is a unification of several lattice-based variants~\cite{ntru2020}. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM. The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem~\cite{ntru1998}. NTRU then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve~\cite{sun2020, ntru1998}.
+The \gls{ntru} \gls{kem} is a unification of several lattice-based variants~\cite{ntru2020}. It has its roots in two submissions to the \gls{nist} standardization process; NTRUEncrypt and NTRU-HRSS-KEM. The original paper on the \gls{ntru} cryptosystem was published in 1998, following the interest of creating a new, efficient and computationally inexpensive public key cryptosystem~\cite{ntru1998}. \gls{ntru} then used a mixing system which was based on polynomial algebra (modulo some number $p$ and $q$) for encryption. The decryption was centered around an unmixing system. As with other lattice-based cryptosystems, the security of \gls{ntru} relies on the short vector problem being hard to solve~\cite{sun2020, ntru1998}.
 
 The third-round submission to \gls{nist} is a merger of several variants of \gls{ntru}~\cite{ntru2020}. Two of the prominent ones are NTRUEncrypt and NTRU-HRSS-KEM. The NTRUEncrypt algorithm has its origin in the original paper published in 1998. The submission had several issues and lacked a correct recommended parameter set. The NTRU-HRSS-KEM submission brought performance improvements which enhanced the decapsulation routine without sacrificing security. The merged algorithm, \gls{ntru}, offer correct parameter sets with trade-offs for performance versus security.
 
@@ -244,16 +244,16 @@ The $(\mu, \nu)$-semi-systematic form of \gls{mceliece} is designed to take both
 \subsection{Security Categories}
 \label{section:background:security-categories}
 
-\gls{nist}~\cite{nist2017} anticipated that submissions to the standardization effort would face uncertainties in terms of estimating the security strength of post-quantum algorithms. They state that the uncertainties are largely caused by two issues. The first issue is the possibility that new attacks will be discovered. The second is that there is a limited ability to predict how a quantum computer will behave in terms of cost, speed and memory.
+\gls{nist}~\cite{nist2017} anticipated that submissions to the standardization effort would face uncertainties in terms of estimating the security strength of \gls{post-quantum} algorithms. They state that the uncertainties are largely caused by two issues. The first issue is the possibility that new attacks will be discovered. The second is that there is a limited ability to predict how a quantum computer will behave in terms of cost, speed and memory.
 
 \gls{nist}~\cite{nist2017} therefore defined security categories that are not based on the traditional measure of bit security. The following categories were defined. The order denotes the strength of the attack.
 
 \begin{enumerate}
-    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 128-bit key (e.g. AES128)
-    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for collision search on a 256-bit hash function (e.g. SHA256/ SHA3-256)
-    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 192-bit key (e.g. AES192)
-    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for collision search on a 384-bit hash function (e.g. SHA384/ SHA3-384)
-    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. AES 256)
+    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 128-bit key (e.g. \gls{aes}-128)
+    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for collision search on a 256-bit hash function (e.g. SHA256/ \gls{sha3}-256)
+    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 192-bit key (e.g. \gls{aes}-192)
+    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for collision search on a 384-bit hash function (e.g. SHA384/ \gls{sha3}-384)
+    \item Any attack that breaks the relevant security definition must require computational resources comparable to or greater than those required for key search on a block cipher with a 256-bit key (e.g. \gls{aes}-256)
 \end{enumerate}
 
 \noindent \gls{nist}~\cite{nist2017} further discuss that it is worth mentioning that the security categories previously presented provide more quantum security that a naïve analysis might suggest. They further state that security category 1, 3, and 5 are defined in terms of block ciphers - which may be broken by Grover's algorithm, given a quadratic quantum speedup. The potential impact, presented in Table \ref{table:background:post-quantum:bit-security}, could be that the \gls{aes} bit security is halved. \gls{nist}~\cite{nist2017} further claim that such an attack requires a long-running serial computation, which is difficult to implement in practice. For the attack to be practical, \gls{nist} believe that many smaller instances of the algorithm must be run in parallel, making the quantum speedup less dramatic.
@@ -294,7 +294,7 @@ In Table \ref{table:background:submissions-security-level}, the security level o
 \section{Architectures and Performance}
 Computer architectures define the different characteristics of a system. An architecture can use different instruction sets, micro-architectures, and systems designs. These will in one way or another, affect the performance of the system. 
 
-This section will describe \gls{risc} and \gls{cisc}, x86 and IBM Z, and their respective design decisions.
+This section will describe \gls{risc} and \gls{cisc}, x86 and \gls{ibmz}, and their respective design decisions.
 
 \subsection{RISC and CISC}
 
