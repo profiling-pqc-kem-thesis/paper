@@ -9,7 +9,7 @@ We used two methods to answer our three research questions - a literature study 
 
 A literature study was conducted to answer \researchquestion{1} and \researchquestion{3}. We have chosen to base our study in literature. We did so as the scope of the question, as well as our limited access to mainframe hardware, made it difficult for us to perform a practical study of the performance potentials of using various hardware features.
 
-To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences~\cite{wohlin2012}\todo{revisit motivation}.
+To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences~\cite{wohlin2012}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
@@ -45,7 +45,7 @@ The \gls{nist} submissions under test are presented in Table \ref{table:method:e
 
 \begin{table}[H]
     \centering
-    \caption{Test Subjects}
+    \caption{Test subjects}
     \label{table:method:experiment:phase1:test-subjects}
     \begin{tabularx}{\linewidth}{l c X}
         \toprule
@@ -66,7 +66,7 @@ As previously mentioned in section \ref{section:background:classical-cryptograph
 
 \begin{table}[H]
     \centering
-    \caption{Control Subjects}
+    \caption{Control subjects}
     \label{table:method:experiment:phase1:control-subjects}
     \begin{tabularx}{\linewidth}{l X}
         \toprule
@@ -94,7 +94,7 @@ Where possible and applicable, the environments ran on the same version of Ubunt
 \begin{table}[H]
     \centering
     \small
-    \caption{Consumer Hardware - x86}
+    \caption{Consumer hardware - x86}
     \label{table:method:experiment:phase1:consumer-hardware}
     \begin{tabularx}{\linewidth}{X c c c}
         \toprule
@@ -112,7 +112,7 @@ Where possible and applicable, the environments ran on the same version of Ubunt
 \begin{table}[H]
     \centering
     \small
-    \caption{Cloud Hardware - x86}
+    \caption{Cloud hardware - x86}
     \label{table:method:experiment:phase1:server-hardware}
     \begin{tabularx}{\linewidth}{X c c c}
         \toprule
@@ -136,7 +136,7 @@ Where possible and applicable, the environments ran on the same version of Ubunt
 \begin{table}[H]
     \centering
     \small
-    \caption{Mainframe Hardware}
+    \caption{Mainframe hardware}
     \label{table:method:experiment:phase1:mainframe-hardware}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
@@ -168,7 +168,7 @@ As we were interested in the performance characteristics of consumer, cloud and 
 
 \begin{table}[H]
     \centering
-    \caption{Independent Variables}
+    \caption{Independent variables}
     \label{table:method:experiment:phase1:independent-variables}
     \begin{tabularx}{\textwidth}{l l X}
         \toprule
@@ -184,7 +184,7 @@ As we were interested in the performance characteristics of consumer, cloud and 
     \end{tabularx}
 \end{table}
 
-The dependent variables we identified are presented in the following non-exhaustive list.
+\noindent The dependent variables we identified are presented in the following list.
 
 \begin{itemize}
     \item CPU cycles
@@ -197,17 +197,13 @@ The dependent variables we identified are presented in the following non-exhaust
     \item logical core utilization
 \end{itemize}
 
-\todo[inline]{
-Förtydliga att hot-paths enbart utförs på referens-implementationen på en plattform. Förtydliga att minneskontroll enbart utförs på de enkla beräkningar och att ingen minneskontroll när vi kör i bulk. Minneskontroll görs inte vid multicore-benchmark p.g.a. att vi allokerar minne o.s.v.
-}
-
 \subsubsection{Selected Toolset - Processor}
 \label{section:method:experiment:phase1:selected-toolset-processor}
-The instrumentation relied on the Linux perf (perf\_event\_open) API. The API is part of the Linux kernel and produces highly accurate measurements, regardless of the underlying hardware - given support. The recorded values for CPU cycles, instructions, etcetera may be counted or sampled\todo{Emphasize on counted - this is a great feature we use for increased accuracy}\todo{cite}. The API functions externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.\todo{Cite this properly?}
+The instrumentation relied on the Linux perf (perf\_event\_open) API. The API is part of the Linux kernel and produces highly accurate measurements, regardless of the underlying hardware - given support. The recorded values for CPU cycles, instructions, etcetera may be counted or sampled. The API functions externally, by monitoring the entire lifetime of a process, or internally by instrumenting a program with specifically measured blocks of code.
 
 As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. To help aid the usage of the API, we used a small tool\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perforator}{https://github.com/profiling-pqc-kem-thesis/perforator}} which enabled us to monitor the algorithms during their lifetime.
 
-Valgrind and its Callgrind module was identified as usable for identifying hot paths of the reference implementations as the implementation can be run in a working environment with its results general to wherever the implementation may be run\todo{cite?}. The tool ran on a single iteration of the reference implementations' tests to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce data for graphs of the hot paths.
+Valgrind and its Callgrind module was identified as usable for identifying hot paths of the reference implementations as the implementation can be run in a working environment with its results general to wherever the implementation may be run. The tool ran on a single iteration of the reference implementations' tests to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce data for graphs of the hot paths.
 
 \subsubsection{Rejected Toolset - Processor}
 \label{section:method:experiment:phase1:rejected-toolset-processor}
@@ -251,9 +247,9 @@ The measurements were taken at different points in the algorithms' lifecycles - 
 
 As we identified that some tools may introduce overhead when monitoring a program, we decided to split the tests into four parts. These parts are presented in Table \ref{table:method:experiment:phase1:benchmark-divisions}. By splitting the benchmarks we aimed to capture accurate values for each measurements without affecting others.
 
-\begin{table}[H]
+\begin{table}[t]
     \centering
-    \caption{Benchmark Divisions}
+    \caption{Benchmark divisions}
     \label{table:method:experiment:phase1:benchmark-divisions}
     \begin{tabularx}{\linewidth}{l>{\RaggedRight}X>{\RaggedRight\arraybackslash}X}
         \toprule
@@ -267,7 +263,7 @@ As we identified that some tools may introduce overhead when monitoring a progra
     \end{tabularx}
 \end{table}
 
-The measurement was repeated 1000 times for each stage of the algorithms and each part of the benchmark. The heap benchmark ran 10 iterations as the heap usage should be deterministic. Furthermore, the cost of running further iterations was deemed too large. If the total duration of a benchmark surpassed 15 minutes, the test was set to timeout and any complete results up until that point recorded. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated budget.
+The measurements were repeated 1000 times for each stage of the algorithms and each part of the benchmark. The heap benchmark ran 10 iterations as the heap usage should be deterministic. Furthermore, the cost of running further iterations was deemed too large. If the total duration of a benchmark surpassed 15 minutes, the test was set to timeout and any complete results up until that point recorded. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated budget.
 
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
 
@@ -279,7 +275,7 @@ For the exact instrumentation used in each subject, please refer to the source c
 The compilers were configured using a series of performance-related flags. The flags, presented in Table \ref{table:method:experiment:phase1:compilers}, are non-exhaustive, but were identified to imply most of the performance-related options. Using GCC, -O3 implies loop unrolling and jam transformations via -floop-unroll-and-jam, strict alignment of functions via -fstrict-aliasing etcetera~\cite{gcc2021}. We opted against using the flag -ffastmath as it was documented as an unsafe option for programs relying on the compliance of IEEE or ISO specifications for math functions~\cite{gcc2021}.
 \begin{table}[H]
     \centering
-    \caption{Compiler Configurations}
+    \caption{Compiler configurations}
     \label{table:method:experiment:phase1:compilers}
     \begin{tabularx}{\linewidth}{l c X}
         \toprule
@@ -333,7 +329,7 @@ The independent variables that were identified to potentially be related to perf
 
 \begin{table}[H]
     \centering
-    \caption{Independent Variables}
+    \caption{Independent variables}
     \label{table:method:experiment:phase2:independent-variables}
     \begin{tabularx}{\linewidth}{l>{\RaggedRight}l>{\RaggedRight\arraybackslash}X}
         \toprule

@@ -83,7 +83,7 @@ Variants of the mentioned key exchange algorithms are also used in messaging app
 
 In 1977, L. Rivest et. al.~\cite{rsa1977} wrote a paper on digital signatures and public-key cryptosystems. In the paper they introduced a public-key cryptosystem based on powers and modulo operations. In the system, \gls{alice} first decides on two different primes $p$ and $q$ as well as an integer $s$ which is relatively prime to $(p-1)(q-1)$. \gls{alice} makes $r=p*q$ and $s$ public, but keeps $r$ and $q$ secret. As seen in section \ref{section:background:public-key-cryptography}, the encryption function in a public-key cryptosystem is defined as $E_A(M)$. In \gls{rsa}, the function $E_A$ is defined as $E_A(M)=M^s\;(mod\;r)$, for any message $M$.
 
-The decryption function, previously defined as $D_A$, is defined as $D_A(C)=C^t\;(mod\;r)$ where $t$ is solved from $s*t=1\;(mod\;\phi(r))$~\cite{rsa1977}. The value $\phi(r)$ is the so called Euler totient function, which produces the number of positive integers less than $r$ which are relatively prime to $r$.
+The decryption function is defined as $D_A(C)=C^t\;(mod\;r)$ where $t$ is solved from $s*t=1\;(mod\;\phi(r))$~\cite{rsa1977}. The value $\phi(r)$ is the so called Euler totient function, which produces the number of positive integers less than $r$ which are relatively prime to $r$.
 
 The security of the cryptosystem is based on the mathematical problem of factorizing a composite prime~\cite{rsa1977}. That is, under the assumption that it is difficult to factorize a number $n=p*q$ into its factors $p$ and $q$, the system is considered secure.
 
@@ -104,7 +104,7 @@ To use an elliptic curve for cryptography, one must establish the following doma
 
 The domain parameters $a,b\in\mathbb{F}_q$ describe the curve $E$ as $y^2=x^3+ax+b$. Illustrations of these curves may be seen in figure \ref{figure:background:elliptic-curves}. Not all curves are suitable for elliptic-curve cryptography, which has led to some being standardized for mass usage~\cite{nist2018}.
 
-\begin{figure}
+\begin{figure}[t]
     \centering
     \includegraphics{chapters/background/figures/elliptic-curves.pdf}
     \caption{Illustrations of $y^2=x^3+ax+b$ for various values for $a$ and $b$}
@@ -141,14 +141,6 @@ Cryptography does not usually come with any guarantee of being secure forever. A
 
 Since the 1980s, research has been made to utilize quantum mechanics for computation, thus introducing the quantum computer~\cite{benioff1980}. By utilizing quantum bits or \textit{\glspl{qubit}} instead of the bits used in classical computers, quantum computers are able to represent several states per \gls{qubit}. This mechanic enables a quantum computer to feasibly perform calculations that have been deemed impossible or impractical on a classical computer~\cite{jordan2021}. Recent progress in the field has shown that, as progress have halted in the area of classical computers, progress made on quantum computers has been increasing exponentially~\cite{ibm2020:quantum-computer}.
 
-\todo[inline]{
-The accenture report cites academic research consensus that by 2028 quantum computer will be capable of implementing Shor's algorithm at the scale needed to break current cryptographic algorithms
-
-(2018) Cryptography in a postquantum world. url- https://www.accenture.com/ acnmedia/PDF87/Accenture- 809668QuantumCryptographyWhitepaperv05.pdf. (Last accessed Aug 1, 2020).
-
-https://www.accenture.com/
-}
-
 Parallel to the development of the theoretical quantum computer, algorithms have been developed to make use of the mechanics~\cite{shor1997, jordan2021}. Two of these algorithms, Shor's algorithm and Grover's algorithm have been shown to threaten pre-quantum cryptographic systems. They have been shown to be impractical or impossible to implement or use on a classical system, but feasible to use on a quantum computer. Demonstrating that a quantum computer is able to feasibly perform an algorithm that a classical computer cannot is referred to as Quantum Supremacy~\cite{farhi2019}.
 
 Shor's algorithm can solve the problems posed by many of the traditional cryptosystems - integer factorization and discrete logarithms, rendering the cryptosystems useless~\cite{shor1997}. Today's quantum computers are however not powerful enough to use Shor's algorithm to break the security offered by classical cryptography~\cite{bernstein2017}. A study~\cite{gidney2019} suggests that it would require 20 million so called noisy \glspl{qubit} to break 2048 bits \gls{rsa}. Among today's most powerful quantum computers are Google's 53-\glspl{qubit} system~\cite{google2019:quantum-computer} and IBM's 65-\glspl{qubit} system~\cite{ibm2020:quantum-computer}. IBM has a 1000-\glspl{qubit} system on their road map scheduled for release in 2023~\cite{ibm2020:quantum-computer}. Though these roadmaps suggest that there is a long way to go until the classical cryptography algorithms are broken, some estimates place the quantum advantage in 3-10 years~\cite{ibm:z15:2019, microsoft2020}.
@@ -184,13 +176,13 @@ Another algorithm threatening classical cryptography is Grover's algorithm. The 
     \end{tabularx}
 \end{table}
 
-The performance increase offered by quantum computers and the threats that Shor's and Grover's algorithms impose have led to a new epoch in computing and cryptography - post-quantum.
+\noindent The performance increase offered by quantum computers and the threats that Shor's and Grover's algorithms impose have led to a new epoch in computing and cryptography - post-quantum.
 
 \section{Post-Quantum Cryptography}
 
 Classical cryptosystems rely on mathematical problems shown to be easy for quantum computers to solve, resulting in their security being diminished or entirely broken~\cite{shor1997, jordan2021}. With the dawn of practical quantum computers, a new set of mathematical problems needs to be used to protect from the attacks made feasible by the quantum computers. Cryptography built on such problems is referred to as post-quantum cryptography~\cite{nist:round-three-submissions}. Note, however, that such cryptography may still be used by classical computers. 
 
-This section further describes post-quantum cryptography, the \gls{nist} standardization process and post-quantum cryptosystems.
+This section further describes post-quantum cryptography, the \gls{nist} standardization process and post-quantum cryptosystems.\todo{This line is not with the previous lines, weird split?}
 
 \subsection{The NIST Post-Quantum Standardization Process}
 \acrfull{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness~\cite{nist:about}.
@@ -201,11 +193,11 @@ The Cryptographic Technology Group has previously held standardization processes
 
 At the time of writing, the process has been ongoing for four years and it has reached a third round of submissions~\cite{nist:round-three-submissions}. For the third round, \gls{nist} published finalists and alternate candidates grouped in public-key encryption and key-establishment algorithms as well as digital signature algorithms. The finalists are presented in Table \ref{table:background:nist:finalists}. The algorithms rely on two types of cryptography - code-based and lattice-based.
 
-\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack~\cite{nist2017}. Resistence to such an attack is referred to as \gls{ind-cca2} security\todo{This seems to be a bit out of context}.
+\gls{nist} has identified that a relevant attack on post-quantum \glspl{kem} is a chosen-ciphertext attack~\cite{nist2017}. Resistence to such an attack is referred to as \gls{ind-cca2} security.
 
-\begin{table}[H]
+\begin{table}[t]
     \centering
-    \caption{NIST Round Three Finalists~\cite{nist:round-three-submissions}}
+    \caption{NIST round three finalists~\cite{nist:round-three-submissions}}
     \label{table:background:nist:finalists}
     \begin{tabularx}{\linewidth}{l c X}
         \toprule
@@ -270,10 +262,10 @@ The $(\mu, \nu)$-semi-systematic form of \gls{mceliece} is designed to take both
 
 In Table \ref{table:background:submissions-security-level}, the security level of the \gls{nist} submissions are presented. Each parameter set of the algorithm is presented with its security level right below it. Chen et.al.~\cite{ntru2020} present two different models for assessing the security level of \gls{ntru} - a local and a stricter non-local model. Both of these models are presented in the aforementioned table and labeled accordingly.
 
-\begin{table}
+\begin{table}[t]
     \centering
     \small
-    \caption{Security Levels of various \gls{nist} Submissions~\cite{ntru2020, mceliece2020, saber, kyber2021}}
+    \caption{Security levels of various \gls{nist} submissions~\cite{ntru2020, mceliece2020, saber, kyber2021}}
     \label{table:background:submissions-security-level}
     \begin{tabularx}{\textwidth}{X c c c c c}
         \toprule

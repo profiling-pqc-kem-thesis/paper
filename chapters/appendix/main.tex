@@ -1,63 +1,56 @@
 \appendix
 \chapter{Appendix}
 
-\todo[inline]{
-Average Symbol Increase in Classic McEliece on Cloud Hardware
-Average Symbol Increase in NTRU on Cloud Hardware
-
-Is the average size increase only or based on reference? If it's based on the reference size, is it not better to have 1.0 instead of N/A?
-}
-
 \begin{table}
     \centering
-    \caption{Average Symbol Increase in NTRU on Cloud Hardware}
+    \caption{Average symbol increase in \gls{ntru} on cloud hardware}
     \label{table:result:ntru-average-stack-increase-cloud}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-            Cloud Provider 1 &           hps4096821 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 1 &           hps4096821 &                clang &        ref-optimized &                4.99x\\
-            Cloud Provider 1 &           hps4096821 &                  gcc &        ref-optimized &                5.04x\\
-            Cloud Provider 1 &           hps4096821 &                  gcc &                 avx2 &                5.25x\\
-            Cloud Provider 1 &           hps4096821 &                clang &       avx2-optimized &                9.67x\\
-            Cloud Provider 1 &           hps4096821 &                  gcc &       avx2-optimized &               10.03x\\
-            Cloud Provider 1 &              hrss701 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 1 &              hrss701 &                clang &        ref-optimized &                4.34x\\
-            Cloud Provider 1 &              hrss701 &                  gcc &        ref-optimized &                4.48x\\
-            Cloud Provider 1 &              hrss701 &                  gcc &                 avx2 &                4.49x\\
-            Cloud Provider 1 &              hrss701 &                clang &       avx2-optimized &                8.13x\\
-            Cloud Provider 1 &              hrss701 &                  gcc &       avx2-optimized &                8.47x\\
-            Cloud Provider 2 &           hps4096821 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 2 &           hps4096821 &                  gcc &        ref-optimized &                3.34x\\
-            Cloud Provider 2 &           hps4096821 &                clang &        ref-optimized &                3.56x\\
-            Cloud Provider 2 &           hps4096821 &                  gcc &                 avx2 &                5.18x\\
-            Cloud Provider 2 &           hps4096821 &                  gcc &       avx2-optimized &                8.22x\\
-            Cloud Provider 2 &           hps4096821 &                clang &       avx2-optimized &                8.28x\\
-            Cloud Provider 2 &              hrss701 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 2 &              hrss701 &                  gcc &        ref-optimized &                3.68x\\
-            Cloud Provider 2 &              hrss701 &                  gcc &                 avx2 &                4.43x\\
-            Cloud Provider 2 &              hrss701 &                clang &        ref-optimized &                4.45x\\
-            Cloud Provider 2 &              hrss701 &                  gcc &       avx2-optimized &                7.59x\\
-            Cloud Provider 2 &              hrss701 &                clang &       avx2-optimized &                8.21x\\
+            Cloud Provider 1 &           hps4096821 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 1 &           hps4096821 &                clang &        ref-optimized &                4.99\\
+            Cloud Provider 1 &           hps4096821 &                  gcc &        ref-optimized &                5.04\\
+            Cloud Provider 1 &           hps4096821 &                  gcc &                 avx2 &                5.25\\
+            Cloud Provider 1 &           hps4096821 &                clang &       avx2-optimized &                9.67\\
+            Cloud Provider 1 &           hps4096821 &                  gcc &       avx2-optimized &               10.03\\
+            Cloud Provider 1 &              hrss701 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 1 &              hrss701 &                clang &        ref-optimized &                4.34\\
+            Cloud Provider 1 &              hrss701 &                  gcc &        ref-optimized &                4.48\\
+            Cloud Provider 1 &              hrss701 &                  gcc &                 avx2 &                4.49\\
+            Cloud Provider 1 &              hrss701 &                clang &       avx2-optimized &                8.13\\
+            Cloud Provider 1 &              hrss701 &                  gcc &       avx2-optimized &                8.47\\
+            Cloud Provider 2 &           hps4096821 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 2 &           hps4096821 &                  gcc &        ref-optimized &                3.34\\
+            Cloud Provider 2 &           hps4096821 &                clang &        ref-optimized &                3.56\\
+            Cloud Provider 2 &           hps4096821 &                  gcc &                 avx2 &                5.18\\
+            Cloud Provider 2 &           hps4096821 &                  gcc &       avx2-optimized &                8.22\\
+            Cloud Provider 2 &           hps4096821 &                clang &       avx2-optimized &                8.28\\
+            Cloud Provider 2 &              hrss701 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 2 &              hrss701 &                  gcc &        ref-optimized &                3.68\\
+            Cloud Provider 2 &              hrss701 &                  gcc &                 avx2 &                4.43\\
+            Cloud Provider 2 &              hrss701 &                clang &        ref-optimized &                4.45\\
+            Cloud Provider 2 &              hrss701 &                  gcc &       avx2-optimized &                7.59\\
+            Cloud Provider 2 &              hrss701 &                clang &       avx2-optimized &                8.21\\
         \bottomrule
     \end{tabularx}
 \end{table}
 
 \begin{table}
     \centering
-    \caption{Average Symbol Increase in NTRU on Mainframe Hardware}
+    \caption{Average symbol increase in \gls{ntru} on mainframe hardware}
     \label{table:result:ntru-average-stack-increase-mainframe}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-         IBM Community Cloud &              hrss701 &                  gcc &                  ref &                  N/A\\
-         IBM Community Cloud &              hrss701 &                clang &        ref-optimized &                2.30x\\
-         IBM Community Cloud &              hrss701 &                  gcc &        ref-optimized &                4.43x\\
-         IBM Community Cloud &           hps4096821 &                  gcc &                  ref &                  N/A\\
-         IBM Community Cloud &           hps4096821 &                clang &        ref-optimized &                2.57x\\
-         IBM Community Cloud &           hps4096821 &                  gcc &        ref-optimized &                7.28x\\
+         IBM Community Cloud &              hrss701 &                  gcc &                  ref &                  1.0\\
+         IBM Community Cloud &              hrss701 &                clang &        ref-optimized &                2.30\\
+         IBM Community Cloud &              hrss701 &                  gcc &        ref-optimized &                4.43\\
+         IBM Community Cloud &           hps4096821 &                  gcc &                  ref &                  1.0\\
+         IBM Community Cloud &           hps4096821 &                clang &        ref-optimized &                2.57\\
+         IBM Community Cloud &           hps4096821 &                  gcc &        ref-optimized &                7.28\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -65,36 +58,36 @@ Is the average size increase only or based on reference? If it's based on the re
 \begin{table}
     \centering
     \footnotesize
-    \caption{Average Symbol Increase in NTRU on Modern Consumer Hardware}
+    \caption{Average symbol increase in \gls{ntru} on modern consumer hardware}
     \label{table:result:ntru-average-stack-increase-modern-consumer}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-               Modern Laptop &           hps4096821 &                  gcc &                  ref &                  N/A\\
-               Modern Laptop &           hps4096821 &                clang &        ref-optimized &                3.56x\\
-               Modern Laptop &           hps4096821 &                  gcc &        ref-optimized &                3.56x\\
-               Modern Laptop &           hps4096821 &                  gcc &                 avx2 &                5.18x\\
-               Modern Laptop &           hps4096821 &                clang &       avx2-optimized &                8.28x\\
-               Modern Laptop &           hps4096821 &                  gcc &       avx2-optimized &                8.36x\\
-               Modern Laptop &              hrss701 &                  gcc &                  ref &                  N/A\\
-               Modern Laptop &              hrss701 &                  gcc &        ref-optimized &                3.91x\\
-               Modern Laptop &              hrss701 &                  gcc &                 avx2 &                4.43x\\
-               Modern Laptop &              hrss701 &                clang &        ref-optimized &                4.45x\\
-               Modern Laptop &              hrss701 &                  gcc &       avx2-optimized &                7.73x\\
-               Modern Laptop &              hrss701 &                clang &       avx2-optimized &                8.21x\\
-          Modern Workstation &           hps4096821 &                  gcc &                  ref &                  N/A\\
-          Modern Workstation &           hps4096821 &                clang &        ref-optimized &                3.56x\\
-          Modern Workstation &           hps4096821 &                  gcc &        ref-optimized &                3.56x\\
-          Modern Workstation &           hps4096821 &                  gcc &                 avx2 &                5.18x\\
-          Modern Workstation &           hps4096821 &                clang &       avx2-optimized &                8.28x\\
-          Modern Workstation &           hps4096821 &                  gcc &       avx2-optimized &                8.36x\\
-          Modern Workstation &              hrss701 &                  gcc &                  ref &                  N/A\\
-          Modern Workstation &              hrss701 &                  gcc &        ref-optimized &                3.91x\\
-          Modern Workstation &              hrss701 &                  gcc &                 avx2 &                4.43x\\
-          Modern Workstation &              hrss701 &                clang &        ref-optimized &                4.45x\\
-          Modern Workstation &              hrss701 &                  gcc &       avx2-optimized &                7.73x\\
-          Modern Workstation &              hrss701 &                clang &       avx2-optimized &                8.21x\\
+               Modern Laptop &           hps4096821 &                  gcc &                  ref &                  1.0\\
+               Modern Laptop &           hps4096821 &                clang &        ref-optimized &                3.56\\
+               Modern Laptop &           hps4096821 &                  gcc &        ref-optimized &                3.56\\
+               Modern Laptop &           hps4096821 &                  gcc &                 avx2 &                5.18\\
+               Modern Laptop &           hps4096821 &                clang &       avx2-optimized &                8.28\\
+               Modern Laptop &           hps4096821 &                  gcc &       avx2-optimized &                8.36\\
+               Modern Laptop &              hrss701 &                  gcc &                  ref &                  1.0\\
+               Modern Laptop &              hrss701 &                  gcc &        ref-optimized &                3.91\\
+               Modern Laptop &              hrss701 &                  gcc &                 avx2 &                4.43\\
+               Modern Laptop &              hrss701 &                clang &        ref-optimized &                4.45\\
+               Modern Laptop &              hrss701 &                  gcc &       avx2-optimized &                7.73\\
+               Modern Laptop &              hrss701 &                clang &       avx2-optimized &                8.21\\
+          Modern Workstation &           hps4096821 &                  gcc &                  ref &                  1.0\\
+          Modern Workstation &           hps4096821 &                clang &        ref-optimized &                3.56\\
+          Modern Workstation &           hps4096821 &                  gcc &        ref-optimized &                3.56\\
+          Modern Workstation &           hps4096821 &                  gcc &                 avx2 &                5.18\\
+          Modern Workstation &           hps4096821 &                clang &       avx2-optimized &                8.28\\
+          Modern Workstation &           hps4096821 &                  gcc &       avx2-optimized &                8.36\\
+          Modern Workstation &              hrss701 &                  gcc &                  ref &                  1.0\\
+          Modern Workstation &              hrss701 &                  gcc &        ref-optimized &                3.91\\
+          Modern Workstation &              hrss701 &                  gcc &                 avx2 &                4.43\\
+          Modern Workstation &              hrss701 &                clang &        ref-optimized &                4.45\\
+          Modern Workstation &              hrss701 &                  gcc &       avx2-optimized &                7.73\\
+          Modern Workstation &              hrss701 &                clang &       avx2-optimized &                8.21\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -102,209 +95,209 @@ Is the average size increase only or based on reference? If it's based on the re
 \begin{table}
     \centering
     \footnotesize
-    \caption{Average Symbol Increase in NTRU on Old Consumer Hardware}
+    \caption{Average symbol increase in \gls{ntru} on old consumer hardware}
     \label{table:result:ntru-average-stack-increase-old-consumer}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-               Old Low-Range Laptop &              hrss701 &                  gcc &                  ref &                  N/A\\
-        Old Low-Range Laptop &              hrss701 &                  gcc &        ref-optimized &                3.33x\\
-        Old Low-Range Laptop &              hrss701 &                clang &        ref-optimized &                4.12x\\
-        Old Low-Range Laptop &           hps4096821 &                  gcc &                  ref &                  N/A\\
-        Old Low-Range Laptop &           hps4096821 &                clang &        ref-optimized &                2.27x\\
-        Old Low-Range Laptop &           hps4096821 &                  gcc &        ref-optimized &                3.52x\\
-        Old Mid-Range Laptop &              hrss701 &                  gcc &                  ref &                  N/A\\
-        Old Mid-Range Laptop &              hrss701 &                  gcc &        ref-optimized &                3.33x\\
-        Old Mid-Range Laptop &              hrss701 &                clang &        ref-optimized &                4.12x\\
-        Old Mid-Range Laptop &           hps4096821 &                  gcc &                  ref &                  N/A\\
-        Old Mid-Range Laptop &           hps4096821 &                clang &        ref-optimized &                2.27x\\
-        Old Mid-Range Laptop &           hps4096821 &                  gcc &        ref-optimized &                3.52x\\
+               Old Low-Range Laptop &              hrss701 &                  gcc &                  ref &                  1.0\\
+        Old Low-Range Laptop &              hrss701 &                  gcc &        ref-optimized &                3.33\\
+        Old Low-Range Laptop &              hrss701 &                clang &        ref-optimized &                4.12\\
+        Old Low-Range Laptop &           hps4096821 &                  gcc &                  ref &                  1.0\\
+        Old Low-Range Laptop &           hps4096821 &                clang &        ref-optimized &                2.27\\
+        Old Low-Range Laptop &           hps4096821 &                  gcc &        ref-optimized &                3.52\\
+        Old Mid-Range Laptop &              hrss701 &                  gcc &                  ref &                  1.0\\
+        Old Mid-Range Laptop &              hrss701 &                  gcc &        ref-optimized &                3.33\\
+        Old Mid-Range Laptop &              hrss701 &                clang &        ref-optimized &                4.12\\
+        Old Mid-Range Laptop &           hps4096821 &                  gcc &                  ref &                  1.0\\
+        Old Mid-Range Laptop &           hps4096821 &                clang &        ref-optimized &                2.27\\
+        Old Mid-Range Laptop &           hps4096821 &                  gcc &        ref-optimized &                3.52\\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-\begin{table}[H]
+\begin{table}
     \centering
     \footnotesize
-    \caption{Average Symbol Increase in Classic McEliece on Cloud Hardware}
+    \caption{Average symbol increase in \gls{mceliece} on cloud hardware}
     \label{table:result:mceliece-average-stack-increase-cloud}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-            Cloud Provider 1 &             6960119f &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 1 &             6960119f &                  gcc &                 avx2 &                1.17x\\
-            Cloud Provider 1 &             6960119f &                  gcc &        ref-optimized &                1.59x\\
-            Cloud Provider 1 &             6960119f &                  gcc &       avx2-optimized &                1.77x\\
-            Cloud Provider 1 &             6960119f &                clang &        ref-optimized &                2.01x\\
-            Cloud Provider 1 &             6960119f &                clang &       avx2-optimized &                2.22x\\
-            Cloud Provider 1 &              8192128 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 1 &              8192128 &                  gcc &                 avx2 &                1.19x\\
-            Cloud Provider 1 &              8192128 &                  gcc &        ref-optimized &                1.51x\\
-            Cloud Provider 1 &              8192128 &                  gcc &       avx2-optimized &                1.72x\\
-            Cloud Provider 1 &              8192128 &                clang &        ref-optimized &                1.74x\\
-            Cloud Provider 1 &              8192128 &                clang &       avx2-optimized &                2.32x\\
-            Cloud Provider 1 &              6960119 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 1 &              6960119 &                  gcc &                 avx2 &                1.18x\\
-            Cloud Provider 1 &              6960119 &                  gcc &        ref-optimized &                1.58x\\
-            Cloud Provider 1 &              6960119 &                  gcc &       avx2-optimized &                1.76x\\
-            Cloud Provider 1 &              6960119 &                clang &        ref-optimized &                2.00x\\
-            Cloud Provider 1 &              6960119 &                clang &       avx2-optimized &                2.21x\\
-            Cloud Provider 1 &             8192128f &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 1 &             8192128f &                  gcc &                 avx2 &                1.18x\\
-            Cloud Provider 1 &             8192128f &                  gcc &        ref-optimized &                1.52x\\
-            Cloud Provider 1 &             8192128f &                  gcc &       avx2-optimized &                1.73x\\
-            Cloud Provider 1 &             8192128f &                clang &        ref-optimized &                1.75x\\
-            Cloud Provider 1 &             8192128f &                clang &       avx2-optimized &                2.33x\\
-            Cloud Provider 2 &             6960119f &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 2 &             6960119f &                  gcc &                 avx2 &                1.19x\\
-            Cloud Provider 2 &             6960119f &                  gcc &        ref-optimized &                1.26x\\
-            Cloud Provider 2 &             6960119f &                  gcc &       avx2-optimized &                1.55x\\
-            Cloud Provider 2 &             6960119f &                clang &        ref-optimized &                2.02x\\
-            Cloud Provider 2 &             6960119f &                clang &       avx2-optimized &                2.18x\\
-            Cloud Provider 2 &              8192128 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 2 &              8192128 &                  gcc &                 avx2 &                1.20x\\
-            Cloud Provider 2 &              8192128 &                  gcc &        ref-optimized &                1.23x\\
-            Cloud Provider 2 &              8192128 &                  gcc &       avx2-optimized &                1.50x\\
-            Cloud Provider 2 &              8192128 &                clang &        ref-optimized &                1.85x\\
-            Cloud Provider 2 &              8192128 &                clang &       avx2-optimized &                2.43x\\
-            Cloud Provider 2 &              6960119 &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 2 &              6960119 &                  gcc &                 avx2 &                1.20x\\
-            Cloud Provider 2 &              6960119 &                  gcc &        ref-optimized &                1.25x\\
-            Cloud Provider 2 &              6960119 &                  gcc &       avx2-optimized &                1.55x\\
-            Cloud Provider 2 &              6960119 &                clang &        ref-optimized &                2.01x\\
-            Cloud Provider 2 &              6960119 &                clang &       avx2-optimized &                2.17x\\
-            Cloud Provider 2 &             8192128f &                  gcc &                  ref &                  N/A\\
-            Cloud Provider 2 &             8192128f &                  gcc &                 avx2 &                1.19x\\
-            Cloud Provider 2 &             8192128f &                  gcc &        ref-optimized &                1.23x\\
-            Cloud Provider 2 &             8192128f &                  gcc &       avx2-optimized &                1.50x\\
-            Cloud Provider 2 &             8192128f &                clang &        ref-optimized &                1.86x\\
-            Cloud Provider 2 &             8192128f &                clang &       avx2-optimized &                2.44x\\
+            Cloud Provider 1 &             6960119f &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 1 &             6960119f &                  gcc &                 avx2 &                1.17\\
+            Cloud Provider 1 &             6960119f &                  gcc &        ref-optimized &                1.59\\
+            Cloud Provider 1 &             6960119f &                  gcc &       avx2-optimized &                1.77\\
+            Cloud Provider 1 &             6960119f &                clang &        ref-optimized &                2.01\\
+            Cloud Provider 1 &             6960119f &                clang &       avx2-optimized &                2.22\\
+            Cloud Provider 1 &              8192128 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 1 &              8192128 &                  gcc &                 avx2 &                1.19\\
+            Cloud Provider 1 &              8192128 &                  gcc &        ref-optimized &                1.51\\
+            Cloud Provider 1 &              8192128 &                  gcc &       avx2-optimized &                1.72\\
+            Cloud Provider 1 &              8192128 &                clang &        ref-optimized &                1.74\\
+            Cloud Provider 1 &              8192128 &                clang &       avx2-optimized &                2.32\\
+            Cloud Provider 1 &              6960119 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 1 &              6960119 &                  gcc &                 avx2 &                1.18\\
+            Cloud Provider 1 &              6960119 &                  gcc &        ref-optimized &                1.58\\
+            Cloud Provider 1 &              6960119 &                  gcc &       avx2-optimized &                1.76\\
+            Cloud Provider 1 &              6960119 &                clang &        ref-optimized &                2.00\\
+            Cloud Provider 1 &              6960119 &                clang &       avx2-optimized &                2.21\\
+            Cloud Provider 1 &             8192128f &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 1 &             8192128f &                  gcc &                 avx2 &                1.18\\
+            Cloud Provider 1 &             8192128f &                  gcc &        ref-optimized &                1.52\\
+            Cloud Provider 1 &             8192128f &                  gcc &       avx2-optimized &                1.73\\
+            Cloud Provider 1 &             8192128f &                clang &        ref-optimized &                1.75\\
+            Cloud Provider 1 &             8192128f &                clang &       avx2-optimized &                2.33\\
+            Cloud Provider 2 &             6960119f &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 2 &             6960119f &                  gcc &                 avx2 &                1.19\\
+            Cloud Provider 2 &             6960119f &                  gcc &        ref-optimized &                1.26\\
+            Cloud Provider 2 &             6960119f &                  gcc &       avx2-optimized &                1.55\\
+            Cloud Provider 2 &             6960119f &                clang &        ref-optimized &                2.02\\
+            Cloud Provider 2 &             6960119f &                clang &       avx2-optimized &                2.18\\
+            Cloud Provider 2 &              8192128 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 2 &              8192128 &                  gcc &                 avx2 &                1.20\\
+            Cloud Provider 2 &              8192128 &                  gcc &        ref-optimized &                1.23\\
+            Cloud Provider 2 &              8192128 &                  gcc &       avx2-optimized &                1.50\\
+            Cloud Provider 2 &              8192128 &                clang &        ref-optimized &                1.85\\
+            Cloud Provider 2 &              8192128 &                clang &       avx2-optimized &                2.43\\
+            Cloud Provider 2 &              6960119 &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 2 &              6960119 &                  gcc &                 avx2 &                1.20\\
+            Cloud Provider 2 &              6960119 &                  gcc &        ref-optimized &                1.25\\
+            Cloud Provider 2 &              6960119 &                  gcc &       avx2-optimized &                1.55\\
+            Cloud Provider 2 &              6960119 &                clang &        ref-optimized &                2.01\\
+            Cloud Provider 2 &              6960119 &                clang &       avx2-optimized &                2.17\\
+            Cloud Provider 2 &             8192128f &                  gcc &                  ref &                  1.0\\
+            Cloud Provider 2 &             8192128f &                  gcc &                 avx2 &                1.19\\
+            Cloud Provider 2 &             8192128f &                  gcc &        ref-optimized &                1.23\\
+            Cloud Provider 2 &             8192128f &                  gcc &       avx2-optimized &                1.50\\
+            Cloud Provider 2 &             8192128f &                clang &        ref-optimized &                1.86\\
+            Cloud Provider 2 &             8192128f &                clang &       avx2-optimized &                2.44\\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-\begin{table}[H]
+\begin{table}
     \centering
     \small
-    \caption{Average Symbol Increase in Classic McEliece on Mainframe Hardware}
+    \caption{Average symbol increase in \gls{mceliece} on mainframe hardware}
     \label{table:result:mceliece-average-stack-increase-mainframe}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-         IBM Community Cloud &              6960119 &                  gcc &                  ref &                  N/A\\
-         IBM Community Cloud &              6960119 &                  gcc &        ref-optimized &                1.50x\\
-         IBM Community Cloud &              6960119 &                clang &        ref-optimized &                1.89x\\
-         IBM Community Cloud &              8192128 &                  gcc &                  ref &                  N/A\\
-         IBM Community Cloud &              8192128 &                  gcc &        ref-optimized &                1.36x\\
-         IBM Community Cloud &              8192128 &                clang &        ref-optimized &                1.66x\\
-         IBM Community Cloud &             8192128f &                  gcc &                  ref &                  N/A\\
-         IBM Community Cloud &             8192128f &                  gcc &        ref-optimized &                1.38x\\
-         IBM Community Cloud &             8192128f &                clang &        ref-optimized &                1.66x\\
-         IBM Community Cloud &             6960119f &                  gcc &                  ref &                  N/A\\
-         IBM Community Cloud &             6960119f &                  gcc &        ref-optimized &                1.52x\\
-         IBM Community Cloud &             6960119f &                clang &        ref-optimized &                1.89x\\
+         IBM Community Cloud &              6960119 &                  gcc &                  ref &                  1.0\\
+         IBM Community Cloud &              6960119 &                  gcc &        ref-optimized &                1.50\\
+         IBM Community Cloud &              6960119 &                clang &        ref-optimized &                1.89\\
+         IBM Community Cloud &              8192128 &                  gcc &                  ref &                  1.0\\
+         IBM Community Cloud &              8192128 &                  gcc &        ref-optimized &                1.36\\
+         IBM Community Cloud &              8192128 &                clang &        ref-optimized &                1.66\\
+         IBM Community Cloud &             8192128f &                  gcc &                  ref &                 1.0\\
+         IBM Community Cloud &             8192128f &                  gcc &        ref-optimized &                1.38\\
+         IBM Community Cloud &             8192128f &                clang &        ref-optimized &                1.66\\
+         IBM Community Cloud &             6960119f &                  gcc &                  ref &                  1.0\\
+         IBM Community Cloud &             6960119f &                  gcc &        ref-optimized &                1.52\\
+         IBM Community Cloud &             6960119f &                clang &        ref-optimized &                1.89\\
         \bottomrule
     \end{tabularx}
 \end{table}
 
 
-\begin{table}[H]
+\begin{table}
     \centering
     \footnotesize
-    \caption{Average Symbol Increase in Classic McEliece on Modern Consumer Hardware}
+    \caption{Average symbol increase in \gls{mceliece} on modern consumer hardware}
     \label{table:result:mceliece-average-stack-increase-modern-consumer}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-               Modern Laptop &             6960119f &                  gcc &                  ref &                  N/A\\
-               Modern Laptop &             6960119f &                  gcc &                 avx2 &                1.18x\\
-               Modern Laptop &             6960119f &                  gcc &        ref-optimized &                1.27x\\
-               Modern Laptop &             6960119f &                  gcc &       avx2-optimized &                1.55x\\
-               Modern Laptop &             6960119f &                clang &        ref-optimized &                2.02x\\
-               Modern Laptop &             6960119f &                clang &       avx2-optimized &                2.20x\\
-               Modern Laptop &              8192128 &                  gcc &                  ref &                  N/A\\
-               Modern Laptop &              8192128 &                  gcc &                 avx2 &                1.20x\\
-               Modern Laptop &              8192128 &                  gcc &        ref-optimized &                1.23x\\
-               Modern Laptop &              8192128 &                  gcc &       avx2-optimized &                1.49x\\
-               Modern Laptop &              8192128 &                clang &        ref-optimized &                1.85x\\
-               Modern Laptop &              8192128 &                clang &       avx2-optimized &                2.44x\\
-               Modern Laptop &              6960119 &                  gcc &                  ref &                  N/A\\
-               Modern Laptop &              6960119 &                  gcc &                 avx2 &                1.19x\\
-               Modern Laptop &              6960119 &                  gcc &        ref-optimized &                1.26x\\
-               Modern Laptop &              6960119 &                  gcc &       avx2-optimized &                1.54x\\
-               Modern Laptop &              6960119 &                clang &        ref-optimized &                2.01x\\
-               Modern Laptop &              6960119 &                clang &       avx2-optimized &                2.19x\\
-               Modern Laptop &             8192128f &                  gcc &                  ref &                  N/A\\
-               Modern Laptop &             8192128f &                  gcc &                 avx2 &                1.19x\\
-               Modern Laptop &             8192128f &                  gcc &        ref-optimized &                1.24x\\
-               Modern Laptop &             8192128f &                  gcc &       avx2-optimized &                1.49x\\
-               Modern Laptop &             8192128f &                clang &        ref-optimized &                1.86x\\
-               Modern Laptop &             8192128f &                clang &       avx2-optimized &                2.45x\\
-          Modern Workstation &             6960119f &                  gcc &                  ref &                  N/A\\
-          Modern Workstation &             6960119f &                  gcc &                 avx2 &                1.18x\\
-          Modern Workstation &             6960119f &                  gcc &        ref-optimized &                1.27x\\
-          Modern Workstation &             6960119f &                  gcc &       avx2-optimized &                1.55x\\
-          Modern Workstation &             6960119f &                clang &        ref-optimized &                2.02x\\
-          Modern Workstation &             6960119f &                clang &       avx2-optimized &                2.20x\\
-          Modern Workstation &              8192128 &                  gcc &                  ref &                  N/A\\
-          Modern Workstation &              8192128 &                  gcc &                 avx2 &                1.20x\\
-          Modern Workstation &              8192128 &                  gcc &        ref-optimized &                1.23x\\
-          Modern Workstation &              8192128 &                  gcc &       avx2-optimized &                1.49x\\
-          Modern Workstation &              8192128 &                clang &        ref-optimized &                1.85x\\
-          Modern Workstation &              8192128 &                clang &       avx2-optimized &                2.44x\\
-          Modern Workstation &              6960119 &                  gcc &                  ref &                  N/A\\
-          Modern Workstation &              6960119 &                  gcc &                 avx2 &                1.19x\\
-          Modern Workstation &              6960119 &                  gcc &        ref-optimized &                1.26x\\
-          Modern Workstation &              6960119 &                  gcc &       avx2-optimized &                1.54x\\
-          Modern Workstation &              6960119 &                clang &        ref-optimized &                2.01x\\
-          Modern Workstation &              6960119 &                clang &       avx2-optimized &                2.19x\\
-          Modern Workstation &             8192128f &                  gcc &                  ref &                  N/A\\
-          Modern Workstation &             8192128f &                  gcc &                 avx2 &                1.19x\\
-          Modern Workstation &             8192128f &                  gcc &        ref-optimized &                1.24x\\
-          Modern Workstation &             8192128f &                  gcc &       avx2-optimized &                1.49x\\
-          Modern Workstation &             8192128f &                clang &        ref-optimized &                1.86x\\
-          Modern Workstation &             8192128f &                clang &       avx2-optimized &                2.45x\\
+               Modern Laptop &             6960119f &                  gcc &                  ref &                  1.0\\
+               Modern Laptop &             6960119f &                  gcc &                 avx2 &                1.18\\
+               Modern Laptop &             6960119f &                  gcc &        ref-optimized &                1.27\\
+               Modern Laptop &             6960119f &                  gcc &       avx2-optimized &                1.55\\
+               Modern Laptop &             6960119f &                clang &        ref-optimized &                2.02\\
+               Modern Laptop &             6960119f &                clang &       avx2-optimized &                2.20\\
+               Modern Laptop &              8192128 &                  gcc &                  ref &                  1.0\\
+               Modern Laptop &              8192128 &                  gcc &                 avx2 &                1.20\\
+               Modern Laptop &              8192128 &                  gcc &        ref-optimized &                1.23\\
+               Modern Laptop &              8192128 &                  gcc &       avx2-optimized &                1.49\\
+               Modern Laptop &              8192128 &                clang &        ref-optimized &                1.85\\
+               Modern Laptop &              8192128 &                clang &       avx2-optimized &                2.44\\
+               Modern Laptop &              6960119 &                  gcc &                  ref &                  1.0\\
+               Modern Laptop &              6960119 &                  gcc &                 avx2 &                1.19\\
+               Modern Laptop &              6960119 &                  gcc &        ref-optimized &                1.26\\
+               Modern Laptop &              6960119 &                  gcc &       avx2-optimized &                1.54\\
+               Modern Laptop &              6960119 &                clang &        ref-optimized &                2.01\\
+               Modern Laptop &              6960119 &                clang &       avx2-optimized &                2.19\\
+               Modern Laptop &             8192128f &                  gcc &                  ref &                  1.0\\
+               Modern Laptop &             8192128f &                  gcc &                 avx2 &                1.19\\
+               Modern Laptop &             8192128f &                  gcc &        ref-optimized &                1.24\\
+               Modern Laptop &             8192128f &                  gcc &       avx2-optimized &                1.49\\
+               Modern Laptop &             8192128f &                clang &        ref-optimized &                1.86\\
+               Modern Laptop &             8192128f &                clang &       avx2-optimized &                2.45\\
+          Modern Workstation &             6960119f &                  gcc &                  ref &                 1.0\\
+          Modern Workstation &             6960119f &                  gcc &                 avx2 &                1.18\\
+          Modern Workstation &             6960119f &                  gcc &        ref-optimized &                1.27\\
+          Modern Workstation &             6960119f &                  gcc &       avx2-optimized &                1.55\\
+          Modern Workstation &             6960119f &                clang &        ref-optimized &                2.02\\
+          Modern Workstation &             6960119f &                clang &       avx2-optimized &                2.20\\
+          Modern Workstation &              8192128 &                  gcc &                  ref &                  1.0\\
+          Modern Workstation &              8192128 &                  gcc &                 avx2 &                1.20\\
+          Modern Workstation &              8192128 &                  gcc &        ref-optimized &                1.23\\
+          Modern Workstation &              8192128 &                  gcc &       avx2-optimized &                1.49\\
+          Modern Workstation &              8192128 &                clang &        ref-optimized &                1.85\\
+          Modern Workstation &              8192128 &                clang &       avx2-optimized &                2.44\\
+          Modern Workstation &              6960119 &                  gcc &                  ref &                  1.0\\
+          Modern Workstation &              6960119 &                  gcc &                 avx2 &                1.19\\
+          Modern Workstation &              6960119 &                  gcc &        ref-optimized &                1.26\\
+          Modern Workstation &              6960119 &                  gcc &       avx2-optimized &                1.54\\
+          Modern Workstation &              6960119 &                clang &        ref-optimized &                2.01\\
+          Modern Workstation &              6960119 &                clang &       avx2-optimized &                2.19\\
+          Modern Workstation &             8192128f &                  gcc &                  ref &                  1.0\\
+          Modern Workstation &             8192128f &                  gcc &                 avx2 &                1.19\\
+          Modern Workstation &             8192128f &                  gcc &        ref-optimized &                1.24\\
+          Modern Workstation &             8192128f &                  gcc &       avx2-optimized &                1.49\\
+          Modern Workstation &             8192128f &                clang &        ref-optimized &                1.86\\
+          Modern Workstation &             8192128f &                clang &       avx2-optimized &                2.45\\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-\begin{table}[H]
+\begin{table}
     \centering
     \footnotesize
-    \caption{Average Symbol Increase in Classic McEliece on Old Consumer Hardware}
+    \caption{Average symbol increase in \gls{mceliece} on old consumer hardware}
     \label{table:result:mceliece-average-stack-increase-old-consumer}
     \begin{tabularx}{\linewidth}{X c c c c}
         \toprule
-        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Average Size}\\
+        \thead{Environment} & \thead{Parameters} & \thead{Compiler} & \thead{Flags} & \thead{Relative Size}\\
         \midrule
-               Old Low-Range Laptop &              6960119 &                  gcc &                  ref &                  N/A\\
-        Old Low-Range Laptop &              6960119 &                  gcc &        ref-optimized &                1.26x\\
-        Old Low-Range Laptop &              6960119 &                clang &        ref-optimized &                2.24x\\
-        Old Low-Range Laptop &              8192128 &                  gcc &                  ref &                  N/A\\
-        Old Low-Range Laptop &              8192128 &                  gcc &        ref-optimized &                1.23x\\
-        Old Low-Range Laptop &              8192128 &                clang &        ref-optimized &                2.17x\\
-        Old Low-Range Laptop &             8192128f &                  gcc &                  ref &                  N/A\\
-        Old Low-Range Laptop &             8192128f &                  gcc &        ref-optimized &                1.24x\\
-        Old Low-Range Laptop &             8192128f &                clang &        ref-optimized &                2.18x\\
-        Old Low-Range Laptop &             6960119f &                  gcc &                  ref &                  N/A\\
-        Old Low-Range Laptop &             6960119f &                  gcc &        ref-optimized &                1.27x\\
-        Old Low-Range Laptop &             6960119f &                clang &        ref-optimized &                2.25x\\
-        Old Mid-Range Laptop &              6960119 &                  gcc &                  ref &                  N/A\\
-        Old Mid-Range Laptop &              6960119 &                  gcc &        ref-optimized &                1.26x\\
-        Old Mid-Range Laptop &              6960119 &                clang &        ref-optimized &                2.24x\\
-        Old Mid-Range Laptop &              8192128 &                  gcc &                  ref &                  N/A\\
-        Old Mid-Range Laptop &              8192128 &                  gcc &        ref-optimized &                1.23x\\
-        Old Mid-Range Laptop &              8192128 &                clang &        ref-optimized &                2.17x\\
-        Old Mid-Range Laptop &             8192128f &                  gcc &                  ref &                  N/A\\
-        Old Mid-Range Laptop &             8192128f &                  gcc &        ref-optimized &                1.24x\\
-        Old Mid-Range Laptop &             8192128f &                clang &        ref-optimized &                2.18x\\
-        Old Mid-Range Laptop &             6960119f &                  gcc &                  ref &                  N/A\\
-        Old Mid-Range Laptop &             6960119f &                  gcc &        ref-optimized &                1.27x\\
-        Old Mid-Range Laptop &             6960119f &                clang &        ref-optimized &                2.25x\\
+               Old Low-Range Laptop &              6960119 &                  gcc &                  ref &                  1.0\\
+        Old Low-Range Laptop &              6960119 &                  gcc &        ref-optimized &                1.26\\
+        Old Low-Range Laptop &              6960119 &                clang &        ref-optimized &                2.24\\
+        Old Low-Range Laptop &              8192128 &                  gcc &                  ref &                  1.0\\
+        Old Low-Range Laptop &              8192128 &                  gcc &        ref-optimized &                1.23\\
+        Old Low-Range Laptop &              8192128 &                clang &        ref-optimized &                2.17\\
+        Old Low-Range Laptop &             8192128f &                  gcc &                  ref &                  1.0\\
+        Old Low-Range Laptop &             8192128f &                  gcc &        ref-optimized &                1.24\\
+        Old Low-Range Laptop &             8192128f &                clang &        ref-optimized &                2.18\\
+        Old Low-Range Laptop &             6960119f &                  gcc &                  ref &                  1.0\\
+        Old Low-Range Laptop &             6960119f &                  gcc &        ref-optimized &                1.27\\
+        Old Low-Range Laptop &             6960119f &                clang &        ref-optimized &                2.25\\
+        Old Mid-Range Laptop &              6960119 &                  gcc &                  ref &                  1.0\\
+        Old Mid-Range Laptop &              6960119 &                  gcc &        ref-optimized &                1.26\\
+        Old Mid-Range Laptop &              6960119 &                clang &        ref-optimized &                2.24\\
+        Old Mid-Range Laptop &              8192128 &                  gcc &                  ref &                  1.0\\
+        Old Mid-Range Laptop &              8192128 &                  gcc &        ref-optimized &                1.23\\
+        Old Mid-Range Laptop &              8192128 &                clang &        ref-optimized &                2.17\\
+        Old Mid-Range Laptop &             8192128f &                  gcc &                  ref &                  1.0\\
+        Old Mid-Range Laptop &             8192128f &                  gcc &        ref-optimized &                1.24\\
+        Old Mid-Range Laptop &             8192128f &                clang &        ref-optimized &                2.18\\
+        Old Mid-Range Laptop &             6960119f &                  gcc &                  ref &                  1.0\\
+        Old Mid-Range Laptop &             6960119f &                  gcc &        ref-optimized &                1.27\\
+        Old Mid-Range Laptop &             6960119f &                clang &        ref-optimized &                2.25\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -343,3 +336,17 @@ Is the average size increase only or based on reference? If it's based on the re
 \input{chapters/results/sequential/mceliece_8192128}
 
 \input{chapters/results/sequential/mceliece_8192128f}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{chapters/results/micro/mceliece_8192128f_Modern Workstation_cpu-cycles.pdf}
+    \caption{CPU cycles consumed for \gls{mceliece} 8192128f on Modern Workstation}
+    \label{figure:results:micro:mceliece-8192128f-modern-workstation}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{chapters/results/micro/ntru_hrss701_Modern Laptop_cpu-cycles.pdf}
+    \caption{CPU cycles consumed for \gls{ntru} HRSS 701 on Modern Laptop}
+    \label{figure:results:micro:ntru-hrss701-modern-laptop}
+\end{figure}

@@ -93,6 +93,8 @@ In the publications for the \gls{nist} submissions, the authors have written the
 % Sampling bias.
 As previously discussed under section \ref{section:method:internal-validity}, one may argue that the selection of subjects was biased as we do not take the entire population of post-quantum and classical algorithms into account. Such a comparison would however be unfeasible. That is why the presented sample is based on the accumulative recommendations of several organizations. We therefore argue that our sample is representative of the algorithms that are and likely will be in use.
 
+Coincidentally, all of the \gls{x86} hardware used for providing measurements in our experimental study were Intel. The consumer hardware we had available did not contain AMD CPUs. Furthermore, the used cloud providers only had Intel offerings within our budget. Though one could argue that the choice is biased, we argue that these CPUs are still representative of the \gls{x86} architecture. Therefore we believe our results should generalize to AMD-branded \gls{x86} CPUs as well.
+
 % History.
 Another factor that may hurt the generalizability of the results is the potential of a series of unrelated events influencing the outcome. We have identified several actions to help mitigate this risk, as discussed further in section \ref{section:method:internal-validity}.
 
@@ -109,10 +111,6 @@ Factors such as various settings, time of day and location may have limited the 
 To counter threats across the experiment we aimed to improve replication of the results by enabling others to carry out the experiment on their own. This was done by providing detailed methodology, the used tools and any accumulated data. The data, tools and the tested implementations used are available as open source\footnote{\url{https://github.com/profiling-pqc-kem-thesis}}.
 
 \iffalse
-\todo[inline]{
-Vi mäter bara Intel x86, ingen AMD. Svårt att generalisera då?
-}
-
 % == 1 ==
 % Medium?
 \todo[inline]{
