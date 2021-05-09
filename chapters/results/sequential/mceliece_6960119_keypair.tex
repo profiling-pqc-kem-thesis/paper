@@ -3,43 +3,49 @@
     \footnotesize
     \caption{Duration of \gls{mceliece} 6960119 keypair-generation for various environments}
     \label{table:results:sequential:mceliece-6960119-keypair}
-    \begin{tabularx}{\linewidth}{X c c c c c c}
+    \begin{tabularx}{\linewidth}{l c c c c c c}
         \toprule
         \thead{Environment} & \thead{Compiler} & \thead{Flags} & \thead{Iterations} & \thead{Average Duration} & \thead{Speedup}\\
         \midrule
-          Modern Workstation &                  gcc &                  ref &                   82 &           22043.51ms &                  0.0\\
-          Modern Workstation &                clang &        ref-optimized &                 2000 &             696.65ms &                 30.6\\
-          Modern Workstation &                  gcc &                 avx2 &                 2000 &             562.39ms &                 38.2\\
-          Modern Workstation &                  gcc &        ref-optimized &                 2000 &             421.15ms &                 51.3\\
-          Modern Workstation &                  gcc &       avx2-optimized &                 2000 &              72.26ms &                304.1\\
-          Modern Workstation &                clang &       avx2-optimized &                 2000 &              70.28ms &                312.7\\
-               Modern Laptop &                  gcc &                  ref &                   66 &           28196.39ms &                  0.0\\
-               Modern Laptop &                clang &        ref-optimized &                 1909 &             943.48ms &                 28.9\\
-               Modern Laptop &                  gcc &                 avx2 &                 2000 &             730.56ms &                 37.6\\
-               Modern Laptop &                  gcc &        ref-optimized &                 2000 &             522.97ms &                 52.9\\
-               Modern Laptop &                  gcc &       avx2-optimized &                 2000 &              93.89ms &                299.3\\
-               Modern Laptop &                clang &       avx2-optimized &                 2000 &              91.24ms &                308.1\\
-        Old Mid-Range Laptop &                  gcc &                  ref &                   54 &           35632.53ms &                  0.0\\
-        Old Mid-Range Laptop &                clang &        ref-optimized &                 1130 &            1598.85ms &                 21.3\\
-        Old Mid-Range Laptop &                  gcc &        ref-optimized &                 1951 &             922.80ms &                 37.6\\
-        Old Low-Range Laptop &                  gcc &                  ref &                   38 &           48365.79ms &                  0.0\\
-        Old Low-Range Laptop &                clang &        ref-optimized &                  878 &            2050.63ms &                 22.6\\
-        Old Low-Range Laptop &                  gcc &        ref-optimized &                 1563 &            1154.21ms &                 40.9\\
-            Cloud Provider 1 &                  gcc &                  ref &                   58 &           33822.17ms &                  0.0\\
-            Cloud Provider 1 &                  gcc &        ref-optimized &                 1715 &            1049.88ms &                 31.2\\
-            Cloud Provider 1 &                clang &        ref-optimized &                 1816 &             993.36ms &                 33.0\\
-            Cloud Provider 1 &                  gcc &                 avx2 &                 2000 &             865.83ms &                 38.1\\
-            Cloud Provider 1 &                  gcc &       avx2-optimized &                 2000 &              97.95ms &                344.3\\
-            Cloud Provider 1 &                clang &       avx2-optimized &                 2000 &              91.33ms &                369.3\\
-            Cloud Provider 2 &                  gcc &                  ref &                   56 &           34358.41ms &                  0.0\\
-            Cloud Provider 2 &                clang &        ref-optimized &                 1528 &            1178.51ms &                 28.2\\
-            Cloud Provider 2 &                  gcc &                 avx2 &                 1843 &             977.72ms &                 34.1\\
-            Cloud Provider 2 &                  gcc &        ref-optimized &                 2000 &             698.16ms &                 48.2\\
-            Cloud Provider 2 &                  gcc &       avx2-optimized &                 2000 &             114.33ms &                299.5\\
-            Cloud Provider 2 &                clang &       avx2-optimized &                 2000 &             109.24ms &                313.5\\
-         IBM Community Cloud &                  gcc &                  ref &                   24 &           83750.71ms &                  0.0\\
-         IBM Community Cloud &                clang &        ref-optimized &                 2000 &             846.66ms &                 97.9\\
-         IBM Community Cloud &                  gcc &        ref-optimized &                 2000 &             834.29ms &                 99.4 \\
+          \multirowcell{6}{Modern\\ Workstation} &                  gcc &                  ref &                   82 &           22043.51ms &                  0.0\\
+          &                clang &        ref-optimized &                 2000 &             696.65ms &                 30.6\\
+          &                  gcc &                 avx2 &                 2000 &             562.39ms &                 38.2\\
+          &                  gcc &        ref-optimized &                 2000 &             421.15ms &                 51.3\\
+          &                  gcc &       avx2-optimized &                 2000 &              72.26ms &                304.1\\
+          &                clang &       avx2-optimized &                 2000 &              70.28ms &                312.7\\
+          \midrule
+               \multirowcell{6}{Modern\\ Laptop} &                  gcc &                  ref &                   66 &           28196.39ms &                  0.0\\
+               &                clang &        ref-optimized &                 1909 &             943.48ms &                 28.9\\
+               &                  gcc &                 avx2 &                 2000 &             730.56ms &                 37.6\\
+               &                  gcc &        ref-optimized &                 2000 &             522.97ms &                 52.9\\
+               &                  gcc &       avx2-optimized &                 2000 &              93.89ms &                299.3\\
+               &                clang &       avx2-optimized &                 2000 &              91.24ms &                308.1\\
+           \midrule
+        \multirowcell{3}{Old Mid-Range\\ Laptop} &                  gcc &                  ref &                   54 &           35632.53ms &                  0.0\\
+        &                clang &        ref-optimized &                 1130 &            1598.85ms &                 21.3\\
+        &                  gcc &        ref-optimized &                 1951 &             922.80ms &                 37.6\\
+        \midrule
+        \multirowcell{3}{Old Low-Range\\ Laptop} &                  gcc &                  ref &                   38 &           48365.79ms &                  0.0\\
+        &                clang &        ref-optimized &                  878 &            2050.63ms &                 22.6\\
+        &                  gcc &        ref-optimized &                 1563 &            1154.21ms &                 40.9\\
+            \midrule
+            \multirowcell{6}{Cloud\\ Provider 1} &                  gcc &                  ref &                   58 &           33822.17ms &                  0.0\\
+            &                  gcc &        ref-optimized &                 1715 &            1049.88ms &                 31.2\\
+            &                clang &        ref-optimized &                 1816 &             993.36ms &                 33.0\\
+            &                  gcc &                 avx2 &                 2000 &             865.83ms &                 38.1\\
+            &                  gcc &       avx2-optimized &                 2000 &              97.95ms &                344.3\\
+            &                clang &       avx2-optimized &                 2000 &              91.33ms &                369.3\\
+            \midrule
+            \multirowcell{6}{Cloud\\ Provider 2} &                  gcc &                  ref &                   56 &           34358.41ms &                  0.0\\
+             &                clang &        ref-optimized &                 1528 &            1178.51ms &                 28.2\\
+             &                  gcc &                 avx2 &                 1843 &             977.72ms &                 34.1\\
+             &                  gcc &        ref-optimized &                 2000 &             698.16ms &                 48.2\\
+             &                  gcc &       avx2-optimized &                 2000 &             114.33ms &                299.5\\
+             &                clang &       avx2-optimized &                 2000 &             109.24ms &                313.5\\
+             \midrule
+         \multirowcell{3}{IBM\\ Community Cloud} &                  gcc &                  ref &                   24 &           83750.71ms &                  0.0\\
+         &                clang &        ref-optimized &                 2000 &             846.66ms &                 97.9\\
+         &                  gcc &        ref-optimized &                 2000 &             834.29ms &                 99.4 \\
         \bottomrule
     \end{tabularx}
 \end{table}

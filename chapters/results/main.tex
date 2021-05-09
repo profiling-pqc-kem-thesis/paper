@@ -10,17 +10,7 @@ Wolpert et. al.~\cite{wolpert2020} introduced the IBM \gls{z15} as a chip built 
 
 In~\cite{payer2020}, Payer et. al. outlined a completely redesigned binary and hexadecimal floating-point unit in \gls{z15}. The unit allows for an efficient implementation of \gls{simd} operations at 5.2GHz, without sacrificing reliability. Initially designed for accelerating common machine learning operations, the 32-bit floating-point operations have seen a doubling in throughput. The latency of all operations on the binary floating-point unit have also been reduced. The \gls{z15} has 32 128-bit wide vector registers per processor~\cite{redbook:z15}.
 
-Quantum-safe platforms demand increased cryptographic performances, agility and safety~\cite{busby2020}. The IBM 4769 cryptographic coprocessor was developed to meet these demands. It was further developed with future workloads in mind, and has support for custom programs via user defined extensions~\cite{busby2020, ibm:4769}. Due to the \gls{nist} standardization process being ongoing at the release of both the \gls{z15} and the IBM 4769 \gls{hsm}, the cryptographic agility is important~\cite{microsoft2020, ibm:z15:2019}. By combining a new \gls{asic} and a \gls{fpga}, the IBM 4769 is highly programmable and may grow with customer-specific functionality. The IBM 4769 further supports several of the key symmetric primitives used by \gls{post-quantum} algoritms, such as \gls{sha3} and \gls{aes}. It also features a hardware-based Digital Random Number Generator (DRNG)~\cite{ibm:4769:ep11}. Furthermore, it also supports the round two \gls{nist} submission \gls{dilithium}~\cite{ibm:4769:ep11, busby2020}.
-
-% IBM z15 - A 12 core 5.2Ghz microprocessor
-% The latest IBM Z microprocessor in the z15 system has been redesigned to have improved performance, system capacity and security over the previous z14 system [1]. These achievements are made while maintaining the central processor (CP) and system controller (SC) chip die sizes at 696mm2 in the GlobalFoundries 14nm high performance (14HP) SOI FinFET technology and 17 layers of copper interconnect [2], both design points of the z14 system. The system contains up to 20 CP and 5 SC chips. Each CP, shown in die photo A (Fig. 2.7.7), operates at 5.2GHz and is comprised of 12 cores, 3 PCIe Gen4 interfaces, 256MB of L3 embedded DRAM (eDRAM) cache, two X-BUS interfaces connecting to one other CP chip and one SC chip, and a redundant array of independent memory (RAIM) interface. Each core on the CP chip has 8MB of L2 eDRAM cache as well as 256KB of L1 SRAM cache, both caches split evenly between data and instruction. Each SC, shown in die photo B, operates at half the frequency of the CP, or 2.6GHz, has 960MB of L4 eDRAM cache, X-BUS interfaces connecting to half of the CP chips in the drawer and four A-BUS interfaces connecting to the SC chips on the other drawers in the system. The CP contains 9.2B transistors and the SC contains 12.2B transistors. The total IO bandwidth of the CP and SC are 2.3Tb/s and 5.6Tb/s, respectively.
-% One of the key innovations to improve the system performance of z15 was to significantly increase the L2, L3 and L4 cache sizes. The L2 grew from 6MB to 8MB (33%), the L3 from 128MB to 256MB (100%) and the L4 grew from 672MB to 960MB (43%).
-
-% For safety's sake - we need a new...
-% If the safety story was not bad enough, the security situation is worse. One defense against timing-channel attacks, especially for crypto algo- rithms, is constant-time implementations, where exe- cution time is independent of inputs. However, these are only possible if the implementer understands exactly what the hardware does, and in general they do not have sufficient information about the hard- ware. The result is frequently that “constant-time” implementations are not constant-time at all, as we have recently demonstrated on the supposedly con- stant-time implementation of Transport Layer Secu- rity (TLS) in OpenSSL 1.0.1e [4].
-% The two aspects of temporal isolation, and the challenges they face, seem very different from each other. However, the cause of both is the same: lack of information on the temporal aspects of execution of programs on a processor. Ultimately, the cause is the increasing ineffectiveness of the instruction-set archi- tecture (ISA) as the hardware–software contract.
-% However, the ISA hides all such information.
-% In fact, it would be permissible if the AISA- specified hardware behavior is enabled by an OS-controlled switch, provided enabling it does not significantly reduce the processor’s performance or energy efficiency. However, it is not clear that such a switch would really help the architects.
+Quantum-safe platforms demand increased cryptographic performances, agility and safety~\cite{busby2020}. The IBM 4769 cryptographic coprocessor was developed to meet these demands. It was further developed with future workloads in mind and has support for custom programs via user defined extensions~\cite{busby2020, ibm:4769}. Due to the \gls{nist} standardization process being ongoing at the release of both the \gls{z15} and the IBM 4769 \gls{hsm}, the cryptographic agility is important~\cite{microsoft2020, ibm:z15:2019}. By combining a new \gls{asic} and a \gls{fpga}, the IBM 4769 is highly programmable and may grow with customer-specific functionality. The IBM 4769 further supports several of the key symmetric primitives used by \gls{post-quantum} algoritms, such as \gls{sha3} and \gls{aes}. It also features a hardware-based Digital Random Number Generator (DRNG)~\cite{ibm:4769:ep11}. Furthermore, it also supports the round two \gls{nist} submission \gls{dilithium}~\cite{ibm:4769:ep11, busby2020}.
 
 % ===== Snowballing ===== %
 % ===== Snowballing ===== %
@@ -100,7 +90,7 @@ The \gls{ntru} reference implementations consists of three API methods - keypair
 
 The following graphs contain relative measurements denoting the percentage of instructions spent in each method. Both the HPS and HRSS variants of \gls{ntru} perform alike, hence only one set of graphs is shown for \gls{ntru} as a whole.
 
-Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a key-pair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $85\%$ of the time spent on generating a keypair.
+Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%$ of the instructions of generating a keypair is spent in the library function \textit{poly\_Rq\_mul} - a function which multiplies two polynomials in $\mathbb{R}^q$. Another $20\%$ of the instructions are spent on inverting a polynomial in $\mathbb{R}^2$ - in \textit{poly\_R2\_inv}. In total, the polynomial math accounts for at least $85\%$ of the time spent on generating a keypair.
 
 \begin{figure}[H]
     \centering
@@ -114,7 +104,7 @@ Figure \ref{figure:result:hot-paths:ntru:crypto_kem_keypair} shows us that $40\%
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{chapters/results/hot-paths/ntru/crypto_kem_enc.pdf}
-    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_keypair} in an unoptimized reference implementation}
+    \caption{Relative instruction count of \gls{ntru}'s \textit{crypto\_kem\_enc} in an unoptimized reference implementation}
     \label{figure:result:hot-paths:ntru:crypto_kem_enc}
 \end{figure}
 
@@ -427,7 +417,7 @@ In Table \ref{table:results:throughput:ecdh-25519}, the throughput for each envi
 
 When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant.
 
-Furthermore, there was a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seemed as if the throughput leveled off after the number of used threads surpassed the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
+\noindent Furthermore, there was a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seemed as if the throughput leveled off after the number of used threads surpassed the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
 
 \begin{figure}
     \centering
@@ -436,8 +426,7 @@ Furthermore, there was a large difference between the encrypt stage of the subje
     \label{figure:results:throughput:mceliece-ibm-community-cloud}
 \end{figure} 
 
-\clearpage
-\noindent When \gls{mceliece} ran in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results were more stable. Not only were the compilers much more consistent with one another, but the difference in throughput between the two variants seemed to become smaller. It is still clear to see, however, that the smallest parameter size had an overall lower throughput for encryption than the largest parameter size tested. The keypair and decrypt results seem to show that the smallest parameter size performed the best.
+When \gls{mceliece} ran in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results were more stable. Not only were the compilers much more consistent with one another, but the difference in throughput between the two variants seemed to become smaller. It is still clear to see, however, that the smallest parameter size had an overall lower throughput for encryption than the largest parameter size tested. The keypair and decrypt results seem to show that the smallest parameter size performed the best.
 
 \begin{figure}
     \centering
@@ -448,6 +437,8 @@ Furthermore, there was a large difference between the encrypt stage of the subje
 
 When running \gls{ntru} in parallel to measure throughput, we found that the performance scaled well with regards to the number of threads used. In figure \ref{figure:results:throughput:ntru-modern-workstation}, \gls{ntru} HRSS 701 running in the Modern Workstation environment seemed to have near-linear scaling for the thread counts tested. The variant also performed considerably better than HPS 4096821 in both the keypair generation stage and the encryption stage. The decrypt stage, however, seems to have provided near identical measurements. We found that the same scaling also occured in the Modern Laptop environment.
 
+In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements for various compilers and thread counts are shown for all of the tested environments. The top value for each row is the throughput as decryptions per second and the bottom value the relative throughput compared to the GCC implementation using one thread. The best scaling was found in the Modern Workstation environment, followed by the Modern Laptop. Although the tested cloud environments supported \gls{avx2}, they did not see the same performance increase when more threads were used. %For all environments except IBM Community Cloud and Cloud Provider 2, GCC seems to have produced the highest increase in throughput over the reference implementation compiled with GCC, without performance optimizations.
+
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{chapters/results/throughput/Modern Workstation_ntru.pdf}
@@ -455,13 +446,11 @@ When running \gls{ntru} in parallel to measure throughput, we found that the per
     \label{figure:results:throughput:ntru-modern-workstation}
 \end{figure}
 
-In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements for various compilers and thread counts are shown for all of the tested environments. The top value for each row is the throughput as decryptions per second and the bottom value the relative throughput compared to the GCC implementation using one thread. The best scaling was found in the Modern Workstation environment, followed by the Modern Laptop. Although the tested cloud environments supported \gls{avx2}, they did not see the same performance increase when more threads were used. For all environments except IBM Community Cloud and Cloud Provider 2, GCC seems to have produced the highest increase in throughput over the reference implementation compiled with GCC, without performance optimizations.
-
 \input{chapters/results/throughput/ntru_hrss701_decrypt}
 
 \subsection{Micro-benchmarks}
 
-\begin{table}[H]
+\begin{table}
     \centering
     \footnotesize
     \caption{Monitored functions}
@@ -508,7 +497,6 @@ With an average of 6911670 cache misses when the GCC reference implementation wa
 
 That the \gls{mceliece} implementations had a drastically larger amount of cache misses than the \gls{ntru} implementations was found in all of the tests of the experiment.
 
-\clearpage
 \noindent Another value we measured was the number of page-faults that occurred during each stage of the algorithms. As with other micro-benchmarks, this data was collected for the \gls{post-quantum} \glspl{kem} in environments with support for measuring them.
 
 \gls{ntru} had zero page-faults in all of the runs, across all implementations and environments. Like \gls{ntru}, \gls{mceliece} had zero page-faults, except during key-pair generation. In Table \ref{table:results:micro:page-faults-mceliece} the mean of each parameter set is presented for the implementations which had page faults. All page faults occured during the keypair stage and for the GCC compiler.
