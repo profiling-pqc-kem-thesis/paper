@@ -57,8 +57,6 @@ When considering the memory footprint of the proposed \glspl{kem}, one must take
 The data we collected for throughput and scaling of the algorithms identified that none of the classical algorithms scaled well when increasing the number of threads that concurrently executed the algorithms. In fact, it seemed as if the worst scaling and throughput was found in \gls{dhe}, followed by \gls{mceliece}. The algorithms saw virtually no increase in throughput once the number of threads surpassed the number of cores of the system. The performance of \gls{ecdhe} varied depending on the environment it was run in, but in general, the scaling was better than that of \gls{dhe}, with improvements made beyond the system's core count. The best scaling by far was found in the AVX2 optimized \gls{ntru} HRSS 701 implementations that saw a near-linear increase in performance with regards to the number of threads - even when passing the core count of the machine itself. Furthermore, the scaling of \gls{ntru} HRSS 701 was found to be the best in Modern Laptop and Modern Workstation, with the latest CPUs included in the test. We therefore strongly believe that \gls{ntru} HRSS 701 is a top candidate for \gls{post-quantum} \glspl{kem}, when only considering performance. Although not strictly comparable, we believe that one may expect similar performance of \gls{ntru} and the classical \gls{ecdhe}, judging from our measurements of throughput and scaling.
 
 \todo[inline]{
--- Talk about how AVX affects the CPU (downclocking) (see background, x86)
-
 -- argue that non-openssl aes is better due to less memory use?
 }
 

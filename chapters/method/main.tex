@@ -7,9 +7,9 @@
 %Argue for one or more methods that are applicable for our questions...
 We used two methods to answer our three research questions - a literature study and an experiment.
 
-A literature study was conducted to answer \researchquestion{1} and \researchquestion{3}. We have chosen to base our study in literature. We did so as the scope of the question, as well as our limited access to mainframe hardware, made it difficult for us to perform a practical study of the performance potentials of using various hardware features.
+A literature study was conducted to answer \researchquestion{1} and \researchquestion{3}. We did so as the scope of the question, as well as our limited access to mainframe hardware, made it difficult for us to perform a practical study of the performance potentials of using various hardware features.
 
-To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not test any hypotheses, and it is mostly used in social sciences~\cite{wohlin2012}.
+To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not allow for a controlled environment is mostly used in social sciences~\cite{wohlin2012}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
@@ -22,7 +22,7 @@ When potential areas of improvements were identified, literature was studied to 
 
 To identify relevant research papers, we searched for peer-reviewed papers by using databases such as Scopus and Web of Science. By searching for relevant keywords such as \textit{mainframe cryptography}, \textit{z15 cryptography}, \textit{cpacf performance}, \textit{mainframe cpu cache}, \textit{cryptocards}, \textit{z15 simd}, \textit{z15 memory security} and \textit{z15 alu} we selected papers that seemed relevant based on their title and abstracts. We then read the selected papers in their entirety to determine the quality and relevance.
 
-The selected papers, as well as the the papers submitted to \gls{nist}, was included in a start set. The start set was then used for forward and backward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question~\cite{wohlin2014}.
+The selected papers, as well as the the papers submitted to \gls{nist}, was included in a start set. The start set was then used for forward snowballing - a useful technique to find more papers that are relevant to provide information to help answer our research question~\cite{wohlin2014}.
 
 \section{Experiment}
 \label{section:method:experiment}
@@ -32,9 +32,9 @@ The selected papers, as well as the the papers submitted to \gls{nist}, was incl
 
 Our goal with the experiment was to analyze \gls{post-quantum} \glspl{kem} for the purpose of evaluating the readiness of today's consumer, mainframe and cloud hardware with respect to their performance from the point of view of businesses and professionals, in the context of replacing the \glspl{kex} used today in \gls{tls}, SSH, \glspl{vpn} and other applications.
 
-The experiment had two phases. In phase one, we aimed to study the effects of changing independent variables possibly related to the performance of the subjects. By studying the performance characteristics of a single run of the algorithms, we also aimed to be able to identify what implementation of each algorithm is the fastest.
+The experiment had two phases. In phase one, we aimed to study the effects of changing independent variables possibly related to the performance of the subjects. By studying the performance characteristics of a single run of the algorithms, we also aimed to be able to identify what implementation of each algorithm was the fastest.
 
-In the second phase, we aimed to test the performance characteristics of the algorithms in a parallel fashion. By evaluating the performance of the algorithms when performed in parallel over multiple threads, we aimed to identify how the underlying platform takes advantage of the available hardware to run the best optimized implementation as identified in the first phase.
+In the second phase, we aimed to test the performance characteristics of the algorithms in a parallel fashion. By evaluating the performance of the algorithms when performed in parallel over multiple threads, we aimed to identify how the underlying platform took advantage of the available hardware to run the best optimized implementation as identified in the first phase.
 
 \subsection{Subjects}
 \label{section:method:experiment:subjects}
@@ -72,8 +72,8 @@ The \gls{nist} submissions under test are presented in Table \ref{table:method:e
         \toprule
         \thead{Name} & \thead{Parameter Set} \\
         \midrule
-        \gls{ecdhe} & \gls{p-256}, \gls{x25519} \\
-        \gls{dhe} & \gls{rsa} with 2048 bit keys \\
+        \acrshort{ecdhe} & \gls{p-256}, \gls{x25519} \\
+        \acrshort{dhe} & \gls{rsa} with 2048 bit keys \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -87,14 +87,14 @@ As the control subjects were intended to represent the algorithms already in use
 
 To fulfil the goal of the experiment, several hardware configurations were tested. These configurations were divided into three categories, namely consumer, cloud and mainframe hardware depicted in figures \ref{table:method:experiment:phase1:consumer-hardware}, \ref{table:method:experiment:phase1:server-hardware} and \ref{table:method:experiment:phase1:mainframe-hardware}.
 
-The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications~\cite{eurostat2021}. The offerings are all virtual CPUs which run through hypervisors in a shared hosting environment. The selected mainframe hardware was intended to represent the latest mainframes available from IBM at the time of writing.
+The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications~\cite{eurostat2021}. The offerings were all \glspl{vcpu} which ran through hypervisors in a shared hosting environment. The selected mainframe hardware was intended to represent the latest mainframes available from IBM at the time of writing.
 
 Where possible and applicable, the environments ran on the same version of Ubuntu (20.04) and used the same versions of GCC (9.3.0) and Clang (10.0.0). The exact version of each tool in each environment is available in the data published alongside this work in a GitHub repository\footnote{\href{https://github.com/profiling-pqc-kem-thesis/data}{https://github.com/profiling-pqc-kem-thesis/data}}.
 
 \begin{table}[H]
     \centering
     \small
-    \caption{Consumer hardware - x86}
+    \caption{Consumer hardware - \gls{x86}}
     \label{table:method:experiment:phase1:consumer-hardware}
     \begin{tabularx}{\linewidth}{X c c c}
         \toprule
@@ -112,7 +112,7 @@ Where possible and applicable, the environments ran on the same version of Ubunt
 \begin{table}[H]
     \centering
     \small
-    \caption{Cloud hardware - x86}
+    \caption{Cloud hardware - \gls{x86}}
     \label{table:method:experiment:phase1:server-hardware}
     \begin{tabularx}{\linewidth}{X c c c}
         \toprule
@@ -131,7 +131,7 @@ Where possible and applicable, the environments ran on the same version of Ubunt
 \addtocounter{footnote}{1}
 \footnotetext{A DigitalOcean "Basic \$20 Droplet" in Amsterdam}
 \addtocounter{footnote}{1}
-\footnotetext{DigitalOcean does not disclose the exact CPU model used, but by using the available metrics we found one likely model}
+\footnotetext{DigitalOcean did not disclose the exact CPU model used, but by using the available metrics we found one likely model}
 
 \begin{table}[H]
     \centering
@@ -176,8 +176,8 @@ As we were interested in the performance characteristics of consumer, cloud and 
         \midrule
         Compiler & Compilers & GCC, Clang, Intel C++ Compiler (ICC), IBM XL \\
         Compiler & Flags & -O0, -O1, ..., -O5, -march, -mtune, -fomit-frame-pointer, -fwrapv, -fPIC, -fPIE, -mcpu, -Qunused-arguments \\
-        Implementation & Libraries & \gls{keccak}, \gls{aes-instruction-set}, \gls{cpacf} \\
-        Implementation & Optimizations & \gls{avx}, \gls{avx2}, \gls{avx512}, \gls{simd} on \gls{ibmz}, \gls{hsm} \\
+        Implementation & Libraries & \gls{keccak}, \gls{aes-instruction-set}, \acrshort{cpacf} \\
+        Implementation & Optimizations & \acrshort{avx}, \gls{avx2}, \gls{avx512}, \acrshort{simd} on \gls{ibmz}, \acrshort{hsm} \\
         Environment & OS & OS type and version, scheduling etc. \\
         Environment & Hardware & CPU model, CPU architecture, available cores, available RAM, RAM model and specification \\
         \bottomrule
@@ -223,7 +223,7 @@ For stack analysis we aimed to identify what amount of memory was required to us
 \subsubsection{Rejected Toolset - Memory}
 \label{section:method:experiment:phase1:rejected-toolset-memory}
 
-Intel's vTune is a profiling suite with support for \gls{x86}. It was found to work well for gathering memory-related metrics of the CPU during execution of a program. It was unavailable on \gls{s390x}, however. It was therefore rejected as we could rely on other tools to yield cross-platform metrics. 
+Intel's vTune is a profiling suite with support for \gls{x86}. It was found to work well for gathering memory-related metrics of the CPU during execution of a program. However, it was unavailable for the \gls{z15}. It was therefore rejected as we could rely on other tools to yield cross-platform metrics. 
 
 As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the run-time stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically.
 
@@ -263,7 +263,7 @@ As we identified that some tools may introduce overhead when monitoring a progra
     \end{tabularx}
 \end{table}
 
-The measurements were repeated 1000 times for each stage of the algorithms and each part of the benchmark. The heap benchmark ran 10 iterations as the heap usage should be deterministic. Furthermore, the cost of running further iterations was deemed too large. If the total duration of a benchmark surpassed 15 minutes, the test was set to timeout and any complete results up until that point recorded. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated budget.
+The measurements were repeated 1000 times for each stage of the algorithms and each part of the benchmark. The heap benchmark ran 10 iterations as the heap usage should be deterministic. Furthermore, the cost of running further iterations was deemed too large. If the total duration of a benchmark surpassed 15 minutes, the test was set to timeout and any complete results up until that point recorded. The timeout was calculated based on the time we had allocated for running the benchmarks. To not let one iteration affect another, we let the system under test idle between each benchmark during one minute. From some early testing we identified that one minute was sufficient for the systems to cool down to a level similar to that before. One minute was also the largest amount of time we could afford to wait, as waiting any longer would make the benchmarks surpass our allocated time budget.
 
 For the exact instrumentation used in each subject, please refer to the source code published alongside this work\footnote{\href{https://github.com/profiling-pqc-kem-thesis/subjects}{https://github.com/profiling-pqc-kem-thesis/subjects}}.
 
@@ -307,7 +307,8 @@ The implementation details presented in Table \ref{table:method:experiment:phase
         \toprule
         \thead{Label} & \thead{Description}\\
         \midrule
-        Reference Implementation & Use the reference implementation as published in the \gls{nist} submissions, or the available \gls{openssl} implementation. Use a plain \gls{keccak} implementation. Use an available \gls{aes} implementation.\\
+        Reference Implementation & Use the reference implementation as published in the \acrshort{nist} submissions, or the available \gls{openssl} implementation. Use a plain \gls{keccak} implementation. Use an available \gls{aes} implementation.\\
+        \cmidrule[0.05em]{2-2}
         Optimized Implementation & Use the authors' provided \gls{avx2} implementation. Use a \gls{avx2} \gls{keccak} implementation.\\
         \bottomrule
     \end{tabularx}
@@ -355,7 +356,7 @@ For the exact instrumentation used in each subject, please refer to the source c
 \subsubsection{Configurations}
 \label{section:method:experiment:phase2:configurations}
 
-The best-performing implementation for each subject as identified in phase one was tested on a series of parallelism configurations, on each environment specified in section \ref{section:method:experiment:environments}.
+The best-performing implementations for each subject as identified in phase one were tested on a series of parallelism configurations, on each environment specified in section \ref{section:method:experiment:environments}.
 
 The parallelism configurations are synonymous with the number of threads used and depended on the degree of \gls{smt} and available physical cores on the target environment. The number of threads started of at one and doubled, up to the product of the number of physical cores and the \gls{smt} degree, multiplied by four.
 

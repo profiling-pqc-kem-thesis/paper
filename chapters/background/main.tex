@@ -5,7 +5,7 @@
 
 Delfs et.al.~\cite{delfs2007} state that electronic communication has grown rapidly. They further discuss that this expansion has led to increased requirements on digital confidentiality - keeping data safe from manipulation and prying eyes. Although just a part of the vast field of cryptology, cryptography studies the act of keeping information safe - encrypting it on one end and decrypting it on another. As outlined in~\cite{bernstein2017}, cryptographic functions are sorted into two categories - \textit{symmetric-key} functions and \textit{public-key} functions, both of which refer to how the keys to the data are used.
 
-In this section, symmetric-key, public-key and related topics will be further discussed to provide an overview of cryptographic subjects.
+In this section, symmetric-key, public-key and related topics will be further discussed to provide an overview of cryptography.
 
 \subsection{Symmetric-Key Cryptography}
 
@@ -16,25 +16,25 @@ A potential problem when using a symmetric key is the fact that the two parties 
 \subsection{Public-Key Cryptography}
 \label{section:background:public-key-cryptography}
 
-Rivest et.al. ~\cite{rsa1977} describe the functions of a public-key cryptosystem as follows. Let $E_A$ be an encryption algorithm created by party $A$, \gls{alice}, known by the public. Let $D_A$ be a decryption algorithm created and kept secret by \gls{alice}. Then, a public-key cryptosystem can be described as $D_A(E_A(M))=M$ for any message $M$. Such a cryptosystem must be efficiently computable. Furthermore, it is assumed that \gls{alice} does not compromise $D_A$ by revealing $E_A$.
+Rivest et.al.~\cite{rsa1977} describe the functions of a public-key cryptosystem as follows. Let $E_A$ be an encryption algorithm created by party $A$, \gls{alice}, known by the public. Let $D_A$ be a decryption algorithm created and kept secret by \gls{alice}. Then, a public-key cryptosystem can be described as $D_A(E_A(M))=M$ for any message $M$. Such a cryptosystem must be efficiently computable. Furthermore, it is assumed that \gls{alice} does not compromise $D_A$ by revealing $E_A$.
 
-In ~\cite{rsa1977} it is further described that whenever a party $B$, \gls{bob}, wants to send a confidential message $M$ to \gls{alice}, they use \gls{alice}'s public encryption algorithm and send the ciphertext $C$ received from $C=E_A(M)$ to \gls{alice}. On the receiving end, \gls{alice} may access the plaintext message $M$ by decrypting the ciphertext, $M=D_A(C)$~\cite{rsa1977}.
+In~\cite{rsa1977} it is further described that whenever a party $B$, \gls{bob}, wants to send a confidential message $M$ to \gls{alice}, they use \gls{alice}'s public encryption algorithm and send the ciphertext $C$ received from $C=E_A(M)$ to \gls{alice}. On the receiving end, \gls{alice} may access the plaintext message $M$ by decrypting the ciphertext, $M=D_A(C)$~\cite{rsa1977}.
 
 For the cryptosystem to be considered secure, it must be computationally unfeasible for an evil party, \gls{eve}, to efficiently compute $D_A$ from information found in $E_A$~\cite{rsa1977}. A trivial, but inefficient way of deciphering a ciphertext $C$ is to enumerate all possible messages $M$ until $E_A(M)=C$.
 
-In practice, each party is in possession of two keys - a public key and a private key ~\cite{bernstein2017}. The public key is known to everyone. The private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party.
+In practice, each party is in possession of two keys - a public key and a private key~\cite{bernstein2017}. The public key is known to everyone. The private key only to the party in ownership of the keys. Anyone may encrypt a message using a party's public key, but only the owner of the private key may decrypt the contents. By using the private key to encrypt data, anyone with the public key may decrypt it. This mechanism provides a way to digitally sign a message and can be used to authenticate a party.
 
 \subsection{Key Establishment}
 
 A key establishment protocol, sometimes referred to as a \acrfull{kex}, is a process in which two or more parties securely exchange a shared symmetric key known only to them~\cite{boyd2020}. Such a protocol should be able to be performed securely over an untrusted communication channel.
 
-One class of key establishments protocols is the key transport protocols. A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties ~\cite{boyd2020}.
+One class of key establishments protocols is the key transport protocols. A key transport protocol is a protocol where one party generates a shared key which is then securely transferred to one or more parties~\cite{boyd2020}.
 
 In another class of protocols, the key agreement protocols, the parties jointly influence the outcome of the shared key by deriving the key from information supplied by the involved parties. This should be performed in such a way that no single party can predetermine the resulting shared key on their own~\cite{boyd2020}.
 
 \subsection{Key Encapsulation Mechanism}
 
-A \acrfull{kem} is a form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs ~\cite{boyd2020}. A \gls{kem} consists of four sets and three algorithms~\cite{boyd2020}, listed below.
+A \acrfull{kem} is a form of key transport protocol designed to generate a new random shared key. The key is encapsulated in a form which can only be unpacked by the chosen recipient. \glspl{kem} are often more efficient than general encryption schemes and are therefore used in many key establishment designs~\cite{boyd2020}. A \gls{kem} consists of four sets and three algorithms~\cite{boyd2020}, listed below.
 
 \begin{itemize}
     \item $K_E$ - a set of public keys for encryption.
@@ -69,7 +69,7 @@ This section will further describe cryptographic systems in use to keep data con
 \subsection{Applications}
 \label{section:background:classical-cryptography:applications}
 
-In \acrfull{tls}, key establishment is used to let to parties establish a shared symmetric key~\cite{bernstein2017}. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography. \gls{tls} may use any of a wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}~\cite{rfc7748}, \gls{ecdhe}~\cite{nist2019} and \gls{dhe}~\cite{nist2019}.
+In \acrfull{tls}, key establishment is used to let parties establish a shared symmetric key~\cite{bernstein2017}. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography. \gls{tls} may use any of a wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}~\cite{rfc7748}, \gls{ecdhe}~\cite{nist2019} and \gls{dhe}~\cite{nist2019}.
 
 \gls{x25519} (in some contexts known as \gls{curve25519}~\cite{25519naming}), is used for key exchange in the \gls{vpn} Wireguard~\cite{wireguard2020}.
 
@@ -109,7 +109,7 @@ To use an elliptic curve for cryptography, one must establish the following doma
     \label{figure:background:elliptic-curves}
 \end{figure}
 
-Elliptic curves are used to replace the multiplicative subgroup $\mathbb{Z}_p^*$ in other cryptosystems based on discrete logarithms, such as ElGamal and DSA~\cite{delfs2007}. The key difference is that elliptic curves define the group operation as $(P, Q)\to P+Q\in E(\mathbb{F}_q)$ for some curve $E$ and two points on the curve $P$ and $Q$ - that is, the group operation of two points on the curve will result in another point on the curve.
+Elliptic curves are used to replace the multiplicative subgroup $\mathbb{Z}_p^*$ in other cryptosystems based on discrete logarithms, such as \gls{elgamal} and \gls{dsa}~\cite{delfs2007}. The key difference is that elliptic curves define the group operation as $(P, Q)\to P+Q\in E(\mathbb{F}_q)$ for some curve $E$ and two points on the curve $P$ and $Q$ - that is, the group operation of two points on the curve will result in another point on the curve.
 
 \subsection{Diffie-Hellman}
 \label{section:background:diffie-hellman}
@@ -155,20 +155,20 @@ Another algorithm threatening classical cryptography is Grover's algorithm. The 
         \midrule
         \multicolumn{5}{c}{\thead[l]{Symmetric Cryptography}} \\
         %\midrule
-        \gls{AES}-128 & block cipher & 128 & 64 & Grover\\
-        \gls{AES}-256 & block cipher & 256 & 128 & Grover\\
+        \acrshort{aes}-128 & block cipher & 128 & 64 & Grover\\
+        \acrshort{aes}-256 & block cipher & 256 & 128 & Grover\\
         Salsa20 & stream cipher & 256 & 128 & Grover\\
         GMAC & MAC & 128 & 128 & -\\
         Poly1305 & MAC & 128 & 128 & -\\
-        SHA-256 & hash & 256 & 128 & Grover\\
+        \acrshort{sha}-256 & hash & 256 & 128 & Grover\\
         \gls{sha3} & hash & 256 & 128 & Grover\\
         \multicolumn{5}{c}{\thead[l]{Public-key Cryptography}} \\
         %\midrule
         \gls{rsa}-3072 & encryption & 128 & broken & Shor \\
         \gls{rsa}-3072 & signature & 128 & broken & Shor \\
-        \gls{dh}-3072 & key exchange & 128 & broken & Shor \\
+        \acrshort{dh}-3072 & key exchange & 128 & broken & Shor \\
         DSA-3072 & signature & 128 & broken & Shor \\
-        256-bit \gls{ecdh} & key exchange & 128 & broken & Shor \\
+        256-bit \acrshort{ecdh} & key exchange & 128 & broken & Shor \\
         256-bit ECDSA & signature & 128 & broken & Shor \\
         \bottomrule
     \end{tabularx}
@@ -195,7 +195,7 @@ At the time of writing, the process has been ongoing for four years and it has r
 
 \begin{table}[t]
     \centering
-    \caption{NIST round three finalists~\cite{nist:round-three-submissions}}
+    \caption{\acrshort{nist} round three finalists~\cite{nist:round-three-submissions}}
     \label{table:background:nist:finalists}
     \begin{tabularx}{\linewidth}{l c X}
         \toprule
@@ -220,9 +220,9 @@ $$
 L=\mathbb{Z}\mathbf{x}_1+\mathbb{Z}\mathbf{x}_2+...+\mathbb{Z}\mathbf{x}_n=\left\{\sum_{i=1}^n a_i\mathbf{x}_i|a_1,a_2,...,a_n\in\mathbb{Z}\right\}
 $$
 
-\noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices is taken advantage of~\cite{bremner2012}. The most significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike~\cite{sun2020}.
+\noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices are taken advantage of~\cite{bremner2012}. One significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike~\cite{sun2020}.
 
-One of the proposed lattice-based cryptosystems is \gls{kyber}, which relies on the learning-with-errors problem over module lattices being hard to solve~\cite{kyber2021}. Another lattice-based submission is the \gls{saber} cryptosystem that relies on the learning-with-rounding problem over module lattices being hard to solve~\cite{saber}.
+One of the proposed lattice-based cryptosystems is \gls{kyber}, which relies on the learning with errors problem over module lattices being hard to solve~\cite{kyber2021}. Another lattice-based submission is the \gls{saber} cryptosystem that relies on the learning with rounding problem over module lattices being hard to solve~\cite{saber}.
 
 \subsection{NTRU}
 
@@ -263,7 +263,7 @@ In Table \ref{table:background:submissions-security-level}, the security level o
 \begin{table}[t]
     \centering
     \small
-    \caption{Security levels of various \gls{nist} submissions~\cite{ntru2020, mceliece2020, saber, kyber2021}}
+    \caption{Security levels of various \acrshort{nist} submissions~\cite{ntru2020, mceliece2020, saber, kyber2021}}
     \label{table:background:submissions-security-level}
     \begin{tabularx}{\textwidth}{X c c c c c}
         \toprule
@@ -304,7 +304,7 @@ A \gls{cisc} computer generally requires fewer instructions than a \gls{risc} co
 
 The nature load/store and register/memory architectures of \gls{risc} and \gls{cisc} results in memory-related arithemtic requiring fewer instructions on a \gls{cisc} machine than a \gls{risc} machine~\cite{carter2002}. The hardware required for the machine is more complex, however. This trade-off is one of many when comparing the architectures.
 
-An example of an architecture using \gls{cisc} is \gls{x86}. Examples of architectures using \gls{risc} are ARM and RISC-V.
+Examples of architectures using \gls{cisc} are \gls{x86} and \gls{ibmz}. Examples of architectures using \gls{risc} are ARM and RISC-V.
 
 \subsection{Single Input Multiple Data (SIMD)}
 \label{section:background:simd-avx}
@@ -312,7 +312,7 @@ An example of an architecture using \gls{cisc} is \gls{x86}. Examples of archite
 The classification of computer architectures proposed by Flynn~\cite{flynn1972}, describes the four classifications presented below.
 
 \begin{itemize}
-    \item The \gls{sisd} organization represents the most conventional type of computer. Such an organization is limited by data dependencies. Branching is particularily limiting.
+    \item The \gls{sisd} organization represents the most conventional type of computer. Such an organization is limited by data dependencies. Branching is particularly limiting.
     \item The \gls{simd} organization represents array processes. The performance of such a process increases as $\mathcal{O}(\log_2 N)$ with respect to the number of data stream processors. 
     \item The \gls{misd} organization was typically represented by the plug-board type machines no longer in use.
     \item The \gls{mimd} organization is typically referred to as multi-processors. The organization may be subject to saturation.
@@ -342,7 +342,7 @@ Mainframe hardware is designed to handle a large amount of data and bulk transac
 
 Many features seen in consumer platforms such as \gls{x86} was first seen in mainframe hardware~\cite{jacobi2020}. Features such as virtualization, caches and cache hierarchies for reduced memory latency, as well as branch prediction, out-of-order execution and hardware-assisted encryption.
 
-IBM Z is among the oldest of mainframes as it was launched as S/360 in 1964~\cite{jacobi2020}. Banks, airlines and enterpresies worldwide use a IBM Z mainframe as part of their IT infrastructure. The Z platform brought the innovation of focusing on an \acrfull{isa} - which specifies a hardware behavior software could rely on regardless of the underlying hardware.
+\gls{ibmz} is among the oldest of mainframes as it was launched as S/360 in 1964~\cite{jacobi2020}. Banks, airlines and enterprises worldwide use \gls{ibmz} mainframes as part of their IT infrastructure. The Z platform brought the innovation of focusing on an \acrfull{isa} - which specifies a hardware behavior software could rely on regardless of the underlying hardware.
 
 With the rise of high-performance workstations and the client-server computing model in the 1990s, IBM refocused the S/390 platform to handle commercial batch and transaction processing workloads~\cite{jacobi2020}. 
 
