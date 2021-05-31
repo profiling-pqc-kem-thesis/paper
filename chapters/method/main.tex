@@ -9,7 +9,7 @@ We used two methods to answer our three research questions - a literature study 
 
 A literature study was conducted to answer \researchquestion{1} and \researchquestion{3}. We did so as the scope of the question, as well as our limited access to mainframe hardware, made it difficult for us to perform a practical study of the performance potentials of using various hardware features.
 
-To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not allow for a controlled environment is mostly used in social sciences~\cite{wohlin2012}.
+To provide information to help us answer \researchquestion{2}, we conducted an experiment in form of a performance test. An experiment was chosen as we could isolate variables and control the environment in which the study was conducted. Furthermore, we were only interested in the raw performance metrics from different computer platforms. Therefore, a survey would not be relevant because we were not interested in user experience, rather the algorithms' performance on various platforms. Neither was a case study relevant because it does not allow for a controlled environment and is mostly used in social sciences~\cite{wohlin2012}.
 
 \section{Literature Study}
 \label{section:method:literature-study}
@@ -73,7 +73,7 @@ The \gls{nist} submissions under test are presented in Table \ref{table:method:e
         \thead{Name} & \thead{Parameter Set} \\
         \midrule
         \acrshort{ecdhe} & \gls{p-256}, \gls{x25519} \\
-        \acrshort{dhe} & \gls{rsa} with 2048 bit keys \\
+        \acrshort{dhe} & 2048 bits \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -85,7 +85,7 @@ As the control subjects were intended to represent the algorithms already in use
 \subsection{Target Environments}
 \label{section:method:experiment:environments}
 
-To fulfil the goal of the experiment, several hardware configurations were tested. These configurations were divided into three categories, namely consumer, cloud and mainframe hardware depicted in figures \ref{table:method:experiment:phase1:consumer-hardware}, \ref{table:method:experiment:phase1:server-hardware} and \ref{table:method:experiment:phase1:mainframe-hardware}.
+To fulfill the goal of the experiment, several hardware configurations were tested. These configurations were divided into three categories, namely consumer, cloud and mainframe hardware depicted in figures \ref{table:method:experiment:phase1:consumer-hardware}, \ref{table:method:experiment:phase1:server-hardware} and \ref{table:method:experiment:phase1:mainframe-hardware}.
 
 The consumer hardware was chosen to represent different tiers of personal computers in use for different purposes. The cloud hardware was chosen to represent various cloud providers' \gls{vps} offerings - a common target for many applications~\cite{eurostat2021}. The offerings were all \glspl{vcpu} which ran through hypervisors in a shared hosting environment. The selected mainframe hardware was intended to represent the latest mainframe available from IBM at the time of writing.
 
@@ -166,6 +166,8 @@ The independent variables that were identified to potentially be related to perf
 
 As we were interested in the performance characteristics of consumer, cloud and mainframe hardware, \gls{fpga} implementations have been left out from the table. Furthermore, older vectorization extensions sets such as \gls{sse} were not considered as they have been superseeded by \gls{avx}.
 
+Not all of the independent variables were actively modified during the experiment. The independent variable configurations tested are explained later in this chapter under the measurements and configurations sections.
+
 \begin{table}[H]
     \centering
     \caption{Independent variables}
@@ -194,6 +196,7 @@ As we were interested in the performance characteristics of consumer, cloud and 
     \item page faults
     \item heap allocations
     \item stack allocations
+    \item symbol sizes
     \item logical core utilization
 \end{itemize}
 
@@ -203,13 +206,13 @@ The instrumentation relied on the Linux perf (perf\_event\_open) API. The API is
 
 As such the Linux perf API was identified as the only applicable tool for profiling the CPU usage of an algorithm. To help aid the usage of the API, we used a small tool\footnote{\href{https://github.com/profiling-pqc-kem-thesis/perforator}{https://github.com/profiling-pqc-kem-thesis/perforator}} which enabled us to monitor the algorithms during their lifetime.
 
-Valgrind and its Callgrind module was identified as usable for identifying hot paths of the reference implementations as the implementation can be run in a working environment with its results general to wherever the implementation may be run. The tool ran on a single iteration of the reference implementations' tests to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce data for graphs of the hot paths.
+Valgrind and its Callgrind module was identified as usable for identifying hot paths of the unoptimized reference implementations as the implementations can be run in a working environment with their results general to wherever they may run. The tool ran on a single iteration of the reference implementations' tests to produce metrics of the call stack. The data was then analyzed manually in KCacheGrind and QCacheGrind to produce data for graphs of the hot paths.
 
 \subsubsection{Rejected Toolset - Processor}
 \label{section:method:experiment:phase1:rejected-toolset-processor}
 Other sampling-based measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the retired instructions or time spent inside of the kernel~\cite{gprof}.
 
-Another, non-sampling-based tool that monitor the entire lifetime of a process, Valgrind and its sub-tool Callgrind was found to not support running all of our samples on all targeted environments and was therefore deemed inappropriate for use as the main instrumentation tool.
+A non-sampling-based tool that monitors the entire lifetime of a process is Valgrind and its sub-tool Callgrind. The tool was found to not support running all of our samples on all targeted environments. It was therefore deemed inappropriate for use as the main instrumentation tool.
 
 Other libraries or APIs such as those available in \gls{supercop} and PAPI were identified via testing and a source code analysis to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of \gls{supercop}, some measurements were identified to rely on extrapolation and estimation of data which led us to reject the tool.
 
@@ -218,14 +221,14 @@ Other libraries or APIs such as those available in \gls{supercop} and PAPI were 
 
 To identify the heap usage we resorted to heaptrack, a tool which allowed us to intercept each heap allocation and deallocation. The tool was found to be simple to build and run on all of our target environments, without yielding a significant run-time overhead. Furthermore, the accompanying tools let us easily automate the process of identifying heap usage on a per-function basis.
 
-For stack analysis we aimed to identify what amount of memory was required to use a specific algorithm. To identify the stack usage we resorted to statically analyzing the assembly code and symbol table produced by the compilers used. The symbol table includes the size of each (non-inlined) function and the assembly code could be used to identify the stack allocation made by each function, if any. The script we wrote to solve this automatically is produced is published alongside this work.
+For stack analysis we aimed to identify what amount of memory was required to use a specific algorithm. To identify the stack usage we resorted to statically analyzing the assembly code and symbol table produced by the compilers used. The symbol table includes the size of each (non-inlined) function. The assembly code could be used to identify the stack allocation made by each function, if any. This data may more easily be used than run-time usage in order to identify if, for example, the implementations may be applicable for edge or IoT computing. The script we wrote to solve this automatically is published alongside this work.
 
 \subsubsection{Rejected Toolset - Memory}
 \label{section:method:experiment:phase1:rejected-toolset-memory}
 
 Intel's vTune is a profiling suite with support for \gls{x86}. It was found to work well for gathering memory-related metrics of the CPU during execution of a program. However, it was unavailable for the \gls{z15}. It was therefore rejected as we could rely on other tools to yield cross-platform metrics. 
 
-As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the run-time stack usage. Furthermore, heaptrack ended up providing simpler tools to work with and helped us identify allocations on a per-function basis automatically.
+As previously mentioned, Valgrind is a non-sampling-based tool which enables it to provide accurate measurements. Although we found it was not applicable for us to use for processor profiling, it was identified as a common and popular tool for analyzing memory - both in terms of heap and stack. In the end we found that, although Valgrind comes with a stack analyzer, we were more interested in the pre-allocated stack usage than the run-time stack usage. Even if Valgrind could have been used to measure stack usage, it was found to come at an enormous overhead. Lastly, heaptrack ended up providing simpler tools to work with and helped us identify heap allocations on a per-function basis automatically.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase1:measurements}
@@ -344,7 +347,7 @@ The independent variables that were identified to potentially be related to perf
     \end{tabularx}
 \end{table}
 
-\noindent We identified throughput and hardware utilization to be dependent variables of potential interest. The hardware utilization of the system were however not considered for this test, instead we focused on how the throughput differs between architectures and environments.
+\noindent We identified throughput (iterations per second) and hardware utilization to be dependent variables of potential interest. The hardware utilization of the system were however not considered for this test, instead we focused on how the throughput differs between architectures and environments.
 
 \subsubsection{Measurements}
 \label{section:method:experiment:phase2:measurements}
