@@ -211,7 +211,7 @@ The \gls{ecdhe} and \gls{dhe} implementations were based entirely on functions m
     \end{tabularx}
 \end{table}
 
-The operation of dividing an integer was found to correlate to an additional $536$ bytes in the Cloud Provider 1 environment and $528$ bytes in all of the other environments. The environments saw an additional $1432$ bytes corresponding to the handling of arbitrary large numbers whilst generating a keypair. Fetching random data raised the allocation with $632$ bytes in all environments. There were further allocations made, all of which are summarized in Table \ref{table:results:memory:dhe-heap}. In the table, the peak heap usage of each function of the implementation has been summed up to produce a sum of peaks. This value does not correspond to the peak heap usage of the algorithm as a whole. Though it is unclear why the exchange stage, which includes a keypair generation, uses less memory, it could be due to OpenSSL's internal handling of memory.
+The operation of dividing an integer was found to correlate to an additional $536$ bytes in the Cloud Provider 1 environment and $528$ bytes in all of the other environments. The environments saw an additional $1432$ bytes corresponding to the handling of arbitrary large numbers whilst generating a keypair. Fetching random data raised the allocation with $632$ bytes in all environments. There were further allocations made, all of which are summarized in Table \ref{table:results:memory:dhe-heap}. In the table, the peak heap usage of each function of the implementation has been summed up to produce a sum of peaks. This value does not correspond to the peak heap usage of the algorithm as a whole. Though it is unclear why the exchange stage, which includes a keypair generation, uses less memory, it could be due to OpenSSL's handling of memory.
 
 \begin{table}
     \centering
@@ -247,7 +247,7 @@ The operation of dividing an integer was found to correlate to an additional $53
     \end{tabularx}
 \end{table}
 
-The \gls{ecdhe} implementation behaved much like the \gls{dhe}, with the peaks differing between some environments. The implementation too worked with \gls{openssl}'s arbitrary numbers and as such had several of the same allocations as the \gls{dhe} implementations. The peaks are presented in Table \ref{table:results:memory:ecdhe-heap}. Though it is unclear why the exchange stage is sometimes zero, it could be due to \gls{openssl}'s internal handling of memory.
+The \gls{ecdhe} implementation behaved much like the \gls{dhe}, with the differing between environments. The implementation too worked with \gls{openssl}'s arbitrary numbers and as such had several of the same allocations as the \gls{dhe} implementations. The peaks are presented in Table \ref{table:results:memory:ecdhe-heap}. Though it is unclear why the exchange stage is sometimes zero, it could be due to \gls{openssl}'s internal handling of memory.
 
 \subsection{Stack Usage}
 
@@ -284,7 +284,7 @@ In terms of stack usage, the results varied between the implementations, compile
 
 The same correlation between optimization flags and compiler versions could not be found in the case of \gls{mceliece} and pk\_gen. In that case, the largest recorded size was found in IBM Community Cloud's optimized reference implementation with $22858$ bytes. The optimized \gls{avx2} implementation of the Modern Workstation and Modern Laptop came second with $22123$ bytes. Lastly, the smallest size recorded was found in the optimized reference implementation of Old Mid-Range Laptop and Old Low-Range Laptop at $2026$ bytes.
 
-As for other functions of the \glspl{kem}, the data was too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one may see that Clang seems to produce smaller binaries. Furthermore, the optimized \gls{avx2} builds result in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
+\noindent As for other functions of the \glspl{kem}, the data was too massive to comprehensively refer to here. There are, however, tables in the appendix for average sizes as compared to the reference implementation compiled with GCC. In Table \ref{table:result:ntru-average-stack-increase-cloud}, for example, one may see that Clang seems to produce smaller binaries. Furthermore, the optimized \gls{avx2} builds result in the largest binaries - with symbols taking 8-10 times the size of the reference implementation.
 
 As the \gls{ecdhe} and \gls{dhe} implementations studied relied on the dynamically linked \gls{openssl} library, the stack usage of these were found to be minimal.
 
@@ -294,7 +294,7 @@ The measurements presented up until this point have been related to either the r
 
 The \glspl{kem} tested conformed to the same API. Their signatures are presented in figure \ref{figure:result:memory:kem-api}. The function crypto\_kem\_keypair, which generates a keypair takes in a public key and a secret key. The encapsulation function, crypto\_kem\_enc, takes in a ciphertext buffer, a key buffer and the public key of a peer. Lastly, the decapsulation function, crypto\_kem\_dec takes in a key buffer, the ciphertext as received from a peer and the secret key. The sizes of these parameters differed between algorithms and implementations - but were not changed depending on the environment or optimizations. Table \ref{table:results:memory:kem-parameter-sizes} shows the sizes of the parameters in bytes. The sizes did not differ between the semi-systematic (f) variants of \gls{mceliece}. Therefore only two variants of \gls{mceliece} are presented.
 
-The APIs were similar, but not the same for the \gls{kex} implementations. That is due to \gls{dh} requiring the so called Diffie-Hellman Parameters $p$ and $g$. The APIs are shown in figure \ref{figure:results:memory:kex-api}. As with the \gls{kem} implementations, the \gls{kex} implementations used two buffers for a public and a private key when generating a keypair. The \gls{dhe} implementation also required the previously mentioned domain parameters $p$ and $g$ - both buffers of bytes containing the respective parameter. The crypto\_dh\_enc functions further used a key buffer. There is no analogous ciphertext as the \glspl{kex} are fundamentally different from the \glspl{kem} as covered in \ref{section:background:diffie-hellman}. The sizes of the parameters are presented in Table \ref{table:results:memory:kex-parameter-sizes}.
+\noindent The APIs were similar, but not the same for the \gls{kex} implementations. That is due to \gls{dh} requiring the so called Diffie-Hellman Parameters $p$ and $g$. The APIs are shown in figure \ref{figure:results:memory:kex-api}. As with the \gls{kem} implementations, the \gls{kex} implementations used two buffers for a public and a private key when generating a keypair. The \gls{dhe} implementation also required the previously mentioned domain parameters $p$ and $g$ - both buffers of bytes containing the respective parameter. The crypto\_dh\_enc functions further used a key buffer. There is no analogous ciphertext as the \glspl{kex} are fundamentally different from the \glspl{kem} as covered in \ref{section:background:diffie-hellman}. The sizes of the parameters are presented in Table \ref{table:results:memory:kex-parameter-sizes}.
 
 \begin{table}
     \centering
@@ -387,7 +387,7 @@ By studying the average duration taken by the various subjects in each environme
     \end{tabularx}
 \end{table}
 
-In Table \ref{table:results:sequential:nist-vs-ours} the measurements performed by the respective submission authors are compared to the measurements gathered in this thesis. Both the \gls{mceliece} and \gls{ntru} measurements were gathered using \gls{supercop}~\cite{mceliece2020,ntru2020} whilst ours were counted using hardware registers. The authors of the \gls{mceliece} submission did not present any measurements for the reference implementations. Our measurements were performed in the Modern Workstation environment on an Intel i9-9990k. The consumed cycles of the \gls{mceliece} \gls{avx2} implementations were measured by the authors on a Intel Xeon E3-1275 v3. The \gls{ntru} authors used an Intel i3-6100T for the reference implementations and an Intel i7-4770k for the \gls{avx2} implementations.
+In Table \ref{table:results:sequential:nist-vs-ours} the measurements performed by the respective submission authors are compared to the measurements gathered in this thesis. Both the \gls{mceliece} and \gls{ntru} measurements were gathered using \gls{supercop}~\cite{mceliece2020,ntru2020} whilst ours were counted using hardware registers. The authors of the \gls{mceliece} submission did not present any measurements for the reference implementations. Our measurements were performed in the Modern Workstation environment on an Intel i9-9990k. The consumed cycles of the \gls{mceliece} \gls{avx2} implementations were measured by the authors on a Intel Xeon E3-1275 v3. The \gls{ntru} authors used an Intel i3-6100T for the reference implementations and an Intel i7-4770k for those using \gls{avx2}.
 
 \subsection{Throughput Performance}
 
@@ -417,7 +417,7 @@ In Table \ref{table:results:throughput:ecdh-25519}, the throughput for each envi
 
 When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant.
 
-\noindent Furthermore, there was a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seemed as if the throughput leveled off after the number of used threads surpassed the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
+Furthermore, there was a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seemed as if the throughput leveled off after the number of used threads surpassed the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
 
 \begin{figure}
     \centering
@@ -435,7 +435,7 @@ When \gls{mceliece} ran in environments with support for \gls{avx2}, such as the
     \label{figure:results:throughput:mceliece-modern-workstation}
 \end{figure}
 
-When running \gls{ntru} in parallel to measure throughput, we found that the performance scaled well with regards to the number of threads used. In figure \ref{figure:results:throughput:ntru-modern-workstation}, \gls{ntru} HRSS 701 running in the Modern Workstation environment seemed to have near-linear scaling for the thread counts tested. The variant also performed considerably better than HPS 4096821 in both the keypair generation stage and the encryption stage. The decrypt stage, however, seems to have provided near identical measurements. We found that the same scaling also occured in the Modern Laptop environment.
+When running \gls{ntru} in parallel to measure throughput, we found that the performance scaled well with regards to the number of threads used. In figure \ref{figure:results:throughput:ntru-modern-workstation}, \gls{ntru} HRSS 701 running in the Modern Workstation environment seemed to have near-linear scaling for the thread counts tested. The variant also performed considerably better than HPS 4096821 in both the keypair generation stage and the encryption stage. The decrypt stage, however, seems to have provided near identical measurements. We found that the same scaling also occured in the Modern Laptop.
 
 In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements for various compilers and thread counts are shown for all of the tested environments. The top value for each row is the throughput as decryptions per second and the bottom value the relative throughput compared to the GCC implementation using one thread. The best scaling was found in the Modern Workstation environment, followed by the Modern Laptop. Although the tested cloud environments supported \gls{avx2}, they did not see the same performance increase when more threads were used. %For all environments except IBM Community Cloud and Cloud Provider 2, GCC seems to have produced the highest increase in throughput over the reference implementation compiled with GCC, without performance optimizations.
 
@@ -450,7 +450,7 @@ In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements f
 
 \subsection{Micro-benchmarks}
 
-\begin{table}
+\begin{table}[t]
     \centering
     \footnotesize
     \caption{Monitored functions}

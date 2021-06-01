@@ -248,7 +248,7 @@ Using the aforementioned toolset, we monitored the subjects and measured the fol
 
 \noindent The measurements were taken at different points in the algorithms' lifecycles - such as at the start and end of the algorithm's invocation. The same measurements were also repeated for all of the stages of the algorithms as presented in section \ref{table:method:experiment:phase1:independent-variables}. By first analyzing the hot paths of the \gls{nist} submissions, we also measured the parts of the algorithm that constituted the highest cost. As some variables in the environment were identified, such as the various implementations for \gls{shake} and \gls{aes}, the use of these were measured as well. In some cases, the authors had provided optimized implementations. In such cases, these optimized functions were measured as well.
 
-As we identified that some tools may introduce overhead when monitoring a program, we decided to split the tests into four parts. These parts are presented in Table \ref{table:method:experiment:phase1:benchmark-divisions}. By splitting the benchmarks we aimed to capture accurate values for each measurements without affecting others.
+\noindent As we identified that some tools may introduce overhead when monitoring a program, we decided to split the tests into four parts. These parts are presented in Table \ref{table:method:experiment:phase1:benchmark-divisions}. By splitting the benchmarks we aimed to capture accurate values for each measurements without affecting others.
 
 \begin{table}[t]
     \centering

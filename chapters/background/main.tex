@@ -71,7 +71,7 @@ This section will further describe cryptographic systems in use to keep data con
 
 In \acrfull{tls}, key establishment is used to let parties establish a shared symmetric key~\cite{bernstein2017}. Digital signatures are used to ensure the authenticity of the public keys used in the key establishment. The rest of the communication is secured using symmetric cryptography. \gls{tls} may use any of a wide variety of different key establishment algorithms. Some of these algorithms and parameter sets are recommended for use in a pre-quantum era by organizations such as \gls{nist} and the \gls{ietf}, namely \gls{x25519}~\cite{rfc7748}, \gls{ecdhe}~\cite{nist2019} and \gls{dhe}~\cite{nist2019}.
 
-The elliptic-curve-based \gls{x25519} is used for key exchange in the \gls{vpn} Wireguard~\cite{wireguard2020}. In some contexts, the \gls{x25519} algorithm is known as \gls{curve25519}~\cite{25519naming}.
+The elliptic-curve-based \gls{x25519} is used for key exchange in the \gls{vpn} Wireguard~\cite{wireguard2020}. The algorithm uses the \gls{curve25519} curve~\cite{rfc7748}. In some contexts, the \gls{x25519} algorithm is known by the name of the curve~\cite{25519naming}. 
 
 In TLS, \gls{ecdh}, \gls{ecdhe}, \gls{dh} and \gls{dhe} are used to exchange session keys~\cite{rfc8446}. Other protocols such as SSH also use the same algorithms for key exchange~\cite{williams2011}. Some \glspl{vpn} such as OpenVPN~\cite{openvpn} and IPSec~\cite{rfc2409} also use the same algorithms. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol~\cite{gordon2017}.
 
@@ -123,8 +123,6 @@ The security of the key exchange comes from the assumption that it is computatio
 The \gls{ecdh} \gls{kex} is an adaption of \gls{dh} over elliptic curves~\cite{nist2018}. In this case, \gls{ecc} refers to the use of one of the so called \gls{nist} curves (\gls{p-256} etc.).
 
 \gls{alice} computes the point $P=hd_aQ_b$, where $d_A$ is \gls{alice}'s private key, $Q_B$ \gls{bob}'s public key and $h$ a \gls{ecc} domain parameter~\cite{nist2018}. If the point evaluates to a null point, the calculation has failed. Else, let $z=x_P$ be the x-coordinate of $P$ and convert the element $z$ to a byte string $Z$, the shared secret.
-
-The \gls{x25519} \gls{kex} is a special case of \gls{ecdh} where \gls{curve25519} is used~\cite{rfc7748}. 
 
 \subsection{Ephemeral Diffie-Hellman}
 
@@ -183,7 +181,7 @@ This section further describes \gls{post-quantum} cryptography, the \gls{nist} s
 \subsection{The NIST Post-Quantum Standardization Process}
 The \acrfull{nist} is an American organization under the Department of Commerce. By advancing measurements, standards and technologies, the institute's goal is to promote U.S. innovation and industrial competitiveness~\cite{nist:about}.
 
-The organization is split into various divisions~\cite{nist:ct}. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and \gls{post-quantum} cryptography.
+\noindent The organization is split into various divisions~\cite{nist:ct}. One of these divisions, the Computer Security Division, has assembled the Cryptographic Technology Group. The group focuses on the topics of cryptographic algorithms such as block ciphers, digital signatures, hash functions and \gls{post-quantum} cryptography.
 
 The Cryptographic Technology Group has previously held standardization processes for the globally used algorithm suites \gls{aes} and \gls{sha3}~\cite{nist:call-for-proposals}. January 3rd, 2017, the Cryptographic Technology Group posted another call for submissions to an open standardization contest. This time for \gls{post-quantum} cryptography algorithms. The process was estimated to take three to five years with multiple rounds of submissions.
 
