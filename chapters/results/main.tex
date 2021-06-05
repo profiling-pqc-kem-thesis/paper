@@ -415,9 +415,11 @@ In Table \ref{table:results:throughput:ecdh-25519}, the throughput for each envi
 
 \input{chapters/results/throughput/ecdh_25519_keypair}
 
-When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly $0.1\%$ of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant.
+When looking at the throughput of \gls{mceliece} in environments which do not support \gls{avx2}, such as the IBM Community Cloud presented in figure \ref{figure:results:throughput:mceliece-ibm-community-cloud}, we found that the keypair and decrypt throughput was significantly lower than that of the encrypt stage. The performance of the decrypt stage was roughly a tenth of the encrypt stage. Furthermore, the parameter set with the largest parameters - \gls{mceliece} 8192128f achieved a higher encryption throughput than the \gls{mceliece} 6960119f variant.
 
-Furthermore, there was a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. Lastly, it seemed as if the throughput leveled off after the number of used threads surpassed the number of available threads. As mentioned, the same overall behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}.
+Furthermore, there was a large difference between the encrypt stage of the subjects compiled and optimized using GCC and those using Clang. The 8192128f parameter set of \gls{mceliece} had a throughput of about 1.5x that of the Clang implementation. In the case of the 6960191f parameter set, GCC saw much higher increase in performance than the Clang implementation when the resulting binary was run on multiple threads.
+
+\noindent Lastly, it seemed as if the throughput leveled off after the number of used threads surpassed the number of available threads. As mentioned, the same behavior was found in all of the environments using the optimized reference implementation for benchmarking the parallel throughput, such as Old Mid-Range Laptop in figure \ref{figure:results:throughput:mceliece-old-mid-range-laptop}. 
 
 \begin{figure}
     \centering
@@ -426,7 +428,7 @@ Furthermore, there was a large difference between the encrypt stage of the subje
     \label{figure:results:throughput:mceliece-ibm-community-cloud}
 \end{figure} 
 
-\noindent When \gls{mceliece} ran in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results were more stable. Not only were the compilers much more consistent with one another, but the difference in throughput between the two variants seemed to become smaller. It is still clear to see, however, that the smallest parameter size had an overall lower throughput for encryption than the largest parameter size tested. The keypair and decrypt results seem to show that the smallest parameter size performed the best.
+When \gls{mceliece} ran in environments with support for \gls{avx2}, such as the Modern Workstation shown in figure \ref{figure:results:throughput:mceliece:modern-workstation}, the results were more stable. Not only were the compilers much more consistent with one another, but the difference in throughput between the two variants seemed to become smaller. It is still clear to see, however, that the smallest parameter size had an overall lower throughput for encryption than the largest parameter size tested. The keypair and decrypt results seem to show that the smallest parameter size performed the best.
 
 \begin{figure}
     \centering
@@ -439,14 +441,17 @@ When running \gls{ntru} in parallel to measure throughput, we found that the per
 
 In Table \ref{table:results:throughput:ntru-hrss701-decrypt}, the measurements for various compilers and thread counts are shown for all of the tested environments. The top value for each row is the throughput as decryptions per second and the bottom value the relative throughput compared to the GCC implementation using one thread. The best scaling was found in the Modern Workstation environment, followed by the Modern Laptop. Although the tested cloud environments supported \gls{avx2}, they did not see the same performance increase when more threads were used. %For all environments except IBM Community Cloud and Cloud Provider 2, GCC seems to have produced the highest increase in throughput over the reference implementation compiled with GCC, without performance optimizations.
 
+% Please don't ask, the LaTeX gods weren't with us in this case :(
+\newpage
+\input{chapters/results/throughput/ntru_hrss701_decrypt}
+\newpage
+
 \begin{figure}
     \centering
     \includegraphics[scale=0.75]{chapters/results/throughput/Modern Workstation_ntru.pdf}
     \caption{Throughput of \gls{ntru} on Modern Workstation for various thread counts}
     \label{figure:results:throughput:ntru-modern-workstation}
 \end{figure}
-
-\input{chapters/results/throughput/ntru_hrss701_decrypt}
 
 \subsection{Micro-benchmarks}
 
@@ -495,8 +500,9 @@ The number of cache misses in \gls{mceliece}, when compared to \gls{ntru}, was s
 
 With an average of 69116705 cache misses when the GCC reference implementation was run in the Cloud Provider 2 environment, keypair generation in \gls{mceliece} 8192128 had the largest number of cache misses recorded during our testing. For the same algorithm and compiler configuration, the Modern Workstation had an average of 20403 cache misses. As the 8192128 parameter set of \gls{mceliece} is the systematic variant, it may run further iterations than the semi-systematic variant of \gls{mceliece}. As this is the only difference between the 8192128 and the 8192128f parameter set, it is likely to be the cause of the higher number of cache misses. In the lower end of the spectrum, the Modern Workstation saw an average of a single cache miss for all configurations of \gls{ntru} HPS 4096821 keypair generation. The environment had the largest amount of cache out of all the dedicated hardware tested. Using the same configurations, the Cloud Provider 2 environment saw an average of between 1440 and 3468 cache misses. As dedicated hardware had similar amounts of cache misses as the tested cloud environments, it may be difficult to directly determine if the type of environment affects the number of cache misses.
 
-That the \gls{mceliece} implementations had a drastically larger amount of cache misses than the \gls{ntru} implementations was found in all of the tests of the experiment.
+That the \gls{mceliece} implementations had a drastically larger amount of cache misses than the \gls{ntru} implementations was found in all of the tests.
 
+\newpage
 \noindent Another value we measured was the number of page-faults that occurred during each stage of the algorithms. As with other micro-benchmarks, this data was collected for the \gls{post-quantum} \glspl{kem} in environments with support for measuring them.
 
 \gls{ntru} had zero page-faults in all of the runs, across all implementations and environments. Like \gls{ntru}, \gls{mceliece} had zero page-faults, except during key-pair generation. In Table \ref{table:results:micro:page-faults-mceliece} the mean of each parameter set is presented for the implementations which had page faults. All page faults occured during the keypair stage and for the GCC compiler.
