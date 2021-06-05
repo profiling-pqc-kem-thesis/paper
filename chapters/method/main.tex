@@ -78,7 +78,7 @@ The \gls{nist} submissions under test are presented in Table \ref{table:method:e
     \end{tabularx}
 \end{table}
 
-\noindent In the case of the \gls{nist} submissions, in this context, the submitted implementations were not thought to be production-ready due to them not yet being standardized nor battle-tested. Due to this, as well as our interest in exploring optimization techniques that are applicable for post-quantum cryptography, we explored various ways the implementations may be optimized.
+\noindent In the case of the \gls{nist} submissions, in this context, the submitted implementations were not thought to be production-ready due to them not yet being standardized nor battle-tested. Due to this, as well as our interest in exploring optimization techniques that are applicable for \gls{post-quantum} cryptography, we explored various ways the implementations may be optimized.
 
 As the control subjects were intended to represent the algorithms already in use, they were thought to be a solved problem. That is, in this context, implementation details were of no concern - an implementation on the native platform was assumed to be optimized and production-ready.
 
@@ -142,22 +142,20 @@ Where possible and applicable, the environments ran on the same version of Ubunt
         \toprule
         \thead{Label} & \thead{Model} & \thead{CPU} & \thead{RAM} & \thead{OS}\\
         \midrule
-        IBM Community Cloud\footnotemark & IBM T01 & IBM \gls{z15} 2 cores\footnotemark & 4GB & RHEL 8.3\footnotemark\\
+        IBM Community Cloud\footnotemark & IBM T01 & IBM \gls{z15} 2 vCPU & 4GB & RHEL 8.3\footnotemark\\
         \bottomrule
     \end{tabularx}
 \end{table}
-\addtocounter{footnote}{-3}
+\addtocounter{footnote}{-2}
 \addtocounter{footnote}{1}
 \footnotetext{A "General Purpose VM" accessed via LinuxOne Community Cloud}
-\addtocounter{footnote}{1}
-\footnotetext{It is unknown if they are dedicated or virtual}
 \addtocounter{footnote}{1}
 \footnotetext{The provider did not offer an Ubuntu distribution}
 
 \subsection{Phase One - Profiling}
 \label{section:method:experiment:phase1}
 
-In the first phase, we aimed to identify how possibly performance-related independent variables alter the performance characteristics of the subjects. The performance of the algorithms in a single sequential run was evaluated.
+In the first phase, we aimed to identify how possibly performance-related independent variables alter the performance characteristics of the subjects. The performance of the algorithms in a single sequential run was evaluated several times, as further explained in the remainder of this section.
 
 \subsubsection{Variables}
 \label{section:method:experiment:phase1:variables}
@@ -212,7 +210,7 @@ Valgrind and its Callgrind module was identified as usable for identifying hot p
 \label{section:method:experiment:phase1:rejected-toolset-processor}
 Other sampling-based measurement alternatives that require the tested binary to be instrumented, such as prof, gprof and gperftools are unable to accurately measure IO-bound tasks, the retired instructions or time spent inside of the kernel~\cite{gprof}.
 
-A non-sampling-based tool that monitors the entire lifetime of a process is Valgrind and its sub-tool Callgrind. The tool was found to not support running all of our samples on all targeted environments. It was therefore deemed inappropriate for use as the main instrumentation tool.
+A non-sampling-based tool that monitors the entire lifetime of a process is Valgrind and its sub-tool Callgrind. The tool was found to not support running all of our samples on all targeted environments. Furthermore, Valgrind translates the code before execution~\cite{valgrind}. It was therefore deemed inappropriate for use as the main instrumentation tool.
 
 Other libraries or APIs such as those available in \gls{supercop} and PAPI were identified via testing and a source code analysis to provide inaccurate and non-deterministic results and were therefore not applicable for this use case. In the case of \gls{supercop}, some measurements were identified to rely on extrapolation and estimation of data which led us to reject the tool.
 

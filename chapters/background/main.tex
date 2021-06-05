@@ -73,7 +73,7 @@ In \acrfull{tls}, key establishment is used to let parties establish a shared sy
 
 The elliptic-curve-based \gls{x25519} is used for key exchange in the \gls{vpn} Wireguard~\cite{wireguard2020}. The algorithm uses the \gls{curve25519} curve~\cite{rfc7748}. In some contexts, the \gls{x25519} algorithm is known by the name of the curve~\cite{25519naming}. 
 
-In TLS, \gls{ecdh}, \gls{ecdhe}, \gls{dh} and \gls{dhe} are used to exchange session keys~\cite{rfc8446}. Other protocols such as SSH also use the same algorithms for key exchange~\cite{williams2011}. Some \glspl{vpn} such as OpenVPN~\cite{openvpn} and IPSec~\cite{rfc2409} also use the same algorithms. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol~\cite{gordon2017}.
+In \gls{tls}, \gls{ecdh}, \gls{ecdhe}, \gls{dh} and \gls{dhe} are used to exchange session keys~\cite{rfc8446}. Other protocols such as SSH also use the same algorithms for key exchange~\cite{williams2011}. Some \glspl{vpn} such as OpenVPN~\cite{openvpn} and IPSec~\cite{rfc2409} also use the same algorithms. Variants of the mentioned key exchange algorithms are also used in messaging applications such as the Signal protocol~\cite{gordon2017}.
 
 \subsection{RSA}
 
@@ -163,7 +163,7 @@ Grover's algorithm was first proposed as a way to search in databases in $O(\sqr
         \gls{rsa}-3072 & encryption & 128 & broken & Shor \\
         \gls{rsa}-3072 & signature & 128 & broken & Shor \\
         \acrshort{dh}-3072 & key exchange & 128 & broken & Shor \\
-        DSA-3072 & signature & 128 & broken & Shor \\
+        \acrshort{dsa}-3072 & signature & 128 & broken & Shor \\
         256-bit \acrshort{ecdh} & key exchange & 128 & broken & Shor \\
         256-bit ECDSA & signature & 128 & broken & Shor \\
         \bottomrule
@@ -216,7 +216,7 @@ $$
 L=\mathbb{Z}\mathbf{x}_1+\mathbb{Z}\mathbf{x}_2+...+\mathbb{Z}\mathbf{x}_n=\left\{\sum_{i=1}^n a_i\mathbf{x}_i|a_1,a_2,...,a_n\in\mathbb{Z}\right\}
 $$
 
-\noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices are taken advantage of~\cite{bremner2012}. One significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and post-quantum algorithms alike~\cite{sun2020}.
+\noindent A lattice provides several applications in number theory and has been applied to cryptography, where the problems imposed by lattices are taken advantage of~\cite{bremner2012}. One significant problem is the shortest vector problem. The problem revolves around approximating the minimal euclidean length of a non-zero lattice vector. The problem has been shown to be hard to solve efficiently and is thought to be secure from future classical and \gls{post-quantum} algorithms alike~\cite{sun2020}.
 
 One of the proposed lattice-based cryptosystems is \gls{kyber}, which relies on the learning with errors problem over module lattices being hard to solve~\cite{kyber2021}. Another lattice-based submission is the \gls{saber} cryptosystem that relies on the learning with rounding problem over module lattices being hard to solve~\cite{saber}.
 
@@ -328,9 +328,9 @@ The \gls{x86} family of architectures are some of the most popular architectures
 
 In 1996 the \gls{x86} architecture saw the addition of the MMX instruction set~\cite{hennessy2011:avx}. The instruction set used the 64-bit floating-point registers of the CPU to enable either eight 8-bit vector operations or four 16-bit operations simultaneously. The instruction set was superseeded by \gls{sse} in 1999, which added special 128 bit wide registers. This enabled instructions to simultaneously perform sixteen 8-bit operations, eight 16-bit operations, or four 32-bit operations. \gls{sse} was in turn superseeded by \gls{sse}2 in 2001, \gls{sse}3 in 2004 and \gls{sse}4 in 2007. Each generation saw improvements in available instructions and floating-point performance.
 
-In 2010 \gls{avx} was introduced and doubled the width of the registers to 256 bits~\cite{hennessy2011:avx, intel:avx}. This increase effectively doubled the number of simultaneous operations that could be performed. The 256-bit width supported 64-bit operands in parallel. \gls{avx2} and AVX512 superseded \gls{avx}. \gls{avx2} extended the number of 256-bit instructions~\cite{intel:manual:2020} and \gls{avx512} added support for 512-bit wide instructions~\cite{intel:avx512}. \gls{avx2} and \gls{avx512} are power-hungry instructions that make the CPU run hot. To prevent the CPU from overheating, the CPU downclock its cores during \gls{avx} operations~\cite{hackenberg2015, intel:manual:2020}. This might have a negative performance impact on non-\gls{avx} code that runs directly after \gls{avx}-related code.
+In 2010 \gls{avx} was introduced and doubled the width of the registers to 256 bits~\cite{hennessy2011:avx, intel:avx}. This increase effectively doubled the number of simultaneous operations that could be performed. The 256-bit width supported 64-bit operands in parallel. \gls{avx2} and \gls{avx512} superseded \gls{avx}. \gls{avx2} extended the number of 256-bit instructions~\cite{intel:manual:2020} and \gls{avx512} added support for 512-bit wide instructions~\cite{intel:avx512}. \gls{avx2} and \gls{avx512} are power-hungry instructions that make the CPU run hot. To prevent the CPU from overheating, the CPU downclock its cores during \gls{avx} operations~\cite{hackenberg2015, intel:manual:2020}. This might have a negative performance impact on non-\gls{avx} code that runs directly after \gls{avx}-related code.
 
-By using AVX, a developer may optimize a program and make use of the performance properties offered by \gls{simd}~\cite{hennessy2011:avx}.
+By using \gls{avx}, a developer may optimize a program and make use of the performance properties offered by \gls{simd}~\cite{hennessy2011:avx}.
 
 \subsection{Mainframe Hardware - IBM Z}
 
