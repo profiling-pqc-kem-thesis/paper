@@ -1,5 +1,13 @@
 <p align="center">
   <strong><a href="#quickstart">Quick Start</a> | <a href="#documentation">Documentation</a> </strong>
+  <p align="center">
+    <a href="http://urn.kb.se/resolve?urn=urn:nbn:se:bth-21849">
+      <img src="https://flat.badgen.net/badge/urn/urn:nbn:se:bth-21849" alt="URN" />
+    </a>
+    <a href="http://urn.kb.se/resolve?urn=urn:nbn:se:bth-21849">
+      <img src="https://flat.badgen.net/badge/DiVA/diva2:1574260" alt="DiVA ID" />
+    </a>
+  </p>
 </p>
 
 # The Performance of Post-Quantum Key Encapsulation Mechanisms
